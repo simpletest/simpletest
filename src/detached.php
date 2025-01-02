@@ -56,7 +56,7 @@ class DetachedTestCase
         $parser = $this->createParser($reporter);
 
         if (!$parser->parse($shell->getOutput())) {
-            \trigger_error('Cannot parse incoming XML from [' . $this->command . ']');
+            simpletest_trigger_error('Cannot parse incoming XML from ['.$this->command.']');
 
             return false;
         }
@@ -78,7 +78,13 @@ class DetachedTestCase
             $parser   = $this->createParser($reporter);
 
             if (!$parser->parse($shell->getOutput())) {
+<<<<<<< HEAD
                 \trigger_error('Cannot parse incoming XML from [' . $this->dry_command . ']');
+||||||| parent of 8cc29c6 (Wrote a wrapper for the trigger_error function.)
+                trigger_error('Cannot parse incoming XML from ['.$this->dry_command.']');
+=======
+                simpletest_trigger_error('Cannot parse incoming XML from ['.$this->dry_command.']');
+>>>>>>> 8cc29c6 (Wrote a wrapper for the trigger_error function.)
 
                 return false;
             }

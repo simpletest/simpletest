@@ -801,8 +801,20 @@ class TestOfMockExpectations extends UnitTestCase
 
     public function testNonArrayForExpectedParametersGivesError(): void
     {
+<<<<<<< HEAD
         $mock = new MockDummyWithInjectedTestCase;
         $this->expectError(new PatternExpectation('/foo is not an array/i'));
+||||||| parent of 8cc29c6 (Wrote a wrapper for the trigger_error function.)
+        $mock = new MockDummyWithInjectedTestCase();
+        $this->expectError(new PatternExpectation('/foo is not an array/i'));
+=======
+        $mock = new MockDummyWithInjectedTestCase();
+        if (PHP_VERSION_ID < 80400) {
+            $this->expectError(new PatternExpectation('/foo is not an array/i'));
+        } else {
+            $this->expectException(ErrorException::class, 'Ouch!');
+        }
+>>>>>>> 8cc29c6 (Wrote a wrapper for the trigger_error function.)
         $mock->expect('aMethod', 'foo');
         $mock->aMethod();
         $mock->mock->atTestEnd('testSomething', $this->test);
@@ -985,7 +997,12 @@ class TestOfThrowingErrorsFromMocks extends UnitTestCase
     {
         $mock = new MockDummy;
         $mock->errorOn('aMethod', 'Ouch!');
-        $this->expectError('Ouch!');
+
+        if (PHP_VERSION_ID < 80400) {
+            $this->expectError('Ouch!');
+        } else {
+            $this->expectException(ErrorException::class, 'Ouch!');
+        }
         $mock->aMethod();
     }
 
@@ -995,7 +1012,11 @@ class TestOfThrowingErrorsFromMocks extends UnitTestCase
         $mock->errorOn('aMethod', 'Ouch!', [3]);
         $mock->aMethod(1);
         $mock->aMethod(2);
-        $this->expectError();
+        if (PHP_VERSION_ID < 80400) {
+            $this->expectError();
+        } else {
+            $this->expectException(ErrorException::class);
+        }
         $mock->aMethod(3);
     }
 
@@ -1005,7 +1026,12 @@ class TestOfThrowingErrorsFromMocks extends UnitTestCase
         $mock->errorAt(2, 'aMethod', 'Ouch!');
         $mock->aMethod();
         $mock->aMethod();
-        $this->expectError();
+        if (PHP_VERSION_ID < 80400) {
+            $this->expectError();
+        } else {
+            $this->expectException(ErrorException::class);
+        }
+
         $mock->aMethod();
     }
 }

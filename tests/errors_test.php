@@ -70,33 +70,33 @@ class TestOfErrorTrap extends UnitTestCase
     public function testErrorsAreSwallowedByMatchingExpectation(): void
     {
         $this->expectError('Ouch!');
-        \trigger_error('Ouch!');
+        simpletest_trigger_error('Ouch!');
     }
 
     public function testErrorsAreSwallowedInOrder(): void
     {
         $this->expectError('a');
         $this->expectError('b');
-        \trigger_error('a');
-        \trigger_error('b');
+        simpletest_trigger_error('a');
+        simpletest_trigger_error('b');
     }
 
     public function testAnyErrorCanBeSwallowed(): void
     {
         $this->expectError();
-        \trigger_error('Ouch!');
+        simpletest_trigger_error('Ouch!');
     }
 
     public function testErrorCanBeSwallowedByPatternMatching(): void
     {
         $this->expectError(new PatternExpectation('/ouch/i'));
-        \trigger_error('Ouch!');
+        simpletest_trigger_error('Ouch!');
     }
 
     public function testErrorWithPercentsPassesWithNoSprintfError(): void
     {
         $this->expectError('%');
-        \trigger_error('%');
+        simpletest_trigger_error('%');
     }
 }
 
@@ -118,46 +118,50 @@ class TestOfErrors extends UnitTestCase
     {
         \error_reporting(\E_ALL);
         $this->expectError('Ouch!');
-        \trigger_error('Ouch!');
+        simpletest_trigger_error('Ouch!');
     }
 
     public function testNoticeWhenReported(): void
     {
         \error_reporting(\E_ALL);
         $this->expectError('Ouch!');
-        \trigger_error('Ouch!', \E_USER_NOTICE);
+        simpletest_trigger_error('Ouch!', E_USER_NOTICE);
     }
 
     public function testWarningWhenReported(): void
     {
         \error_reporting(\E_ALL);
         $this->expectError('Ouch!');
-        \trigger_error('Ouch!', \E_USER_WARNING);
+        simpletest_trigger_error('Ouch!', E_USER_WARNING);
     }
 
     public function testErrorWhenReported(): void
     {
-        \error_reporting(\E_ALL);
-        $this->expectError('Ouch!');
-        \trigger_error('Ouch!', \E_USER_ERROR);
+        error_reporting(E_ALL);
+        if (PHP_VERSION_ID < 80400) {
+            $this->expectError('Ouch!');
+        } else {
+            $this->expectException(ErrorException::class, 'Ouch!');
+        }
+        simpletest_trigger_error('Ouch!', E_USER_ERROR);
     }
 
     public function testNoNoticeWhenNotReported(): void
     {
-        \error_reporting(0);
-        \trigger_error('Ouch!', \E_USER_NOTICE);
+        error_reporting(0);
+        simpletest_trigger_error('Ouch!', E_USER_NOTICE);
     }
 
     public function testNoWarningWhenNotReported(): void
     {
-        \error_reporting(0);
-        \trigger_error('Ouch!', \E_USER_WARNING);
+        error_reporting(0);
+        simpletest_trigger_error('Ouch!', E_USER_WARNING);
     }
 
     public function testNoticeSuppressedWhenReported(): void
     {
-        \error_reporting(\E_ALL);
-        @\trigger_error('Ouch!', \E_USER_NOTICE);
+        error_reporting(E_ALL);
+        @simpletest_trigger_error('Ouch!', E_USER_NOTICE);
     }
 
     public function testWarningSuppressedWhenReported(): void
@@ -169,7 +173,7 @@ class TestOfErrors extends UnitTestCase
     public function testErrorWithPercentsReportedWithNoSprintfError(): void
     {
         $this->expectError('%');
-        \trigger_error('%');
+        simpletest_trigger_error('%');
     }
 }
 
@@ -186,7 +190,7 @@ class TestOfNotEnoughErrors extends UnitTestCase
     public function testExpectTwoErrorsThrowOne(): void
     {
         $this->expectError('Error 1');
-        \trigger_error('Error 1');
+        simpletest_trigger_error('Error 1');
         $this->expectError('Error 2');
     }
 }
@@ -204,8 +208,8 @@ class TestOfLeftOverErrors extends UnitTestCase
     public function testExpectOneErrorGetTwo(): void
     {
         $this->expectError('Error 1');
-        \trigger_error('Error 1');
-        \trigger_error('Error 2');
+        simpletest_trigger_error('Error 1');
+        simpletest_trigger_error('Error 2');
     }
 }
 
