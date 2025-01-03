@@ -210,15 +210,19 @@ class SimpleErrorQueue
             E_CORE_WARNING => 'E_CORE_WARNING',
             E_COMPILE_ERROR => 'E_COMPILE_ERROR',
             E_COMPILE_WARNING => 'E_COMPILE_WARNING',
-            E_USER_ERROR => 'E_USER_ERROR',
             E_USER_WARNING => 'E_USER_WARNING',
             E_USER_NOTICE => 'E_USER_NOTICE',
-            E_STRICT => 'E_STRICT',
             E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',   // PHP 5.2
             E_DEPRECATED => 'E_DEPRECATED',          // PHP 5.3
             E_USER_DEPRECATED => 'E_USER_DEPRECATED',     // PHP 5.3
             E_ALL => 'E_ALL',
         ];
+
+        // deprecated since PHP 8.4
+        if (PHP_VERSION_ID < 80400) {
+            $map[E_USER_ERROR]  = 'E_USER_ERROR';
+            $map[E_STRICT]      = 'E_STRICT';
+        }
 
         return $map[$severity];
     }
@@ -248,4 +252,12 @@ function SimpleTestErrorHandler($severity, $message, $file = null, $line = null,
     }
 
     return true;
+}
+
+function simpletest_trigger_error(string $message, int $errorLevel = E_USER_NOTICE)
+{
+    if (PHP_VERSION_ID >= 80400 && E_USER_ERROR === $errorLevel) {
+        throw new ErrorException($message, $errorLevel);
+    }
+    trigger_error($message, $errorLevel);
 }

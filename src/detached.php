@@ -53,7 +53,7 @@ class DetachedTestCase
         $shell->execute($this->command);
         $parser = $this->createParser($reporter);
         if (!$parser->parse($shell->getOutput())) {
-            trigger_error('Cannot parse incoming XML from ['.$this->command.']');
+            simpletest_trigger_error('Cannot parse incoming XML from ['.$this->command.']');
 
             return false;
         }
@@ -74,7 +74,7 @@ class DetachedTestCase
             $reporter = new SimpleReporter();
             $parser = $this->createParser($reporter);
             if (!$parser->parse($shell->getOutput())) {
-                trigger_error('Cannot parse incoming XML from ['.$this->dry_command.']');
+                simpletest_trigger_error('Cannot parse incoming XML from ['.$this->dry_command.']');
 
                 return false;
             }

@@ -25,12 +25,12 @@ class SeleniumTestCase extends UnitTestCase
         parent::__construct($name);
 
         if (empty($this->browser)) {
-            trigger_error('browser property must be set in ' . get_class($this));
+            simpletest_trigger_error('browser property must be set in ' . get_class($this));
             exit;
         }
 
         if (empty($this->browserUrl)) {
-            trigger_error('browserUrl property must be set in ' . get_class($this));
+            simpletest_trigger_error('browserUrl property must be set in ' . get_class($this));
             exit;
         }
     }

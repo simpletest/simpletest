@@ -692,7 +692,7 @@ class SimpleErrorThrower
      */
     public function act()
     {
-        trigger_error($this->error, $this->severity);
+        simpletest_trigger_error($this->error, $this->severity);
 
         return;
     }
@@ -771,7 +771,7 @@ class SimpleMock
     {
         if (!is_array($args)) {
             $errormsg = sprintf('Cannot %s. Parameter %s is not an array.', $task, $args);
-            trigger_error($errormsg, E_USER_ERROR);
+            simpletest_trigger_error($errormsg, E_USER_ERROR);
 
             return false;
         }
@@ -791,7 +791,7 @@ class SimpleMock
     {
         if ($this->is_strict && !method_exists($this, $method)) {
             $errormsg = sprintf('Cannot %s. Method %s() not in class %s.', $task, $method, get_class($this));
-            trigger_error($errormsg, E_USER_ERROR);
+            simpletest_trigger_error($errormsg, E_USER_ERROR);
 
             return false;
         }
@@ -1303,7 +1303,9 @@ class SimpleMock
     private function disableEStrict()
     {
         $was = error_reporting();
-        error_reporting($was & ~E_STRICT);
+        if (PHP_VERSION_ID < 80400) {
+            error_reporting($was & ~E_STRICT);
+        }
 
         return $was;
     }
@@ -1332,7 +1334,7 @@ class Mock
      */
     public function __construct()
     {
-        trigger_error('Mock factory methods are static.');
+        simpletest_trigger_error('Mock factory methods are static.');
     }
 
     /**
@@ -1482,7 +1484,7 @@ class MockGenerator
         }
         $mock_reflection = new SimpleReflection($this->mock_class);
         if ($mock_reflection->classExistsWithoutAutoload()) {
-            trigger_error('Partial mock class ['.$this->mock_class.'] already exists');
+            simpletest_trigger_error('Partial mock class ['.$this->mock_class.'] already exists');
 
             return false;
         }

@@ -457,6 +457,18 @@ class SimpleReflection
             $typeHint = '\\'.$typeHint;
         }
 
+        // Since PHP 8.4 implicitly marking parameter as nullable is deprecated,
+        // the explicit nullable type must be used instead
+        if (PHP_VERSION_ID >= 80400
+            &&
+            $parameter->isOptional()
+            &&
+            $typeHint !== 'mixed'
+            &&
+            strpos($typeHint, "|") === false && strpos($typeHint, "&") === false) {
+            $typeHint = '?' . $typeHint;
+        }
+
         return $typeHint .= ' ';
     }
 }
