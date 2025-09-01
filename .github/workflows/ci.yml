@@ -21,7 +21,7 @@ jobs:
     steps:
 
       - name: 🤘 Checkout
-        uses: actions/checkout@v4 # https://github.com/actions/checkout
+        uses: actions/checkout@v5 # https://github.com/actions/checkout
 
       - name: 🔽 Setup PHP
         uses: shivammathur/setup-php@v2 # https://github.com/shivammathur/setup-php
