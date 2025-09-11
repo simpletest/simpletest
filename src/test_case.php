@@ -444,14 +444,59 @@ class SimpleFileLoader
         $classes = [];
 
         foreach ($candidates as $class) {
-            if (TestSuite::getBaseTestCase($class)) {
-                $reflection = new SimpleReflection($class);
+            if (!TestSuite::getBaseTestCase($class)) {
+                continue;
+            }
 
-                if ($reflection->isAbstract()) {
-                    SimpleTest::ignore($class);
-                } else {
-                    $classes[] = $class;
+            $reflection = new SimpleReflection($class);
+
+            if ($reflection->isAbstract()) {
+                SimpleTest::ignore($class);
+
+                continue;
+            }
+
+            // Add the candidate class to the list so that ignoreParentsIfIgnored
+            // can see it (it inspects the returned list to propagate ignores).
+            $classes[] = $class;
+
+            // We keep TestSuite subclasses as they are intended to be instantiated.
+            if ('testsuite' === TestSuite::getBaseTestCase($class)) {
+                continue;
+            }
+
+            // For normal test cases ensure the class declares at least one test* method.
+            // Else mark them ignored, but keep them in the list so parent ignores
+            // will be propagated correctly.
+            try {
+                $rc = new ReflectionClass($class);
+            } catch (ReflectionException $e) {
+                SimpleTest::ignore($class);
+
+                continue;
+            }
+
+            $has_test = false;
+
+            foreach ($rc->getMethods() as $method) {
+                $name = $method->getName();
+
+                if (0 == \strncmp(\strtolower($name), 'test', 4)) {
+                    // ensure the method is declared on this class (not inherited)
+                    if (\strtolower($method->getDeclaringClass()->getName()) === \strtolower($class)) {
+                        // ignore constructor-like names
+                        if ('__construct' === $name || $name === $class) {
+                            continue;
+                        }
+                        $has_test = true;
+
+                        break;
+                    }
                 }
+            }
+
+            if (!$has_test) {
+                SimpleTest::ignore($class);
             }
         }
 
