@@ -14,9 +14,8 @@ class VisualTestOfErrors extends UnitTestCase
     {
         $this->dump('Four exceptions...');
         \trigger_error('Default');
-        \trigger_error('Error', E_USER_ERROR);
-        \trigger_error('Warning', E_USER_WARNING);
-        \trigger_error('Notice', E_USER_NOTICE);
+
+        throw new ErrorException('Error');
     }
 
     public function testErrorTrap(): void

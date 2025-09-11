@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * does type matter.
  */
-if (!defined('TYPE_MATTERS')) {
-    define('TYPE_MATTERS', true);
+if (!\defined('TYPE_MATTERS')) {
+    \define('TYPE_MATTERS', true);
 }
 
 /**
@@ -22,19 +22,25 @@ class SimpleDumper
     public function describeValue($value)
     {
         $type = $this->getType($value);
+
         switch ($type) {
             case 'Null':
                 return 'NULL';
+
             case 'bool':
-                return 'bool: '.($value ? 'true' : 'false');
+                return 'bool: ' . ($value ? 'true' : 'false');
+
             case 'Array':
-                return 'Array: '.count($value).' items';
+                return 'Array: ' . \count($value) . ' items';
+
             case 'Object':
-                return 'Object: of '.get_class($value);
+                return 'Object: of ' . $value::class;
+
             case 'String':
-                return 'String: '.$this->clipString($value, 200);
+                return 'String: ' . $this->clipString($value, 200);
+
             default:
-                return $type.': '.$value;
+                return $type . ': ' . $value;
         }
     }
 
@@ -49,19 +55,33 @@ class SimpleDumper
     {
         if (!isset($value)) {
             return 'Null';
-        } elseif (is_bool($value)) {
+        }
+
+        if (\is_bool($value)) {
             return 'bool';
-        } elseif (is_string($value)) {
+        }
+
+        if (\is_string($value)) {
             return 'String';
-        } elseif (is_int($value)) {
+        }
+
+        if (\is_int($value)) {
             return 'Integer';
-        } elseif (is_float($value)) {
+        }
+
+        if (\is_float($value)) {
             return 'Float';
-        } elseif (is_array($value)) {
+        }
+
+        if (\is_array($value)) {
             return 'Array';
-        } elseif (is_resource($value)) {
+        }
+
+        if (\is_resource($value)) {
             return 'Resource';
-        } elseif (is_object($value)) {
+        }
+
+        if (\is_object($value)) {
             return 'Object';
         }
 
@@ -82,34 +102,21 @@ class SimpleDumper
     {
         if ($identical) {
             if (!$this->isTypeMatch($first, $second)) {
-                return sprintf(
+                return \sprintf(
                     'with type mismatch as [%s] does not match [%s]',
                     $this->describeValue($first),
-                    $this->describeValue($second)
+                    $this->describeValue($second),
                 );
             }
         }
         $type = $this->getType($first);
+
         if ('Unknown' === $type) {
             return 'with unknown type';
         }
-        $method = 'describe'.$type.'Difference';
+        $method = 'describe' . $type . 'Difference';
 
-        return $this->$method($first, $second, $identical);
-    }
-
-    /**
-     * Tests to see if types match.
-     *
-     * @param mixed $first  first variable
-     * @param mixed $second value to compare with
-     *
-     * @return bool true if matches
-     */
-    protected function isTypeMatch($first, $second)
-    {
-        return \gettype($first) === \gettype($second);
-        //return $this->getType($first) === $this->getType($second);
+        return $this->{$method}($first, $second, $identical);
     }
 
     /**
@@ -124,25 +131,72 @@ class SimpleDumper
     public function clipString($string, $size, $position = 0)
     {
         $utf8 = false;
-        if (function_exists('mb_detect_encoding') && 'UTF-8' == mb_detect_encoding($string)) {
+
+        if (\function_exists('mb_detect_encoding') && 'UTF-8' == \mb_detect_encoding($string, \mb_detect_order(), true)) {
             $utf8 = true;
         }
 
-        $length = (true == $utf8) ? mb_strlen($string, 'UTF-8') : strlen($string);
+        $length = (true == $utf8) ? \mb_strlen($string, 'UTF-8') : \strlen($string);
 
         if ($length <= $size) {
             return $string;
         }
 
-        $position = min($position, $length);
+        $position  = \min($position, $length);
         $half_size = (int) $size / 2;
-        $start = (int) ($half_size > $position ? 0 : $position - $half_size);
+        $start     = (int) ($half_size > $position ? 0 : $position - $half_size);
+
         if ($start + $size > $length) {
             $start = $length - $size;
         }
-        $string = (true == $utf8) ? mb_substr($string, $start, $size) : substr($string, $start, $size);
+        $string = (true == $utf8) ? \mb_substr($string, $start, $size) : \substr($string, $start, $size);
 
-        return ($start > 0 ? '...' : '').$string.($start + $size < $length ? '...' : '');
+        return ($start > 0 ? '...' : '') . $string . ($start + $size < $length ? '...' : '');
+    }
+
+    /**
+     * Removes crud from property name after it's been converted to an array.
+     *
+     * @param string $mangled name from array cast
+     *
+     * @return string cleaned up name
+     */
+    public function unmangle($mangled)
+    {
+        $parts = \preg_split('/[^a-zA-Z0-9_\x7f-\xff]+/', $mangled);
+
+        return \array_pop($parts);
+    }
+
+    /**
+     * Sends a formatted dump of a variable to a string.
+     *
+     * @param mixed $variable variable to display
+     *
+     * @return string output from print_r()
+     */
+    public function dump($variable)
+    {
+        \ob_start();
+        \print_r($variable);
+        $formatted = \ob_get_contents();
+        \ob_end_clean();
+
+        return $formatted;
+    }
+
+    /**
+     * Tests to see if types match.
+     *
+     * @param mixed $first  first variable
+     * @param mixed $second value to compare with
+     *
+     * @return bool true if matches
+     */
+    protected function isTypeMatch($first, $second)
+    {
+        return \gettype($first) === \gettype($second);
+        // return $this->getType($first) === $this->getType($second);
     }
 
     /**
@@ -156,10 +210,10 @@ class SimpleDumper
      */
     protected function describeGenericDifference($first, $second)
     {
-        return sprintf(
+        return \sprintf(
             'as [%s] does not match [%s]',
             $this->describeValue($first),
-            $this->describeValue($second)
+            $this->describeValue($second),
         );
     }
 
@@ -204,16 +258,16 @@ class SimpleDumper
      */
     protected function describeStringDifference($first, $second, $identical)
     {
-        if (is_object($second) || is_array($second)) {
+        if (\is_object($second) || \is_array($second)) {
             return $this->describeGenericDifference($first, $second);
         }
         $position = $this->stringDiffersAt($first, $second);
 
-        return sprintf(
+        return \sprintf(
             'at character %s with [%s] and [%s]',
             $position,
             $this->clipString($first, 200, $position),
-            $this->clipString($second, 200, $position)
+            $this->clipString($second, 200, $position),
         );
     }
 
@@ -229,15 +283,15 @@ class SimpleDumper
      */
     protected function describeIntegerDifference($first, $second, $identical)
     {
-        if (is_object($second) || is_array($second)) {
+        if (\is_object($second) || \is_array($second)) {
             return $this->describeGenericDifference($first, $second);
         }
 
-        return sprintf(
+        return \sprintf(
             'because [%s] differs from [%s] by %s',
             $this->describeValue($first),
             $this->describeValue($second),
-            abs($first - $second)
+            \abs($first - $second),
         );
     }
 
@@ -253,15 +307,15 @@ class SimpleDumper
      */
     protected function describeFloatDifference($first, $second, $identical)
     {
-        if (is_object($second) || is_array($second)) {
+        if (\is_object($second) || \is_array($second)) {
             return $this->describeGenericDifference($first, $second);
         }
 
-        return sprintf(
+        return \sprintf(
             'because [%s] differs from [%s] by %s',
             $this->describeValue($first),
             $this->describeValue($second),
-            abs($first - $second)
+            \abs($first - $second),
         );
     }
 
@@ -276,28 +330,31 @@ class SimpleDumper
      */
     protected function describeArrayDifference($first, $second, $identical)
     {
-        if (!is_array($second)) {
+        if (!\is_array($second)) {
             return $this->describeGenericDifference($first, $second);
         }
+
         if (!$this->isMatchingKeys($first, $second, $identical)) {
-            return sprintf(
+            return \sprintf(
                 'as key list [%s] does not match key list [%s]',
-                implode(', ', array_keys($first)),
-                implode(', ', array_keys($second))
+                \implode(', ', \array_keys($first)),
+                \implode(', ', \array_keys($second)),
             );
         }
-        foreach (array_keys($first) as $key) {
+
+        foreach (\array_keys($first) as $key) {
             if ($identical && ($first[$key] === $second[$key])) {
                 continue;
             }
+
             if (!$identical && ($first[$key] == $second[$key])) {
                 continue;
             }
 
-            return sprintf(
+            return \sprintf(
                 'with member [%s] %s',
                 $key,
-                $this->describeDifference($first[$key], $second[$key], $identical)
+                $this->describeDifference($first[$key], $second[$key], $identical),
             );
         }
 
@@ -316,13 +373,14 @@ class SimpleDumper
      */
     protected function isMatchingKeys($first, $second, $identical)
     {
-        $first_keys = array_keys($first);
-        $second_keys = array_keys($second);
+        $first_keys  = \array_keys($first);
+        $second_keys = \array_keys($second);
+
         if ($identical) {
             return $first_keys === $second_keys;
         }
-        sort($first_keys);
-        sort($second_keys);
+        \sort($first_keys);
+        \sort($second_keys);
 
         return $first_keys === $second_keys;
     }
@@ -353,14 +411,14 @@ class SimpleDumper
      */
     protected function describeObjectDifference($first, $second, $identical)
     {
-        if (!is_object($second)) {
+        if (!\is_object($second)) {
             return $this->describeGenericDifference($first, $second);
         }
 
         return $this->describeArrayDifference(
             $this->getMembers($first),
             $this->getMembers($second),
-            $identical
+            $identical,
         );
     }
 
@@ -375,20 +433,52 @@ class SimpleDumper
     protected function getMembers($object)
     {
         $reflection = new ReflectionObject($object);
-        $members = [];
+        $members    = [];
+
         foreach ($reflection->getProperties() as $property) {
-            if (method_exists($property, 'setAccessible')) {
+            if (\method_exists($property, 'setAccessible')) {
                 $property->setAccessible(true);
             }
+
             try {
                 $members[$property->getName()] = $property->getValue($object);
             } catch (ReflectionException $e) {
-                $members[$property->getName()] =
-                    $this->getPrivatePropertyNoMatterWhat($property->getName(), $object);
+                $members[$property->getName()] = $this->getPrivatePropertyNoMatterWhat($property->getName(), $object);
             }
         }
 
         return $members;
+    }
+
+    /**
+     * Find the first character position that differs in two strings by binary chop.
+     *
+     * @param string $first  first string
+     * @param string $second string to compare with
+     *
+     * @return int position of first differing character
+     */
+    protected function stringDiffersAt($first, $second)
+    {
+        if (!$first || !$second) {
+            return 0;
+        }
+
+        if (\strlen($first) < \strlen($second)) {
+            [$first, $second] = [$second, $first];
+        }
+        $position = 0;
+        $step     = \strlen($first);
+
+        while ($step > 1) {
+            $step = (int) (($step + 1) / 2);
+
+            if (0 == \strncmp($first, $second, $position + $step)) {
+                $position += $step;
+            }
+        }
+
+        return $position;
     }
 
     /**
@@ -406,65 +496,7 @@ class SimpleDumper
                 return $value;
             }
         }
+
         return null;
-    }
-
-    /**
-     * Removes crud from property name after it's been converted to an array.
-     *
-     * @param string $mangled name from array cast
-     *
-     * @return string cleaned up name
-     */
-    public function unmangle($mangled)
-    {
-        $parts = preg_split('/[^a-zA-Z0-9_\x7f-\xff]+/', $mangled);
-
-        return array_pop($parts);
-    }
-
-    /**
-     * Find the first character position that differs in two strings by binary chop.
-     *
-     * @param string $first  first string
-     * @param string $second string to compare with
-     *
-     * @return int position of first differing character
-     */
-    protected function stringDiffersAt($first, $second)
-    {
-        if (!$first || !$second) {
-            return 0;
-        }
-        if (strlen($first) < strlen($second)) {
-            [$first, $second] = [$second, $first];
-        }
-        $position = 0;
-        $step = strlen($first);
-        while ($step > 1) {
-            $step = (int) (($step + 1) / 2);
-            if (0 == strncmp($first, $second, $position + $step)) {
-                $position += $step;
-            }
-        }
-
-        return $position;
-    }
-
-    /**
-     * Sends a formatted dump of a variable to a string.
-     *
-     * @param mixed $variable variable to display
-     *
-     * @return string output from print_r()
-     */
-    public function dump($variable)
-    {
-        ob_start();
-        print_r($variable);
-        $formatted = ob_get_contents();
-        ob_end_clean();
-
-        return $formatted;
     }
 }

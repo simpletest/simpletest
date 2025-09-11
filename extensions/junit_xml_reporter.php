@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-require_once __DIR__ . '/../src/reporter.php';
+require_once \dirname(__DIR__) . '/src/reporter.php';
 
 /**
  * Reporter which outputs test results in a format compatible with JUnit / Maven XML output.

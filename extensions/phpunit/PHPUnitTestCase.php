@@ -103,7 +103,7 @@ class PHPUnitTestCase extends SimpleTestCase
         );
 
         return $this->assert(
-            new falseExpectation,
+            new FalseExpectation,
             SimpleTestCompatibility::isReference($first, $second),
             $message,
         );

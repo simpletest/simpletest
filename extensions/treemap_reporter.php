@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-require_once __DIR__ . '/../src/scorer.php';
+require_once \dirname(__DIR__) . '/src/scorer.php';
 
 require_once __DIR__ . '/treemap_reporter/treemap_recorder.php';
 
@@ -10,6 +10,7 @@ require_once __DIR__ . '/treemap_reporter/treemap_recorder.php';
 class TreemapReporter extends SimpleReporterDecorator
 {
     public $_reporter;
+    private $aspect = 1;
 
     public function __construct()
     {
@@ -17,11 +18,9 @@ class TreemapReporter extends SimpleReporterDecorator
     }
 
     /**
-     * basic CSS for floating nested divs.
-     *
-     * @todo checkout some weird border bugs
+     * Return CSS.
      */
-    public function _getCss()
+    public function getCss()
     {
         $css = '.pass{background-color:green;}.fail{background-color:red;}';
         $css .= 'body {background-color:white;margin:0;padding:1em;}';
@@ -34,40 +33,54 @@ class TreemapReporter extends SimpleReporterDecorator
     }
 
     /**
-     * paints the HTML header and sets up results.
+     * Paints the HTML header and sets up results.
      */
     public function paintResultsHeader(): void
     {
         $title = $this->_reporter->getTitle();
-        print '<html><head>';
-        print "<title>{$title}</title>";
-        print '<style type="text/css">' . $this->_getCss() . '</style>';
-        print '</head><body>';
-        print "<h1>{$title}</h1>";
+        $css   = $this->getCss();
+
+        $html = '<html><head>';
+        $html .= "<title>{$title}</title>";
+        $html .= '<style type="text/css">' . $css . '</style>';
+        $html .= '</head><body>';
+        $html .= "<h1>{$title}</h1>";
+
+        print $html;
     }
 
     /**
-     * places a clearing break below the end of the test nodes.
+     * Places a clearing break below the end of the test nodes.
      */
     public function paintResultsFooter(): void
     {
-        print '<br clear="all">';
-        print '</body></html>';
+        $html = '<br clear="all">';
+        $html .= '</body></html>';
+
+        print $html;
     }
 
     /**
-     * paints start tag for div representing a test node.
+     * Paints start tag for div representing a test node.
      */
     public function paintRectangleStart($node, $horiz, $vert): void
     {
         $name        = $node->getName();
         $description = $node->getDescription();
         $status      = $node->getStatus();
-        print "<div title=\"{$name}: {$description}\" class=\"{$status}\" style=\"width:{$horiz}%;height:{$vert}%\">";
+
+        print \sprintf(
+            '<div title="%s: %s" class="%s" style="width:%d%%; height:%d%%;">',
+            $name,
+            $description,
+            $status,
+            $horiz,
+            $vert,
+        );
     }
 
     /**
-     * paints end tag for test node div.
+     * Paints end tag for test node div.
      */
     public function paintRectangleEnd(): void
     {
@@ -75,16 +88,15 @@ class TreemapReporter extends SimpleReporterDecorator
     }
 
     /**
-     * paints wrapping treemap divs.
+     * Paints wrapping treemap divs.
      *
      * @todo how to configure aspect and other parameters?
      */
     public function paintFooter($group): void
     {
-        $aspect = 1;
         $this->paintResultsHeader();
         $this->paintRectangleStart($this->_reporter->getGraph(), 100, 100);
-        $this->divideMapNodes($this->_reporter->getGraph(), $aspect);
+        $this->divideMapNodes($this->_reporter->getGraph(), $this->aspect);
         $this->paintRectangleEnd();
         $this->paintResultsFooter();
     }
@@ -94,8 +106,6 @@ class TreemapReporter extends SimpleReporterDecorator
      *
      * @param TreemapNode $map    sorted
      * @param bool        $aspect flips the aspect between horizontal and vertical
-     *
-     * @private
      */
     public function divideMapNodes($map, $aspect): void
     {

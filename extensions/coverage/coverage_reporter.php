@@ -29,8 +29,8 @@ class CoverageReporter
     {
         print 'Generating Code Coverage Report';
 
-    // ensure summaryFile uses the configured reportDir
-    $this->summaryFile = $this->reportDir . '/index.html';
+        // ensure summaryFile uses the configured reportDir
+        $this->summaryFile = $this->reportDir . '/index.html';
 
         CoverageUtils::mkdir($this->reportDir);
 

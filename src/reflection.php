@@ -429,18 +429,98 @@ class SimpleReflection
     {
         // Guard: parameter types only supported by PHP7.0+
         if ((PHP_VERSION_ID >= 70000) && $parameter->hasType()) {
-            $typeHint = $parameter->getType();
+            $type = $parameter->getType();
 
-            if ($typeHint && PHP_VERSION_ID >= 70100) {
-                if ($typeHint::class === 'ReflectionNamedType') {
-                    $typeHint = $typeHint->getName();
-                } elseif ($typeHint::class === 'ReflectionUnionType') {
-                    $typeHint = \implode('|', $typeHint->getTypes());
-                } elseif ($typeHint::class === 'ReflectionIntersectionType') {
-                    $typeHint = \implode('&', $typeHint->getTypes());
+            $typesThatDontRequirePrefixSlash = [
+                'self', 'array', 'callable',
+                // PHP 7
+                'bool', 'float', 'int', 'string', 'object',
+                // PHP 8
+                'mixed', 'null',
+            ];
+
+            $renderNamed = static function (ReflectionNamedType $t) use ($typesThatDontRequirePrefixSlash)
+            {
+                $name = $t->getName();
+
+                // don't prefix builtins or special names
+                if (!\in_array($name, $typesThatDontRequirePrefixSlash, true) && !\str_starts_with($name, '\\')) {
+                    $name = '\\' . $name;
+                }
+
+                return $name;
+            };
+
+            if ($type instanceof ReflectionNamedType) {
+                $name = $renderNamed($type);
+                // nullable named type -> ?Type (PHP 7.1+)
+                // never render ?mixed because `mixed` already includes null
+                $isMixedNamed = (0 === \strcasecmp(\ltrim($name, '\\'), 'mixed'));
+
+                if (PHP_VERSION_ID >= 70100 && $type->allowsNull() && $name !== 'null' && !$isMixedNamed) {
+                    $typeHint = '?' . $name;
+                } else {
+                    $typeHint = $name;
+                }
+            } elseif (PHP_VERSION_ID >= 80000 && $type instanceof ReflectionUnionType) {
+                $parts = [];
+
+                foreach ($type->getTypes() as $t) {
+                    if ($t instanceof ReflectionNamedType) {
+                        $parts[] = $renderNamed($t);
+                    } else {
+                        $parts[] = (string) $t;
+                    }
+                }
+                // if the union contains `mixed`, simplify to `mixed` (mixed already includes null)
+                $hasMixed = false;
+
+                foreach ($parts as $p) {
+                    if (0 === \strcasecmp(\ltrim($p, '\\'), 'mixed')) {
+                        $hasMixed = true;
+
+                        break;
+                    }
+                }
+
+                if ($hasMixed) {
+                    $typeHint = 'mixed';
+                } else {
+                    // ensure 'null' is explicitly present if union allows null
+                    if ($type->allowsNull() && !\in_array('null', $parts, true)) {
+                        $parts[] = 'null';
+                    }
+                    $typeHint = \implode('|', $parts);
+                }
+            } elseif (PHP_VERSION_ID >= 80000 && $type instanceof ReflectionIntersectionType) {
+                $parts = [];
+
+                foreach ($type->getTypes() as $t) {
+                    if ($t instanceof ReflectionNamedType) {
+                        $parts[] = $renderNamed($t);
+                    } else {
+                        $parts[] = (string) $t;
+                    }
+                }
+                // if any intersection part is `mixed`, simplify to `mixed`
+                $hasMixed = false;
+
+                foreach ($parts as $p) {
+                    if (0 === \strcasecmp(\ltrim($p, '\\'), 'mixed')) {
+                        $hasMixed = true;
+
+                        break;
+                    }
+                }
+
+                if ($hasMixed) {
+                    $typeHint = 'mixed';
+                } else {
+                    $typeHint = \implode('&', $parts);
                 }
             } else {
-                $typeHint = (string) $typeHint;
+                // Fallback to string conversion for older versions
+                $typeHint = (string) $type;
             }
         }
         // Guard: parameter->isArray() only supported by <PHP8
@@ -467,15 +547,25 @@ class SimpleReflection
             'mixed',
         ];
 
-        // prefix a slash, on "class" or "interface" typehints
-        if (!\in_array($typeHint, $typesThatDontRequirePrefixSlash, true) &&
-            // Union or intersection type don't need to prefix a slash
-            // using strpos() instead of str_contains() for backward compatibility
-            !\str_contains($typeHint, '|') && !\str_contains($typeHint, '&')) {
-            $typeHint = '\\' . $typeHint;
+        // prefix a slash on class/interface typehints, but avoid inserting
+        // it before a nullable marker (?) or for unions/intersections.
+        $raw            = $typeHint;
+        $nullablePrefix = false;
+
+        if (\str_starts_with($raw, '?')) {
+            $nullablePrefix = true;
+            $raw            = \substr($raw, 1);
         }
 
-        return $typeHint .= ' ';
+        if (!\str_contains($raw, '|') && !\str_contains($raw, '&')) {
+            if (!\str_starts_with($raw, '\\') && !\in_array($raw, $typesThatDontRequirePrefixSlash, true)) {
+                $raw = '\\' . $raw;
+            }
+        }
+
+        $typeHint = ($nullablePrefix ? '?' : '') . $raw;
+
+        return $typeHint . ' ';
     }
 
     /**

@@ -211,7 +211,6 @@ class UnitTestCase extends SimpleTestCase
 
     /**
      * Will trigger a pass if both parameters refer to the same object or value.
-     * This will cause problems testing objects under E_STRICT.
      *
      * @todo Replace with expectation.
      *
@@ -287,7 +286,7 @@ class UnitTestCase extends SimpleTestCase
     /**
      * Will trigger a pass if both parameters refer to different variables.
      * The objects have to be identical references though.
-     * This will fail under E_STRICT with objects. Use assertClone() for this.
+     * Use assertClone() for this.
      *
      * @param mixed  $first   object reference to check
      * @param mixed  $second  hopefully not the same object

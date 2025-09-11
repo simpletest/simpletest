@@ -19,12 +19,12 @@ require_once __DIR__ . '/../coverage_utils.php';
 
 require_once __DIR__ . '/../coverage.php';
 
-$cc = new CodeCoverage;
+$cc      = new CodeCoverage;
 $cc->log = 'coverage.sqlite';
 
 // Load existing settings if present so we don't overwrite user customizations
-if (file_exists($cc->settingsFile)) {
-	$cc->readSettings();
+if (\file_exists($cc->settingsFile)) {
+    $cc->readSettings();
 }
 
 $args = CoverageUtils::parseArguments($_SERVER['argv'], true);
@@ -35,34 +35,34 @@ $cliExcludes = CoverageUtils::issetOrDefault($args['exclude[]'], null);
 
 // Default include pattern if nothing provided
 if ($cliIncludes !== null) {
-	$cc->includes = $cliIncludes;
+    $cc->includes = $cliIncludes;
 } elseif (empty($cc->includes)) {
-	$cc->includes = ['.*\.php$'];
+    $cc->includes = ['.*\.php$'];
 }
 
 // Ensure common folders are excluded and merge with existing excludes
 $defaultExcludes = [
-	# folders
-	'.*\/build\/.*',
-	'.*\/coverage-report\/.*',
-	'.*\/docs\/.*',
-	'.*\/vendor\/.*',
-	# files
-	'.*sqlite.php$',
-	'.*unit_tests.php$'
+    # folders
+    '.*\/build\/.*',
+    '.*\/coverage-report\/.*',
+    '.*\/docs\/.*',
+    '.*\/vendor\/.*',
+    # files
+    '.*sqlite.php$',
+    '.*unit_tests.php$',
 ];
 
 if ($cliExcludes !== null) {
-	$merged = array_merge($cc->excludes ?? [], $cliExcludes);
+    $merged = \array_merge($cc->excludes ?? [], $cliExcludes);
 } else {
-	$merged = $cc->excludes ?? [];
+    $merged = $cc->excludes ?? [];
 }
 
 // Add defaults if missing
 foreach ($defaultExcludes as $pattern) {
-	if (!in_array($pattern, $merged, true)) {
-		$merged[] = $pattern;
-	}
+    if (!\in_array($pattern, $merged, true)) {
+        $merged[] = $pattern;
+    }
 }
 
 $cc->excludes = $merged;

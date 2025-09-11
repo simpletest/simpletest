@@ -79,18 +79,18 @@ class SimpleErrorQueue
     public function getSeverityAsString($severity)
     {
         static $map = [
-            E_ERROR             => 'E_ERROR',
-            E_WARNING           => 'E_WARNING',
-            E_PARSE             => 'E_PARSE',
-            E_NOTICE            => 'E_NOTICE',
-            E_CORE_ERROR        => 'E_CORE_ERROR',
-            E_CORE_WARNING      => 'E_CORE_WARNING',
-            E_COMPILE_ERROR     => 'E_COMPILE_ERROR',
-            E_COMPILE_WARNING   => 'E_COMPILE_WARNING',
-            E_USER_ERROR        => 'E_USER_ERROR',
-            E_USER_WARNING      => 'E_USER_WARNING',
-            E_USER_NOTICE       => 'E_USER_NOTICE',
-            E_STRICT            => 'E_STRICT',
+            E_ERROR           => 'E_ERROR',
+            E_WARNING         => 'E_WARNING',
+            E_PARSE           => 'E_PARSE',
+            E_NOTICE          => 'E_NOTICE',
+            E_CORE_ERROR      => 'E_CORE_ERROR',
+            E_CORE_WARNING    => 'E_CORE_WARNING',
+            E_COMPILE_ERROR   => 'E_COMPILE_ERROR',
+            E_COMPILE_WARNING => 'E_COMPILE_WARNING',
+            E_USER_ERROR      => 'E_USER_ERROR',
+            E_USER_WARNING    => 'E_USER_WARNING',
+            E_USER_NOTICE     => 'E_USER_NOTICE',
+            // E_STRICT            => 'E_STRICT',            // PHP 5.0, removed PHP 8.4
             E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',   // PHP 5.2
             E_DEPRECATED        => 'E_DEPRECATED',          // PHP 5.3
             E_USER_DEPRECATED   => 'E_USER_DEPRECATED',     // PHP 5.3
@@ -142,6 +142,13 @@ class SimpleErrorQueue
      */
     public function add($severity, $content, $filename, $line): void
     {
+        // Drop the PHP 8.4 deprecation emitted when code calls
+        // trigger_error(..., E_USER_ERROR) since it interferes with tests
+        // that intentionally expect the user-provided message.
+        if (\is_string($content) && \str_starts_with($content, 'Passing E_USER_ERROR to trigger_error() is deprecated')) {
+            return;
+        }
+
         $content = \str_replace('%', '%%', $content);
         $this->testLatestError($severity, $content, $filename, $line);
     }

@@ -86,7 +86,7 @@ class CodeCoverageTest extends UnitTestCase
     public function testResetLog(): void
     {
         $coverage      = new CodeCoverage;
-        $coverage->log = \tempnam(sys_get_temp_dir(), 'php.xdebug.coverage.test.');
+        $coverage->log = \tempnam(\sys_get_temp_dir(), 'php.xdebug.coverage.test.');
         $coverage->resetLog();
         $this->assertTrue(\file_exists($coverage->log));
     }

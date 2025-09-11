@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-require_once __DIR__ . '/../runner.php';
+require_once \dirname(__DIR__) . '/src/autorun.php';
 
-require_once __DIR__ . '/../reporter.php';
+require_once \dirname(__DIR__) . '/src/reporter.php';
 
 /**
  * Main sprintf template for the start of the page.
@@ -62,7 +62,7 @@ EOS
 \define('SIMPLETEST_WEBUNIT_CSS', '/* this space reseved for future use */');
 
 /**
- * Sample minimal test displayer. Generates only failure messages and a pass count.
+ * Sample minimal test displayer for use by a web browser.
  */
 class WebUnitReporter extends SimpleReporter
 {
@@ -75,11 +75,9 @@ class WebUnitReporter extends SimpleReporter
     public $path;
 
     /**
-     * Does nothing yet.
      * The first output will be sent on the first test start.
-     * For use by a web browser.
      */
-    public function __construct($path = '../ui/')
+    public function __construct($path = '/webunit')
     {
         parent::__construct();
         $this->path = $path;
@@ -149,7 +147,7 @@ class WebUnitReporter extends SimpleReporter
         $content .= '<strong>' . $this->getExceptionCount() . '</strong> exceptions.';
         $content .= "</div>\n";
 
-        print $this->outputScript('foo = "' . $this->toJsString($content) . '";' . "\nset_div_content('run', foo);");
+        print $this->outputScript('js = "' . $this->toJsString($content) . '";' . "\nset_div_content('run', js);");
         print "\n</body>\n</html>\n";
     }
 
@@ -232,8 +230,6 @@ class WebUnitReporter extends SimpleReporter
      * Paints a PHP error or exception.
      *
      * @param string $message message is ignored
-     *
-     * @abstract
      */
     public function paintException($message): void
     {

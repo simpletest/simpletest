@@ -3,7 +3,7 @@
 // Relies heavily on the X library in x.js
 //     X v3.14.1, Cross-Browser DHTML Library from Cross-Browser.com
 // Copyright (c) 2004 Jason E. Sweat (jsweat_php@yahoo.com)
-// 
+//
 // SimpleTest - http://simpletest.sf.net/
 // Copyright (c) 2003,2004 Marcus Baker (marcus@lastcraft.com)
 // $Id$
@@ -78,7 +78,7 @@ function activate_tab(tab) {
 
 function add_group(group_name) {
   var add;
-  
+
   add = {
 		Set : function(foo,bar) {this[foo] = bar;},
 		Get : function(foo) {return this[foo];}
@@ -94,7 +94,7 @@ function add_group(group_name) {
 function add_case(case_name) {
   var curgroup;
   var add;
-  
+
   add = {
 		Set : function(foo,bar) {this[foo] = bar;},
 		Get : function(foo) {return this[foo];}
@@ -110,7 +110,7 @@ function add_case(case_name) {
 function add_method(method_name) {
 	var curcase;
   var add;
-  
+
   add = {
 		Set : function(foo,bar) {this[foo] = bar;},
 		Get : function(foo) {return this[foo];}
@@ -153,17 +153,16 @@ function set_msg(gid, cid, mid) {
 }
 
 function make_tree() {
-	var content;
+	var content = '<ul>';
 	var passfail;
-	content = '<ul>';
 	for (x in groups) {
-	  passfail = (groups[x].Get('pass')) ? 'pass' : 'fail';	
+	  passfail = (groups[x].Get('pass')) ? 'pass' : 'fail';
 		content += '<li class="'+passfail+'">'+groups[x].Get('desc')+'<ul>';
 		for (y in cases[x]) {
-	    passfail = (cases[x][y].Get('pass')) ? 'pass' : 'fail';	
+	    passfail = (cases[x][y].Get('pass')) ? 'pass' : 'fail';
 			content += '<li class="'+passfail+'">'+cases[x][y].Get('desc')+'<ul>';
 			for (z in methods[x][y]) {
-	      passfail = (methods[x][y][z].Get('pass')) ? 'pass' : 'fail';	
+	      passfail = (methods[x][y][z].Get('pass')) ? 'pass' : 'fail';
 			  content += '<li class="'+passfail+'"><a href="javascript:set_msg('+x+','+y+','+z+')">'+methods[x][y][z].Get('desc')+'</a></li>';
 			}
 			content += '</ul></li>';
@@ -172,14 +171,14 @@ function make_tree() {
 	}
 	content += '</ul>';
 	xGetElementById('tree').innerHTML = content;
-	if (xGetElementById('treetab').className == 'activetab') { 
-	  activate_tab('tree'); 
+	if (xGetElementById('treetab').className == 'activetab') {
+	  activate_tab('tree');
 	} else {
-	  activate_tab('fail'); 
+	  activate_tab('fail');
 	}
 }
 
-function make_output(data) { 
+function make_output(data) {
 }
 
 function make_fail_msg(id, msg) {

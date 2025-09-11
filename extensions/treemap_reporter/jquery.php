@@ -28,33 +28,41 @@ class JqueryTreemapReporter extends TreemapReporter
      *
      * @return string HTML of results header
      */
-    public function paintResultsHeader()
+    public function paintResultsHeader(): void
     {
         $title = $this->_reporter->getTitle();
-        print '<html><head>';
-        print "<title>{$title}</title>";
-        print '<style type="text/css">' . $this->_getCss() . '</style>';
-        print '<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>';
-        print '<script type="text/javascript" src="http://www.fbtools.com/jquery/treemap/treemap.js"></script>';
-        print "<script type=\"text/javascript\">\n";
-        print '	window.onload = function() { jQuery("ul").treemap(800,600,{getData:getDataFromUL}); };
-					function getDataFromUL(el) {
-					 var data = [];
-					 jQuery("li",el).each(function(){
-					   var item = jQuery(this);
-					   var row = [item.find("span.desc").html(),item.find("span.data").html()];
-					   data.push(row);
-					 });
-					 return data;
-					}';
-        print '</script></head>';
-        print '<body><ul>';
+        $css   = $this->_getCss();
+
+        $html = '<html><head>';
+        $html .= "<title>{$title}</title>";
+        $html .= "<style type=\"text/css\">{$css}</style>";
+        $html .= '<script src="http://code.jquery.com/jquery-latest.js"></script>';
+        $html .= '<script src="https://cdnjs.cloudflare.com/ajax/libs/jqwidgets/19.2.0/jqwidgets/jqxtreemap.min.js"></script>';
+        $html .= '<script type="text/javascript">
+            window.onload = function() {
+                jQuery("ul").treemap(800, 600, { getData: getDataFromUL });
+            };
+            function getDataFromUL(el) {
+                var data = [];
+                jQuery("li", el).each(function() {
+                    var item = jQuery(this);
+                    var row = [item.find("span.desc").html(), item.find("span.data").html()];
+                    data.push(row);
+                });
+                return data;
+            }
+        </script>';
+        $html .= '</head><body><ul>';
+
+        print $html;
     }
 
     public function paintRectangleStart($node): void
     {
-        print '<li><span class="desc">' . \basename($node->getDescription()) . '</span>';
-        print '<span class="data">' . $node->getTotalSize() . '</span>';
+        $html = '<li><span class="desc">' . \basename($node->getDescription()) . '</span>';
+        $html .= '<span class="data">' . $node->getTotalSize() . '</span>';
+
+        print $html;
     }
 
     public function paintRectangleEnd(): void
@@ -63,8 +71,10 @@ class JqueryTreemapReporter extends TreemapReporter
 
     public function paintResultsFooter(): void
     {
-        print '</ul></body>';
-        print '</html>';
+        $html = '</ul></body>';
+        $html .= '</html>';
+
+        print $html;
     }
 
     public function divideMapNodes($map): void

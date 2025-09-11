@@ -209,25 +209,25 @@ class TestOfUrl extends UnitTestCase
         $this->assertUrl(
             'username:password@somewhere.com:243',
             [false, 'username', 'password', 'somewhere.com', 243, '/', 'com', '', false],
-            []
+            [],
         );
         $this->assertUrl(
             'https://www.somewhere.com',
-            ['https', false, false, 'www.somewhere.com', false, '/', 'com', '', false]
+            ['https', false, false, 'www.somewhere.com', false, '/', 'com', '', false],
         );
         $this->assertUrl(
             'username@www.somewhere.com:243#anchor',
-            [false, 'username', false, 'www.somewhere.com', 243, '/', 'com', '', 'anchor']
+            [false, 'username', false, 'www.somewhere.com', 243, '/', 'com', '', 'anchor'],
         );
         $this->assertUrl(
             '/this/that/here.php?a=1&b=2',
             [false, false, false, '', false, '/this/that/here.php', false, '?a=1&b=2', false],
-            ['a' => '1', 'b' => '2']
+            ['a' => '1', 'b' => '2'],
         );
         $this->assertUrl(
             'username@/here.php?a=1&b=2',
             [false, 'username', false, '', false, '/here.php', false, '?a=1&b=2', false],
-            ['a' => '1', 'b' => '2']
+            ['a' => '1', 'b' => '2'],
         );
     }
 
