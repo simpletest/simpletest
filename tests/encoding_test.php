@@ -276,3 +276,26 @@ class TestOfEncodingHeaders extends UnitTestCase
         $encoding->writeHeadersTo($socket);
     }
 }
+
+class TestOfMimeDetectionInline extends UnitTestCase
+{
+    public function testDetectsJpegFromBinaryContent(): void
+    {
+        $jpegHeader = "\xFF\xD8\xFF\xE0\x00\x10JFIF\x00" . \str_repeat("\x00", 100);
+
+        $part     = new SimpleAttachment('a', $jpegHeader, 'image.jpg');
+        $mimePart = $part->asMime();
+
+        $this->assertNotEqual(\strpos($mimePart, 'Content-Type: image/jpeg'), false);
+    }
+
+    public function testUsesExtensionWhenContentUndetectable(): void
+    {
+        $binary = "\x00\x01\x02\x03" . \str_repeat("\x00", 100);
+
+        $part     = new SimpleAttachment('a', $binary, 'photo.jpeg');
+        $mimePart = $part->asMime();
+
+        $this->assertNotEqual(\strpos($mimePart, 'Content-Type: image/jpeg'), false);
+    }
+}

@@ -175,10 +175,67 @@ class SimpleAttachment
      */
     protected function deduceMimeType()
     {
+        // If the content is only ASCII, treat as plain text.
         if ($this->isOnlyAscii($this->content)) {
             return 'text/plain';
         }
 
+        // Prefer the fileinfo extension (can inspect raw data via finfo_buffer).
+        if (\function_exists('finfo_open')) {
+            $finfo = @\finfo_open(\FILEINFO_MIME_TYPE);
+
+            if ($finfo) {
+                $type = @\finfo_buffer($finfo, $this->content);
+                @\finfo_close($finfo);
+
+                if ($type && 'application/octet-stream' !== $type) {
+                    return $type;
+                }
+            }
+        }
+
+        // Use file extension as a hint if present and
+        // when content-based detection returns application/octet-stream.
+        $extension = \strtolower(\pathinfo($this->filename, \PATHINFO_EXTENSION));
+
+        if ($extension) {
+            $map = [
+                'jpg'  => 'image/jpeg',
+                'jpeg' => 'image/jpeg',
+                'png'  => 'image/png',
+                'gif'  => 'image/gif',
+                'txt'  => 'text/plain',
+                'html' => 'text/html',
+                'htm'  => 'text/html',
+                'csv'  => 'text/csv',
+                'pdf'  => 'application/pdf',
+                'zip'  => 'application/zip',
+                'svg'  => 'image/svg+xml',
+                'bmp'  => 'image/bmp',
+                'webp' => 'image/webp',
+            ];
+
+            if (isset($map[$extension])) {
+                return $map[$extension];
+            }
+        }
+
+        // Fall back to mime_content_type by writing to a temp file if available.
+        if (\function_exists('mime_content_type')) {
+            $tmp = @\tempnam(\sys_get_temp_dir() ?: __DIR__, 'st');
+
+            if ($tmp !== false) {
+                @\file_put_contents($tmp, $this->content);
+                $type = @\mime_content_type($tmp);
+                @\unlink($tmp);
+
+                if ($type && 'application/octet-stream' !== $type) {
+                    return $type;
+                }
+            }
+        }
+
+        // Last resort: unknown binary content.
         return 'application/octet-stream';
     }
 
@@ -194,7 +251,15 @@ class SimpleAttachment
         $length = \strlen($string);
 
         for ($i = 0; $i < $length; $i++) {
-            if (\ord($string[$i]) > 127) {
+            $ord = \ord($string[$i]);
+
+            // Allow common whitespace: tab(9), LF(10), CR(13).
+            if ($ord < 32 && !\in_array($ord, [9, 10, 13], true)) {
+                return false;
+            }
+
+            // DEL (127) is not printable ASCII.
+            if ($ord === 127) {
                 return false;
             }
         }
