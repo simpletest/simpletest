@@ -116,3 +116,21 @@ class TestOfTestDoxReporter extends UnitTestCase
         );
     }
 }
+
+class TestOfTestDoxReporterConstructor extends UnitTestCase
+{
+    public function testConstructorUsesFallbackPatternWhenEmpty(): void
+    {
+        $r = new TestDoxReporter('');
+        $this->assertSame('/^(.*)$/', $r->_test_case_pattern);
+    }
+
+    public function testPaintCaseStartPrintsNameWhenNoMatch(): void
+    {
+        $r = new TestDoxReporter;
+        \ob_start();
+        $r->paintCaseStart('NotATestCase');
+        $out = \ob_get_clean();
+        $this->assertTrue(\str_contains($out, 'NotATestCase'));
+    }
+}
