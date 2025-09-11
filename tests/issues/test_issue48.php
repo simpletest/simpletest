@@ -1,8 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// Combined repro for Issue #48 — mocking interfaces with class type-hinted arguments
-// This consolidates two temporary repro scripts into one test file.
+// Reproduction for  Issue #48 — mocking interfaces with class type-hinted arguments
 
 namespace Acme\Plugin {
     class Config {}
@@ -48,7 +47,8 @@ namespace {
     try {
         $ret = \Mock::generate('Acme\\Plugin\\PluginFactory');
         echo "Mock::generate('Acme\\Plugin\\PluginFactory') returned:\n";
-        var_dump($ret);
+
+        //var_dump($ret);
 
         $mockName = 'Acme\\Plugin\\' . 'Mock' . (new \ReflectionClass('Acme\\Plugin\\PluginFactory'))->getShortName();
 
