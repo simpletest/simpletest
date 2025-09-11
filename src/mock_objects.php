@@ -78,7 +78,6 @@ class ParametersExpectation extends SimpleExpectation
         }
 
         return $this->describeDifference($this->expected, $parameters);
-
     }
 
     /**
@@ -709,7 +708,6 @@ class SimpleErrorThrower
     public function act(): void
     {
         \trigger_error($this->error, $this->severity);
-
     }
 }
 
@@ -1078,7 +1076,7 @@ class SimpleMock
      *                         method call matches the arguments.
      * @param int    $severity The PHP severity level. Defaults to E_USER_ERROR.
      */
-    public function errorOn($method, $error = 'A mock error', $args = false, $severity = E_USER_ERROR): void
+    public function errorOn($method, $error = 'A mock error', $args = false, $severity = \E_USER_ERROR): void
     {
         $this->dieOnNoMethod($method, 'error on');
         $this->actions->register($method, $args, new SimpleErrorThrower($error, $severity));
@@ -1101,7 +1099,7 @@ class SimpleMock
      *                         method call matches the arguments.
      * @param int    $severity The PHP severity level. Defaults to E_USER_ERROR.
      */
-    public function errorAt($timing, $method, $error = 'A mock error', $args = false, $severity = E_USER_ERROR): void
+    public function errorAt($timing, $method, $error = 'A mock error', $args = false, $severity = \E_USER_ERROR): void
     {
         $this->dieOnNoMethod($method, 'error at');
         $this->actions->registerAt($timing, $method, $args, new SimpleErrorThrower($error, $severity));
@@ -1180,7 +1178,7 @@ class SimpleMock
     {
         if (!\is_array($args)) {
             $errormsg = \sprintf('Cannot %s. Parameter %s is not an array.', $task, $args);
-            \trigger_error($errormsg, E_USER_ERROR);
+            \trigger_error($errormsg, \E_USER_ERROR);
 
             return false;
         }
@@ -1200,7 +1198,7 @@ class SimpleMock
     {
         if ($this->is_strict && !\method_exists($this, $method)) {
             $errormsg = \sprintf('Cannot %s. Method %s() not in class %s.', $task, $method, static::class);
-            \trigger_error($errormsg, E_USER_ERROR);
+            \trigger_error($errormsg, \E_USER_ERROR);
 
             return false;
         }
@@ -1473,7 +1471,8 @@ class MockGenerator
             if (\in_array($low, $magicNames, true)) {
                 $sig = $this->reflection->getSignature($m);
 
-                if (PHP_VERSION_ID >= 80200 && \str_contains($sig, ': void')) {
+                // Match a ": void" return type robustly, allowing any spacing (e.g. ":void" or ": void").
+                if (\preg_match('/:\s*void\b/', $sig)) {
                     $magicVoidFound = true;
 
                     break;
@@ -1490,6 +1489,10 @@ class MockGenerator
         }
 
         $code = $this->createCodeForSubclass($methods ?: []);
+
+        // Dump generated code for debugging to inspect any methods that
+        // incorrectly return a value from a void signature.
+        @\file_put_contents(__DIR__ . '/../build/mock_generated.php', $code);
 
         return eval("{$code} return \$code;");
     }
@@ -1654,7 +1657,7 @@ class MockGenerator
 
             $signature = $this->reflection->getSignature($method);
 
-            if ($stripVoid && PHP_VERSION_ID >= 80200) {
+            if ($stripVoid) {
                 // Remove any trailing ": void" from the signature to allow
                 // returning values in the mock without violating parent
                 // signatures in a standalone mock class.
@@ -1663,7 +1666,7 @@ class MockGenerator
 
             // Guard: silence deprecation notices, when return type is not declared
             // https://www.php.net/manual/en/class.returntypewillchange.php
-            if (PHP_VERSION_ID >= 80100) {
+            if (\PHP_VERSION_ID >= 80100) {
                 $code .= '    #[\\ReturnTypeWillChange]' . "\n";
             }
             $code .= '    ' . $signature;
@@ -1674,15 +1677,57 @@ class MockGenerator
             } else {
                 $code .= "\n    {\n";
 
+                // Determine whether the original method declares a void return
+                // type. When $stripVoid is true (standalone mock class), we
+                // intentionally allow returns even if the original declared
+                // void, therefore treat as non-void.
+                $isVoid = false;
+
+                if (!$stripVoid) {
+                    $originalClass = !empty($this->namespace) ? $this->namespace . '\\' . $this->class : $this->class;
+
+                    if (\class_exists($originalClass) && \method_exists($originalClass, $method)) {
+                        try {
+                            $rm = new ReflectionMethod($originalClass, $method);
+
+                            if (\method_exists($rm, 'hasReturnType') && $rm->hasReturnType()) {
+                                $rt = $rm->getReturnType();
+
+                                if ($rt instanceof ReflectionNamedType) {
+                                    $name = \strtolower($rt->getName());
+
+                                    if ('void' === $name) {
+                                        $isVoid = true;
+                                    }
+                                }
+                            }
+                        } catch (ReflectionException $e) {
+                            // fallback to signature matching
+                            $isVoid = (bool) @\preg_match('/:\s*void\b/', $signature);
+                        }
+                    } else {
+                        $isVoid = (bool) @\preg_match('/:\s*void\b/', $signature);
+                    }
+                }
+
                 if (\strtolower($method) === '__set') {
                     // If a value of null is assigned, treat it as an unset operation
                     // to match historical SimpleTest semantics.
                     $code .= "        if (func_num_args() >= 2 && func_get_arg(1) === null) {\n";
                     $code .= "            return \$this->invoke(\"__unset\", array(func_get_arg(0)));\n";
                     $code .= "        }\n";
-                    $code .= "        return \$this->invoke(\"__set\", func_get_args());\n";
+
+                    if ($isVoid) {
+                        $code .= "        \$this->invoke(\"__set\", func_get_args());\n";
+                    } else {
+                        $code .= "        return \$this->invoke(\"__set\", func_get_args());\n";
+                    }
                 } else {
-                    $code .= "        return \$this->invoke(\"{$method}\", func_get_args());\n";
+                    if ($isVoid) {
+                        $code .= "        \$this->invoke(\"{$method}\", func_get_args());\n";
+                    } else {
+                        $code .= "        return \$this->invoke(\"{$method}\", func_get_args());\n";
+                    }
                 }
                 $code .= "    }\n";
             }
@@ -1774,7 +1819,7 @@ class MockGenerator
         $code = "    function __constructor() {\n";
 
         // Guard: Use of "parent" in callables is deprecated since PHP 8.2
-        if (PHP_VERSION_ID >= 80200) {
+        if (\PHP_VERSION_ID >= 80200) {
             $code .= "        call_user_func_array('" . $this->class . "::__construct', func_get_args());\n";
         } else {
             $code .= "        call_user_func_array('parent::__construct', func_get_args());\n";
@@ -1927,13 +1972,47 @@ class MockGenerator
 
             // Guard: silence deprecation notices, when return type is not declared
             // https://www.php.net/manual/en/class.returntypewillchange.php
-            if (PHP_VERSION_ID >= 80100) {
+            if (\PHP_VERSION_ID >= 80100) {
                 $code .= '    #[\ReturnTypeWillChange]' . "\n";
             }
             $code .= '    ' . $signature . "\n    {\n";
 
             // Guard: a void function must not return a value
-            if (PHP_VERSION_ID >= 80200 && \str_contains($signature, ': void')) {
+            // Guard: a void function must not return a value. Use ReflectionMethod
+            // to determine whether the original method declares a void return
+            // type. This is more robust than matching the signature string.
+            $hasVoidReturn = false;
+
+            // Build fully-qualified original class name including namespace if present.
+            $originalClass = !empty($this->namespace) ? $this->namespace . '\\' . $this->class : $this->class;
+
+            if (\class_exists($originalClass) && \method_exists($originalClass, $method)) {
+                try {
+                    $rm = new ReflectionMethod($originalClass, $method);
+
+                    if (\method_exists($rm, 'hasReturnType') && $rm->hasReturnType()) {
+                        $rt = $rm->getReturnType();
+
+                        if ($rt instanceof ReflectionNamedType) {
+                            $name = \strtolower($rt->getName());
+
+                            if ('void' === $name) {
+                                $hasVoidReturn = true;
+                            }
+                        }
+                    }
+                } catch (ReflectionException $e) {
+                    // Ignore reflection errors and fall back to signature matching.
+                    $hasVoidReturn = (bool) @\preg_match('/:\s*void\b/', $signature);
+                }
+                // Debug: record detection outcome for this method
+                @\file_put_contents(__DIR__ . '/../build/mock_void_detection.log', $originalClass . '::' . $method . ' -> ' . ($hasVoidReturn ? 'void' : 'non-void') . "\n", \FILE_APPEND);
+            } else {
+                // Fallback when original class/method isn't available.
+                $hasVoidReturn = (bool) @\preg_match('/:\s*void\b/', $signature);
+            }
+
+            if ($hasVoidReturn) {
                 $code .= "        \$this->mock->invoke(\"{$method}\", func_get_args());\n";
             } else {
                 $code .= "        return \$this->mock->invoke(\"{$method}\", func_get_args());\n";
