@@ -5,8 +5,6 @@ require_once \dirname(__DIR__) . '/src/reporter.php';
 /**
  * Reporter which outputs test results in a format compatible with JUnit / Maven XML output.
  * Can be used for integrating test suite with CI servers such as Atlassian Bamboo.
- *
- * @author Patrice Neff - mailinglists@patrice.ch (original code)
  */
 class JUnitXMLReporter extends SimpleReporter
 {

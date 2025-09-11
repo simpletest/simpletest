@@ -11,8 +11,6 @@
  * derived from sfDomCssSelector Id 3053 (Symfony version 1.0.2) - Fabien Potencier, 2006-12-16
  * http://www.symfony-project.com/api/symfony/util/sfDomCssSelector.html
  *
- * @author Perrick Penet <perrick@noparking.net>
- *
  * @param DomDocument $dom
  */
 class CssSelector

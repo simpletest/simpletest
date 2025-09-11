@@ -1,4 +1,5 @@
 <?php declare(strict_types=1);
+use DummyNS\DummyWithNamespace;
 
 require_once __DIR__ . '/../src/autorun.php';
 
@@ -1225,8 +1226,8 @@ class TestOfProtectedMethodPartialMocks extends UnitTestCase
 
 // Mock::generate('DummyNS\DummyWithNamespace', 'TestFullDummyWithNamespace');
 // Mock::generatePartial('DummyNS\DummyWithNamespace', 'TestPartialDummyWithNamespace', ['aMethod']);
-Mock::generate(DummyNS\DummyWithNamespace::class, 'TestFullDummyWithNamespace');
-Mock::generatePartial(DummyNS\DummyWithNamespace::class, 'TestPartialDummyWithNamespace', ['aMethod']);
+Mock::generate(DummyWithNamespace::class, 'TestFullDummyWithNamespace');
+Mock::generatePartial(DummyWithNamespace::class, 'TestPartialDummyWithNamespace', ['aMethod']);
 
 class TestOfNamespacedPartialMocks extends UnitTestCase
 {

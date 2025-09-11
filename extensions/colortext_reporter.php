@@ -4,9 +4,6 @@ require_once __DIR__ . '/../src/reporter.php';
 
 /**
  * Provides an ANSI-colored {@link TextReporter} for viewing test results.
- *
- * @author Jason Sweat (original code)
- * @author Travis Swicegood <development@domain51.com>
  */
 class ColorTextReporter extends TextReporter
 {

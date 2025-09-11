@@ -308,7 +308,6 @@ class SimpleEncoding
         }
 
         return $values;
-
     }
 
     /**

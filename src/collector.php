@@ -1,10 +1,4 @@
 <?php declare(strict_types=1);
-/**
- * This file contains the following classes: {@link SimpleCollector},
- * {@link SimplePatternCollector}.
- *
- * @author Travis Swicegood <development@domain51.com>
- */
 
 /**
  * The basic collector for {@link GroupTest}.
@@ -30,7 +24,7 @@ class SimpleCollector
                 if ($this->isHidden($entry)) {
                     continue;
                 }
-                $this->handle($test, $path . DIRECTORY_SEPARATOR . $entry);
+                $this->handle($test, $path . \DIRECTORY_SEPARATOR . $entry);
             }
             \closedir($handle);
         }
@@ -45,7 +39,7 @@ class SimpleCollector
      */
     protected function removeTrailingSlash($path)
     {
-        if (DIRECTORY_SEPARATOR === \substr($path, -1)) {
+        if (\DIRECTORY_SEPARATOR === \substr($path, -1)) {
             return \substr($path, 0, -1);
         }
 
@@ -54,7 +48,6 @@ class SimpleCollector
         }
 
         return $path;
-
     }
 
     /**

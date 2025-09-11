@@ -9,8 +9,6 @@ require_once __DIR__ . '/dom_tester/css_selector.php';
  *
  * Create a CSS Selector expectactation
  *
- * @author     Perrick Penet <perrick@noparking.net>
- *
  * @param DomDocument $_dom
  * @param string      $_selector
  * @param array       $_value
