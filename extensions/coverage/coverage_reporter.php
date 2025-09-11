@@ -6,11 +6,14 @@ require_once __DIR__ . '/coverage_utils.php';
 
 require_once __DIR__ . '/coverage_writer.php';
 
+require_once __DIR__ . '/coverage_json_reporter.php';
+
 /**
  * Take aggregated coverage data and generate reports from it.
  */
 class CoverageReporter
 {
+    use CoverageJsonReporterTrait;
     public $coverage;
     public $untouched;
     public $reportDir;
