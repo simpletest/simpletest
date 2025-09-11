@@ -1,5 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/php:8.2-bookworm
-#FROM mcr.microsoft.com/devcontainers/php:8.3-bookworm
+FROM mcr.microsoft.com/devcontainers/php:8
 
 # +-----------------------------+
 # | METADATA                    |
@@ -57,7 +56,7 @@ RUN apt-get autoremove -fy && \
 # +-----------------------------+
 
 # Important!
-# 1) You have to set the env var XDEBUG_TRIGGER=1 to trigger xdebug (e.g. in .vscode/launch.json).
+# 1) You have to set the env var XDEBUG_TRIGGER=1 to trigger xdebug.
 #    https://xdebug.org/docs/all_settings#start_with_request#trigger
 # 2) You might use the env var XDEBUG_MODE to override the xdebug.mode.
 #    https://xdebug.org/docs/develop#mode
