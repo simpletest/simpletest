@@ -621,7 +621,7 @@ class SimpleHtmlSaxParser
         }
 
         if ('=' !== $token) {
-            $this->current_attribute                    = \strtolower(\html_entity_decode($token, ENT_QUOTES));
+            $this->current_attribute                    = \strtolower(\html_entity_decode($token, \ENT_QUOTES));
             $this->attributes[$this->current_attribute] = '';
         }
 
@@ -658,12 +658,12 @@ class SimpleHtmlSaxParser
         if ($this->current_attribute) {
             if (LEXER_UNMATCHED == $event) {
                 $this->attributes[$this->current_attribute] .=
-                        \html_entity_decode($token, ENT_QUOTES);
+                        \html_entity_decode($token, \ENT_QUOTES);
             }
 
             if (LEXER_SPECIAL == $event) {
                 $this->attributes[$this->current_attribute] .=
-                        \preg_replace('/^=\s*/', '', \html_entity_decode($token, ENT_QUOTES));
+                        \preg_replace('/^=\s*/', '', \html_entity_decode($token, \ENT_QUOTES));
             }
         }
 

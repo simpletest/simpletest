@@ -10,7 +10,12 @@ class CoverageWriter
         $summaryTemplateContents = function ($file, $data)
         {
             \extract($data);
-            $now = \date('F j, Y, g:i a');
+
+            \asort($coverageByFile);
+
+            $now            = (new DateTimeImmutable)->format(DateTime::ATOM);
+            $human_readable = (new DateTimeImmutable($now))->format('F j, Y, g:i a');
+
             \ob_start();
 
             include __DIR__ . '/templates/index.php';

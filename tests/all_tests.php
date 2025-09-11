@@ -17,6 +17,5 @@ class AllTests extends TestSuite
          */
         // $this->addFile(__DIR__ . '/live_test.php');
         // $this->addFile(__DIR__ . '/acceptance_test.php');
-
     }
 }

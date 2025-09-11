@@ -79,7 +79,6 @@ class FieldExpectation extends SimpleExpectation
             '] fails with [' .
             $dumper->describeValue($compare) . '] ' .
             $dumper->describeDifference($this->value, $compare);
-
     }
 
     /**
@@ -194,7 +193,6 @@ class HttpHeaderExpectation extends SimpleExpectation
         }
 
         return "Failed to find header [{$message}]";
-
     }
 
     /**
@@ -334,7 +332,6 @@ class NoHttpHeaderExpectation extends HttpHeaderExpectation
         }
 
         return "Did not find unwanted header [{$expectation}]";
-
     }
 }
 
@@ -387,7 +384,6 @@ class TextExpectation extends SimpleExpectation
         return 'Text [' . $this->getSubstring() .
             '] not detected in [' .
             $dumper->describeValue($compare) . ']';
-
     }
 
     /**
@@ -465,7 +461,6 @@ class NoTextExpectation extends TextExpectation
         }
 
         return $this->describeTextMatch($this->getSubstring(), $compare);
-
     }
 }
 
@@ -1316,7 +1311,6 @@ class WebTestCase extends SimpleTestCase
             \strtolower($this->browser->getAuthentication()) === \strtolower($authentication),
             $message,
         );
-
     }
 
     /**

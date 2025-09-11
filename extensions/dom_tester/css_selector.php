@@ -101,7 +101,7 @@ class CssSelector
                 ([^\]]*)            # non quoted value (optional)
               )
             \]
-          /x', $matches[2], $matches, PREG_SET_ORDER);
+          /x', $matches[2], $matches, \PREG_SET_ORDER);
 
                     // Grab all of the tagName elements within current node
                     $founds = $this->getElementsByTagName($nodes, $tagName, $combinator);

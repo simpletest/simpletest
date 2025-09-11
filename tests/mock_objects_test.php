@@ -221,7 +221,7 @@ class TestOfCallSchedule extends UnitTestCase
     public function testCanEmitError(): void
     {
         $schedule = new SimpleCallSchedule;
-        $schedule->register('aMethod', false, new SimpleErrorThrower('Ouch', E_USER_WARNING));
+        $schedule->register('aMethod', false, new SimpleErrorThrower('Ouch', \E_USER_WARNING));
         $this->expectError('Ouch');
         $schedule->respond(0, 'aMethod', []);
     }

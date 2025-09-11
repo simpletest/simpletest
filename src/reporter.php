@@ -178,7 +178,7 @@ class HtmlReporter extends SimpleReporter
      */
     protected function htmlEntities($message)
     {
-        return \htmlentities($message, ENT_COMPAT, $this->charset);
+        return \htmlentities($message, \ENT_COMPAT, $this->charset);
     }
 }
 
@@ -416,7 +416,6 @@ class SelectiveReporter extends SimpleReporterDecorator
             }
 
             return true;
-
         }
 
         return false;

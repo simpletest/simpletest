@@ -366,7 +366,7 @@ class SimpleReflection
                 $signature .= '&';
             }
             // Guard: Variadic methods only supported by PHP 5.6+
-            $isVariadic = (PHP_VERSION_ID >= 50600) && $parameter->isVariadic();
+            $isVariadic = (\PHP_VERSION_ID >= 50600) && $parameter->isVariadic();
 
             if ($isVariadic) {
                 $signature .= '...';
@@ -400,7 +400,7 @@ class SimpleReflection
         $returnTypeString = '';
 
         // Guard: method getReturnType() is only supported by PHP7.0+
-        if (PHP_VERSION_ID >= 70000) {
+        if (\PHP_VERSION_ID >= 70000) {
             $returnType       = $method->getReturnType();
             $returnTypeString = (string) $returnType;
 
@@ -410,7 +410,7 @@ class SimpleReflection
 
             if ('' !== $returnTypeString) {
                 // Guard: method getReturnType()->allowsNull() is only supported by PHP7.1+
-                if (PHP_VERSION_ID >= 70100 &&
+                if (\PHP_VERSION_ID >= 70100 &&
                     $returnType->allowsNull() &&
                     // getReturnType->__toString() for Throwable
                     // already return question mark ("?Throwable"), so check it.
@@ -428,7 +428,7 @@ class SimpleReflection
     protected function getParameterTypeHint(ReflectionParameter $parameter)
     {
         // Guard: parameter types only supported by PHP7.0+
-        if ((PHP_VERSION_ID >= 70000) && $parameter->hasType()) {
+        if ((\PHP_VERSION_ID >= 70000) && $parameter->hasType()) {
             $type = $parameter->getType();
 
             $typesThatDontRequirePrefixSlash = [
@@ -457,12 +457,12 @@ class SimpleReflection
                 // never render ?mixed because `mixed` already includes null
                 $isMixedNamed = (0 === \strcasecmp(\ltrim($name, '\\'), 'mixed'));
 
-                if (PHP_VERSION_ID >= 70100 && $type->allowsNull() && $name !== 'null' && !$isMixedNamed) {
+                if (\PHP_VERSION_ID >= 70100 && $type->allowsNull() && $name !== 'null' && !$isMixedNamed) {
                     $typeHint = '?' . $name;
                 } else {
                     $typeHint = $name;
                 }
-            } elseif (PHP_VERSION_ID >= 80000 && $type instanceof ReflectionUnionType) {
+            } elseif (\PHP_VERSION_ID >= 80000 && $type instanceof ReflectionUnionType) {
                 $parts = [];
 
                 foreach ($type->getTypes() as $t) {
@@ -492,7 +492,7 @@ class SimpleReflection
                     }
                     $typeHint = \implode('|', $parts);
                 }
-            } elseif (PHP_VERSION_ID >= 80000 && $type instanceof ReflectionIntersectionType) {
+            } elseif (\PHP_VERSION_ID >= 80000 && $type instanceof ReflectionIntersectionType) {
                 $parts = [];
 
                 foreach ($type->getTypes() as $t) {
@@ -525,11 +525,11 @@ class SimpleReflection
         }
         // Guard: parameter->isArray() only supported by <PHP8
         // https://www.php.net/manual/en/reflectionparameter.isarray.php
-        elseif ((PHP_VERSION_ID < 80000) && $parameter->isArray()) {
+        elseif ((\PHP_VERSION_ID < 80000) && $parameter->isArray()) {
             $typeHint = 'array';
         }
         // Guard: use functional replacement for parameter->isArray() on PHP8+
-        elseif ((PHP_VERSION_ID >= 80000) && $this->declaresArray($parameter)) {
+        elseif ((\PHP_VERSION_ID >= 80000) && $this->declaresArray($parameter)) {
             $typeHint = 'array';
         } else {
             $typeHint = '';

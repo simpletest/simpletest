@@ -73,4 +73,18 @@ class TestOfCompatibility extends UnitTestCase
         $this->assertFalse(\is_a(new ComparisonClass, 'ComparisonInterface'));
         $this->assertTrue(\is_a(new ComparisonClassWithInterface, 'ComparisonInterface'));
     }
+
+    public function testDifferentObjectClassesAreNotIdentical(): void
+    {
+        $a = new ComparisonClass;
+        $b = new ComparisonSubclass;
+        $this->assertFalse(SimpleTestCompatibility::isIdentical($a, $b));
+    }
+
+    public function testArrayKeysMismatchIsNotIdentical(): void
+    {
+        $arr1 = ['one' => 1];
+        $arr2 = ['two' => 1];
+        $this->assertFalse(SimpleTestCompatibility::isIdentical($arr1, $arr2));
+    }
 }

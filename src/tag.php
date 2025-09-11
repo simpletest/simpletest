@@ -763,7 +763,7 @@ class SimpleTextAreaTag extends SimpleWidget
      */
     public function getDefault()
     {
-        return $this->wrap(\html_entity_decode($this->getContent(), ENT_QUOTES));
+        return $this->wrap(\html_entity_decode($this->getContent(), \ENT_QUOTES));
     }
 
     /**
@@ -1323,7 +1323,6 @@ class SimpleDateTag extends SimpleTextTag
                 return false;
             }
             $value = \date('Y-m-d', $time);
-
         }
 
         return parent::setValue($value);
@@ -1364,7 +1363,6 @@ class SimpleTimeTag extends SimpleTextTag
             }
 
             $value = 0 === $step % 60 ? \date('H:i', $time) : \date('H:i:s', $time);
-
         }
 
         return parent::setValue($value);
@@ -1589,7 +1587,6 @@ class SimpleCheckboxGroup extends SimpleTagGroup
         }
 
         return $values;
-
     }
 
     /**

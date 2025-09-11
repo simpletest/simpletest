@@ -229,7 +229,7 @@ class CodeCoverage
         }
 
         try {
-            \file_put_contents($this->settingsFile, \json_encode($data, JSON_PRETTY_PRINT));
+            \file_put_contents($this->settingsFile, \json_encode($data, \JSON_PRETTY_PRINT));
         } catch (Throwable $e) {
             \error_log('Could not write settings file ' . $this->settingsFile . ': ' . $e->getMessage());
         }

@@ -83,7 +83,7 @@ class CoverageDataHandler
                 foreach ($coverage as $file => $lines) {
                     // store as JSON text to enable SQL JSON functions and safer storage
                     try {
-                        $coverageJson = \json_encode($lines, JSON_THROW_ON_ERROR);
+                        $coverageJson = \json_encode($lines, \JSON_THROW_ON_ERROR);
                     } catch (Exception $e) {
                         // fallback to a best-effort encode without throwing
                         $coverageJson = \json_encode($lines);
@@ -160,7 +160,7 @@ class CoverageDataHandler
             }
 
             try {
-                $decoded = \json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
+                $decoded = \json_decode($raw, true, 512, \JSON_THROW_ON_ERROR);
             } catch (Exception $e) {
                 // Skip non-JSON data; log for operators to perform migration if
                 // necessary.

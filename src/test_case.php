@@ -20,7 +20,7 @@ require_once __DIR__ . '/reflection.php';
 
 // define root constant for dependent libraries
 if (!\defined('SIMPLE_TEST')) {
-    \define('SIMPLE_TEST', __DIR__ . DIRECTORY_SEPARATOR);
+    \define('SIMPLE_TEST', __DIR__ . \DIRECTORY_SEPARATOR);
 }
 
 /**
@@ -314,7 +314,6 @@ class SimpleTestCase
         return $this->fail(
             \sprintf($message, $expectation->overlayMessage($compare, $this->reporter->getDumper())),
         );
-
     }
 
     /**
@@ -575,7 +574,6 @@ class TestSuite
         }
 
         return $this->label;
-
     }
 
     /**

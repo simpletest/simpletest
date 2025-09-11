@@ -50,7 +50,7 @@ class TestOfErrorTrap extends UnitTestCase
 
     protected function setUp(): void
     {
-        $this->old = \error_reporting(E_ALL);
+        $this->old = \error_reporting(\E_ALL);
         \set_error_handler('SimpleTestErrorHandler');
     }
 
@@ -106,7 +106,7 @@ class TestOfErrors extends UnitTestCase
 
     protected function setUp(): void
     {
-        $this->old = \error_reporting(E_ALL);
+        $this->old = \error_reporting(\E_ALL);
     }
 
     protected function tearDown(): void
@@ -116,54 +116,54 @@ class TestOfErrors extends UnitTestCase
 
     public function testDefaultWhenAllReported(): void
     {
-        \error_reporting(E_ALL);
+        \error_reporting(\E_ALL);
         $this->expectError('Ouch!');
         \trigger_error('Ouch!');
     }
 
     public function testNoticeWhenReported(): void
     {
-        \error_reporting(E_ALL);
+        \error_reporting(\E_ALL);
         $this->expectError('Ouch!');
-        \trigger_error('Ouch!', E_USER_NOTICE);
+        \trigger_error('Ouch!', \E_USER_NOTICE);
     }
 
     public function testWarningWhenReported(): void
     {
-        \error_reporting(E_ALL);
+        \error_reporting(\E_ALL);
         $this->expectError('Ouch!');
-        \trigger_error('Ouch!', E_USER_WARNING);
+        \trigger_error('Ouch!', \E_USER_WARNING);
     }
 
     public function testErrorWhenReported(): void
     {
-        \error_reporting(E_ALL);
+        \error_reporting(\E_ALL);
         $this->expectError('Ouch!');
-        \trigger_error('Ouch!', E_USER_ERROR);
+        \trigger_error('Ouch!', \E_USER_ERROR);
     }
 
     public function testNoNoticeWhenNotReported(): void
     {
         \error_reporting(0);
-        \trigger_error('Ouch!', E_USER_NOTICE);
+        \trigger_error('Ouch!', \E_USER_NOTICE);
     }
 
     public function testNoWarningWhenNotReported(): void
     {
         \error_reporting(0);
-        \trigger_error('Ouch!', E_USER_WARNING);
+        \trigger_error('Ouch!', \E_USER_WARNING);
     }
 
     public function testNoticeSuppressedWhenReported(): void
     {
-        \error_reporting(E_ALL);
-        @\trigger_error('Ouch!', E_USER_NOTICE);
+        \error_reporting(\E_ALL);
+        @\trigger_error('Ouch!', \E_USER_NOTICE);
     }
 
     public function testWarningSuppressedWhenReported(): void
     {
-        \error_reporting(E_ALL);
-        @\trigger_error('Ouch!', E_USER_WARNING);
+        \error_reporting(\E_ALL);
+        @\trigger_error('Ouch!', \E_USER_WARNING);
     }
 
     public function testErrorWithPercentsReportedWithNoSprintfError(): void

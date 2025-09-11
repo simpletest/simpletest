@@ -116,8 +116,8 @@ class SimpleSeleniumRemoteControl
         if (!$ch = \curl_init($url)) {
             throw new Exception('Unable to setup curl');
         }
-        \curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        \curl_setopt($ch, CURLOPT_TIMEOUT, \floor($this->_timeout));
+        \curl_setopt($ch, \CURLOPT_RETURNTRANSFER, true);
+        \curl_setopt($ch, \CURLOPT_TIMEOUT, \floor($this->_timeout));
 
         return $ch;
     }

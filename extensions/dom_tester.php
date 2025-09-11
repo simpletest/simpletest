@@ -73,7 +73,6 @@ class CssSelectorExpectation extends SimpleExpectation
                 ' fails with [' .
                 $dumper->describeValue($compare) . '] ' .
                 $dumper->describeDifference($this->value, $compare);
-
     }
 }
 

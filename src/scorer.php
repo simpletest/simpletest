@@ -262,7 +262,7 @@ class SimpleReporter extends SimpleScorer
      */
     public static function inCli()
     {
-        return PHP_SAPI === 'cli';
+        return \PHP_SAPI === 'cli';
     }
 
     /**
@@ -480,7 +480,6 @@ class SimpleReporterDecorator
         }
 
         return [];
-
     }
 
     /**

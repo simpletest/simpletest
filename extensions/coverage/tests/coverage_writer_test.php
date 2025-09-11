@@ -36,18 +36,19 @@ class CoverageWriterTest extends UnitTestCase
 
         $contents = $writer->writeSummaryReport($reportFile, $variables);
 
-        $dom = new SimpleXMLElement($contents);
+        $dom = new DOMDocument;
+        @$dom->loadHTML($contents);
+        $xpath = new DOMXPath($dom);
 
-        $totalPercentCoverage = $dom->xpath("//span[@class='totalPercentCoverage']");
-        $this->assertEqual('50%', (string) $totalPercentCoverage[0]);
+        $totalPercentCoverage = $xpath->query("//span[@class='totalPercentCoverage']");
+        $this->assertEqual('50%', $totalPercentCoverage->item(0)->textContent);
 
-        $fileLinks    = $dom->xpath("//a[@class='fileReportLink']");
-        $fileLinkAttr = $fileLinks[0]->attributes();
-        $this->assertEqual('file.html', $fileLinkAttr['href']);
-        $this->assertEqual('file', (string) ($fileLinks[0]));
+        $fileLinks = $xpath->query("//a[@class='fileReportLink']");
+        $this->assertEqual('file.html', $fileLinks->item(0)->getAttribute('href'));
+        $this->assertEqual('file', $fileLinks->item(0)->textContent);
 
-        $untouchedFile = $dom->xpath("//span[@class='untouchedFile']");
-        $this->assertEqual('missed-file', (string) $untouchedFile[0]);
+        $untouchedFile = $xpath->query("//span[@class='untouchedFile']");
+        $this->assertEqual('missed-file', $untouchedFile->item(0)->textContent);
 
         \unlink($reportFile);
     }
@@ -64,13 +65,16 @@ class CoverageWriterTest extends UnitTestCase
 
         $contents = $writer->writeFileReport($reportFile, $variables);
 
-        $dom = new SimpleXMLElement($contents);
+        $dom = new DOMDocument;
+        @$dom->loadHTML($contents);
+        $xpath = new DOMXPath($dom);
 
-        $cells = $dom->xpath("//table[@id='code']/tbody/tr/td/span");
-        $this->assertEqual('comment code', self::getAttribute($cells[1], 'class'));
-        $this->assertEqual('comment code', self::getAttribute($cells[3], 'class'));
-        $this->assertEqual('covered code', self::getAttribute($cells[5], 'class'));
-        $this->assertEqual('dead code', self::getAttribute($cells[7], 'class'));
+        $cells = $xpath->query("//table[@id='code']/tbody/tr/td/span");
+
+        $this->assertEqual('comment code', $cells->item(1)->getAttribute('class'));
+        $this->assertEqual('comment code', $cells->item(3)->getAttribute('class'));
+        $this->assertEqual('covered code', $cells->item(5)->getAttribute('class'));
+        $this->assertEqual('dead code', $cells->item(7)->getAttribute('class'));
 
         \unlink($reportFile);
     }

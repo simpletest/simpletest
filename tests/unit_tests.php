@@ -51,5 +51,7 @@ class UnitTests extends TestSuite
 
         $this->addFile($path . '/../extensions/phpunit/tests/adapter_test.php');
         $this->addFile($path . '/../extensions/testdox/test.php');
+        $this->addFile($path . '/extensions/testdox_reporter_test.php');
+        $this->addFile(__DIR__ . '/extensions/coverage_data_handler_test.php');
     }
 }

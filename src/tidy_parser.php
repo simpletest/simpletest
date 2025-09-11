@@ -385,7 +385,7 @@ class SimpleTidyPageBuilder
     {
         $parts                    = \explode('=', $raw);
         [$name, $value]           = 1 === \count($parts) ? [$parts[0], $parts[0]] : $parts;
-        $attributes[\trim($name)] = \html_entity_decode($this->dequote(\trim($value)), ENT_QUOTES);
+        $attributes[\trim($name)] = \html_entity_decode($this->dequote(\trim($value)), \ENT_QUOTES);
 
         return $attributes;
     }
