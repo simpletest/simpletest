@@ -21,7 +21,7 @@ class TestOfDirectRoute extends UnitTestCase
     public function testDefaultGetRequest(): void
     {
         $socket = new MockSimpleSocket;
-        $socket->expectAt(0, 'write', ["GET /here.html HTTP/1.0\r\n"]);
+    $socket->expectAt(0, 'write', ["GET /here.html HTTP/1.1\r\n"]);
         $socket->expectAt(1, 'write', ["Host: a.valid.host\r\n"]);
         $socket->expectAt(2, 'write', ["Connection: close\r\n"]);
         $socket->expectCallCount('write', 3);
@@ -34,7 +34,7 @@ class TestOfDirectRoute extends UnitTestCase
     public function testDefaultPostRequest(): void
     {
         $socket = new MockSimpleSocket;
-        $socket->expectAt(0, 'write', ["POST /here.html HTTP/1.0\r\n"]);
+    $socket->expectAt(0, 'write', ["POST /here.html HTTP/1.1\r\n"]);
         $socket->expectAt(1, 'write', ["Host: a.valid.host\r\n"]);
         $socket->expectAt(2, 'write', ["Connection: close\r\n"]);
         $socket->expectCallCount('write', 3);
@@ -48,7 +48,7 @@ class TestOfDirectRoute extends UnitTestCase
     public function testDefaultDeleteRequest(): void
     {
         $socket = new MockSimpleSocket;
-        $socket->expectAt(0, 'write', ["DELETE /here.html HTTP/1.0\r\n"]);
+    $socket->expectAt(0, 'write', ["DELETE /here.html HTTP/1.1\r\n"]);
         $socket->expectAt(1, 'write', ["Host: a.valid.host\r\n"]);
         $socket->expectAt(2, 'write', ["Connection: close\r\n"]);
         $socket->expectCallCount('write', 3);
@@ -61,7 +61,7 @@ class TestOfDirectRoute extends UnitTestCase
     public function testDefaultHeadRequest(): void
     {
         $socket = new MockSimpleSocket;
-        $socket->expectAt(0, 'write', ["HEAD /here.html HTTP/1.0\r\n"]);
+    $socket->expectAt(0, 'write', ["HEAD /here.html HTTP/1.1\r\n"]);
         $socket->expectAt(1, 'write', ["Host: a.valid.host\r\n"]);
         $socket->expectAt(2, 'write', ["Connection: close\r\n"]);
         $socket->expectCallCount('write', 3);
@@ -74,7 +74,7 @@ class TestOfDirectRoute extends UnitTestCase
     public function testGetWithPort(): void
     {
         $socket = new MockSimpleSocket;
-        $socket->expectAt(0, 'write', ["GET /here.html HTTP/1.0\r\n"]);
+    $socket->expectAt(0, 'write', ["GET /here.html HTTP/1.1\r\n"]);
         $socket->expectAt(1, 'write', ["Host: a.valid.host:81\r\n"]);
         $socket->expectAt(2, 'write', ["Connection: close\r\n"]);
         $socket->expectCallCount('write', 3);
@@ -89,7 +89,7 @@ class TestOfDirectRoute extends UnitTestCase
     public function testGetWithParameters(): void
     {
         $socket = new MockSimpleSocket;
-        $socket->expectAt(0, 'write', ["GET /here.html?a=1&b=2 HTTP/1.0\r\n"]);
+    $socket->expectAt(0, 'write', ["GET /here.html?a=1&b=2 HTTP/1.1\r\n"]);
         $socket->expectAt(1, 'write', ["Host: a.valid.host\r\n"]);
         $socket->expectAt(2, 'write', ["Connection: close\r\n"]);
         $socket->expectCallCount('write', 3);
@@ -107,7 +107,7 @@ class TestOfProxyRoute extends UnitTestCase
     public function testDefaultGet(): void
     {
         $socket = new MockSimpleSocket;
-        $socket->expectAt(0, 'write', ["GET http://a.valid.host/here.html HTTP/1.0\r\n"]);
+    $socket->expectAt(0, 'write', ["GET http://a.valid.host/here.html HTTP/1.1\r\n"]);
         $socket->expectAt(1, 'write', ["Host: my-proxy:8080\r\n"]);
         $socket->expectAt(2, 'write', ["Connection: close\r\n"]);
         $socket->expectCallCount('write', 3);
@@ -124,7 +124,7 @@ class TestOfProxyRoute extends UnitTestCase
     public function testDefaultPost(): void
     {
         $socket = new MockSimpleSocket;
-        $socket->expectAt(0, 'write', ["POST http://a.valid.host/here.html HTTP/1.0\r\n"]);
+    $socket->expectAt(0, 'write', ["POST http://a.valid.host/here.html HTTP/1.1\r\n"]);
         $socket->expectAt(1, 'write', ["Host: my-proxy:8080\r\n"]);
         $socket->expectAt(2, 'write', ["Connection: close\r\n"]);
         $socket->expectCallCount('write', 3);
@@ -141,7 +141,7 @@ class TestOfProxyRoute extends UnitTestCase
     public function testGetWithPort(): void
     {
         $socket = new MockSimpleSocket;
-        $socket->expectAt(0, 'write', ["GET http://a.valid.host:81/here.html HTTP/1.0\r\n"]);
+    $socket->expectAt(0, 'write', ["GET http://a.valid.host:81/here.html HTTP/1.1\r\n"]);
         $socket->expectAt(1, 'write', ["Host: my-proxy:8081\r\n"]);
         $socket->expectAt(2, 'write', ["Connection: close\r\n"]);
         $socket->expectCallCount('write', 3);
@@ -158,7 +158,7 @@ class TestOfProxyRoute extends UnitTestCase
     public function testGetWithParameters(): void
     {
         $socket = new MockSimpleSocket;
-        $socket->expectAt(0, 'write', ["GET http://a.valid.host/here.html?a=1&b=2 HTTP/1.0\r\n"]);
+    $socket->expectAt(0, 'write', ["GET http://a.valid.host/here.html?a=1&b=2 HTTP/1.1\r\n"]);
         $socket->expectAt(1, 'write', ["Host: my-proxy:8080\r\n"]);
         $socket->expectAt(2, 'write', ["Connection: close\r\n"]);
         $socket->expectCallCount('write', 3);
@@ -177,7 +177,7 @@ class TestOfProxyRoute extends UnitTestCase
         $encoded = \base64_encode('Me:Secret');
 
         $socket = new MockSimpleSocket;
-        $socket->expectAt(0, 'write', ["GET http://a.valid.host/here.html HTTP/1.0\r\n"]);
+    $socket->expectAt(0, 'write', ["GET http://a.valid.host/here.html HTTP/1.1\r\n"]);
         $socket->expectAt(1, 'write', ["Host: my-proxy:8080\r\n"]);
         $socket->expectAt(2, 'write', ["Proxy-Authorization: Basic {$encoded}\r\n"]);
         $socket->expectAt(3, 'write', ["Connection: close\r\n"]);

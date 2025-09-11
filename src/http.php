@@ -71,7 +71,7 @@ class SimpleRoute
     protected function getRequestLine($method)
     {
         return $method . ' ' . $this->url->getPath() .
-                $this->url->getEncodedRequest() . ' HTTP/1.0';
+                $this->url->getEncodedRequest() . ' HTTP/1.1';
     }
 
     /**
@@ -111,7 +111,6 @@ class SimpleRoute
         }
 
         return new SimpleSocket($host, $port, $timeout);
-
     }
 }
 
@@ -154,7 +153,7 @@ class SimpleProxyRoute extends SimpleRoute
         $port   = $url->getPort() ? ':' . $url->getPort() : '';
 
         return $method . ' ' . $scheme . '://' . $url->getHost() . $port .
-                $url->getPath() . $url->getEncodedRequest() . ' HTTP/1.0';
+            $url->getPath() . $url->getEncodedRequest() . ' HTTP/1.1';
     }
 
     /**
@@ -461,6 +460,16 @@ class SimpleHttpHeaders
     }
 
     /**
+     * Return parsed Set-Cookie entries as an array.
+     *
+     * @return array
+     */
+    public function getNewCookies()
+    {
+        return $this->cookies;
+    }
+
+    /**
      * Called on each header line to accumulate the held data within the class.
      *
      * @param string $header_line one line of header
@@ -529,104 +538,158 @@ class SimpleHttpResponse extends SimpleStickyError
     private $content = false;
     private $headers;
 
-    /**
-     * Constructor. Reads and parses the incoming content and headers.
-     *
-     * @param SimpleSocket $socket   network connection to fetch response text from
-     * @param SimpleUrl    $url      resource name
-     * @param mixed        $encoding record of content sent
-     */
     public function __construct($socket, $url, $encoding)
     {
         parent::__construct();
         $this->url      = $url;
         $this->encoding = $encoding;
         $this->sent     = $socket->getSent();
-        $raw            = $this->readAll($socket);
 
-        if ($socket->isError()) {
-            $this->setError('Error reading socket [' . $socket->getError() . ']');
+        // Read raw until we have headers
+        $raw = '';
+
+        while (!\str_contains($raw, "\r\n\r\n")) {
+            $next = $socket->read();
+
+            if ($socket->isError()) {
+                $this->setError('Error reading socket [' . $socket->getError() . ']');
+
+                return;
+            }
+
+            if ($next === '' || $next === false || $next === null) {
+                break;
+            }
+            $raw .= $next;
+
+            if (\strlen($raw) > 65536) {
+                break;
+            }
+        }
+
+        if ($raw === '' || $raw === null) {
+            $this->setError('Nothing fetched');
+            $this->headers = new SimpleHttpHeaders('');
 
             return;
         }
-        $this->parse($raw);
+
+        if (false !== ($pos = \strpos($raw, "\r\n\r\n"))) {
+            $headers_part = \substr($raw, 0, $pos);
+            $initial_body = \substr($raw, $pos + 4);
+
+            $this->headers = new SimpleHttpHeaders($headers_part);
+        } else {
+            // Could not find end of headers -> treat as incomplete header
+            $this->setError('Could not split headers from content');
+            $this->headers = new SimpleHttpHeaders($raw);
+            $this->content = '';
+
+            return;
+        }
+
+        $transfer_encoding = null;
+        $content_length    = null;
+
+        if (\preg_match('/transfer-encoding:\s*chunked/i', $this->headers->getRaw())) {
+            $transfer_encoding = 'chunked';
+        }
+
+        if (\preg_match('/content-length:\s*(\d+)/i', $this->headers->getRaw(), $m)) {
+            $content_length = (int) $m[1];
+        }
+
+        $body = $initial_body;
+
+        if ($transfer_encoding === 'chunked') {
+            while (true) {
+                $chunk = $socket->read();
+
+                if ($socket->isError()) {
+                    $this->setError('Error reading socket [' . $socket->getError() . ']');
+
+                    return;
+                }
+
+                if ($chunk === '' || $chunk === false || $chunk === null) {
+                    break;
+                }
+                $body .= $chunk;
+            }
+            $this->content = $this->dechunk($body);
+        } elseif (null !== $content_length) {
+            $needed = $content_length - \strlen($body);
+
+            while ($needed > 0) {
+                $chunk = $socket->read();
+
+                if ($socket->isError()) {
+                    $this->setError('Error reading socket [' . $socket->getError() . ']');
+
+                    return;
+                }
+
+                if ($chunk === '' || $chunk === false || $chunk === null) {
+                    break;
+                }
+                $body .= $chunk;
+                $needed = $content_length - \strlen($body);
+            }
+            $this->content = $body;
+        } else {
+            while (true) {
+                $chunk = $socket->read();
+
+                if ($socket->isError()) {
+                    $this->setError('Error reading socket [' . $socket->getError() . ']');
+
+                    return;
+                }
+
+                if ($chunk === '' || $chunk === false || $chunk === null) {
+                    break;
+                }
+                $body .= $chunk;
+            }
+            $this->content = $body;
+        }
     }
 
-    /**
-     * Original request method.
-     *
-     * @return string GET, POST or HEAD
-     */
     public function getMethod()
     {
         return $this->encoding->getMethod();
     }
 
-    /**
-     * Resource name.
-     *
-     * @return SimpleUrl current url
-     */
     public function getUrl()
     {
         return $this->url;
     }
 
-    /**
-     * Original request data.
-     *
-     * @return mixed sent content
-     */
     public function getRequestData()
     {
         return $this->encoding;
     }
 
-    /**
-     * Raw request that was sent down the wire.
-     *
-     * @return string bytes actually sent
-     */
     public function getSent()
     {
         return $this->sent;
     }
 
-    /**
-     * Accessor for the content after the last header line.
-     *
-     * @return string all content
-     */
     public function getContent()
     {
         return $this->content;
     }
 
-    /**
-     * Accessor for header block. The response is the combination of this and the content.
-     *
-     * @return SimpleHttpHeaders wrapped header block
-     */
     public function getHeaders()
     {
         return $this->headers;
     }
 
-    /**
-     * Accessor for any new cookies.
-     *
-     * @return array list of new cookies
-     */
     public function getNewCookies()
     {
         return $this->headers->getNewCookies();
     }
 
-    /**
-     * Splits up the headers and the rest of the content.
-     *
-     * @param string $raw content to parse
-     */
     protected function parse($raw): void
     {
         if (!$raw) {
@@ -648,13 +711,32 @@ class SimpleHttpResponse extends SimpleStickyError
         }
     }
 
-    /**
-     * Reads the whole of the socket output into a single string.
-     *
-     * @param SimpleSocket $socket unread socket
-     *
-     * @return string raw output if successful else false
-     */
+    protected function dechunk($body): string
+    {
+        $out = '';
+        $ptr = 0;
+        $len = \strlen($body);
+
+        while ($ptr < $len) {
+            $pos = \strpos($body, "\r\n", $ptr);
+
+            if ($pos === false) {
+                break;
+            }
+            $line      = \substr($body, $ptr, $pos - $ptr);
+            $chunkSize = \hexdec(\trim($line));
+            $ptr       = $pos + 2;
+
+            if ($chunkSize <= 0) {
+                break;
+            }
+            $out .= \substr($body, $ptr, $chunkSize);
+            $ptr += $chunkSize + 2; // skip chunk and CRLF
+        }
+
+        return $out;
+    }
+
     protected function readAll($socket)
     {
         $all = '';
@@ -666,13 +748,6 @@ class SimpleHttpResponse extends SimpleStickyError
         return $all;
     }
 
-    /**
-     * Test to see if the packet from the socket is the last one.
-     *
-     * @param string $packet chunk to interpret
-     *
-     * @return bool true if empty or EOF
-     */
     protected function isLastPacket($packet)
     {
         if (\is_string($packet)) {

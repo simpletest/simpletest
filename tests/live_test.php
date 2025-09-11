@@ -43,7 +43,7 @@ class LiveHttpTestCase extends UnitTestCase
     {
         $socket = new SimpleSocket($this->host, $this->port, 15, 8);
         $this->assertTrue($socket->isOpen());
-        $this->assertTrue($socket->write("GET /network_confirm.php HTTP/1.0\r\n"));
+    $this->assertTrue($socket->write("GET /network_confirm.php HTTP/1.1\r\n"));
         $socket->write("Host: {$this->host}\r\n");
         $socket->write("Connection: close\r\n\r\n");
         $this->assertEqual($socket->read(), 'HTTP/1.0');
@@ -54,13 +54,13 @@ class LiveHttpTestCase extends UnitTestCase
     public function testRecordOfSentCharacters(): void
     {
         $socket = new SimpleSocket($this->host, $this->port, 15);
-        $this->assertTrue($socket->write("GET /network_confirm.php HTTP/1.0\r\n"));
+    $this->assertTrue($socket->write("GET /network_confirm.php HTTP/1.1\r\n"));
         $socket->write("Host: {$this->host}\r\n");
         $socket->write("Connection: close\r\n\r\n");
         $socket->close();
         $this->assertEqual(
             $socket->getSent(),
-            "GET /network_confirm.php HTTP/1.0\r\n" .
+            "GET /network_confirm.php HTTP/1.1\r\n" .
                 "Host: {$this->host}\r\n" .
                 "Connection: close\r\n\r\n",
         );
