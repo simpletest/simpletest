@@ -1533,11 +1533,17 @@ class MockGenerator
         $implements = '';
         $interfaces = $this->reflection->getInterfaces();
 
-        // exclude interfaces
+        // exclude interfaces that should not be copied
         $interfaces = \array_diff($interfaces, ['Traversable', 'Throwable']);
 
+        // Ensure interfaces are fully-qualified to avoid namespace duplication
+        // when generating code inside a namespace. Prefix a backslash if missing.
         if ($interfaces !== []) {
-            $implements = 'implements ' . \implode(', ', $interfaces);
+            $qInterfaces = \array_map(static function ($i) {
+                return '\\' . ltrim($i, '\\');
+            }, $interfaces);
+
+            $implements = 'implements ' . \implode(', ', $qInterfaces);
         }
         $code = '';
 
