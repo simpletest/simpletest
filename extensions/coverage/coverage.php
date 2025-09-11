@@ -50,9 +50,11 @@ class CodeCoverage
 
     public function getTouchedFiles()
     {
-        $handler = new CoverageDataHandler($this->log);
+    $handler = new CoverageDataHandler($this->log);
+    $files = $handler->getFilenames();
+    $handler->close();
 
-        return $handler->getFilenames();
+    return $files;
     }
 
     public function includeUntouchedFiles($untouched): void
@@ -62,6 +64,8 @@ class CodeCoverage
         foreach ($untouched as $file) {
             $handler->writeUntouchedFile($file);
         }
+
+        $handler->close();
     }
 
     public function getUntouchedFiles(&$untouched, $touched, $parentPath, $rootPath, $directoryDepth = 1): void
@@ -104,6 +108,19 @@ class CodeCoverage
         $handler->createSchema();
     }
 
+	public function isXdebugCoverageEnabled(): bool
+	{
+		$env = $_ENV['XDEBUG_MODE'] ?? '';
+		$mode = \ini_get('xdebug.mode');
+		if (version_compare(phpversion('xdebug'), '3.0.0', '>=')) {
+			if (strpos($mode, 'coverage') === false && $env !== 'coverage') {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
     public function startCoverage(): void
     {
         $this->root = \getcwd();
@@ -112,17 +129,22 @@ class CodeCoverage
             throw new Exception('The PHP extension XDebug is not loaded. It is required for CodeCoverage to work! Please adjust your php.ini.');
         }
 
-        xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
+        if ($this->isXdebugCoverageEnabled() === false) {
+			throw new Exception('XDebug is loaded, but code coverage is not enabled. Please set the environment variable XDEBUG_MODE=coverage or adjust your php.ini to include "coverage" in the xdebug.mode setting.');
+        }
+
+		xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
     }
 
     public function stopCoverage(): void
     {
         $cov = xdebug_get_code_coverage();
         $this->filter($cov);
-        $data = new CoverageDataHandler($this->log);
-        \chdir($this->root);
-        $data->write($cov);
-        unset($data); // release sqlite connection
+    $data = new CoverageDataHandler($this->log);
+    \chdir($this->root);
+    $data->write($cov);
+    $data->close();
+    unset($data); // release sqlite connection
         xdebug_stop_code_coverage();
         // make sure we wind up on same current working directory, otherwise
         // coverage handler writer doesn't know what directory to chop off
@@ -133,14 +155,78 @@ class CodeCoverage
     {
         if (!\file_exists($this->settingsFile)) {
             \error_log('Could not find settings file ' . $this->settingsFile);
+            return;
         }
 
-        $this->setSettings(\json_decode(\file_get_contents($this->settingsFile), true));
+        $contents = \file_get_contents($this->settingsFile);
+
+        if ($contents === false) {
+            \error_log('Could not read settings file ' . $this->settingsFile);
+            return;
+        }
+
+        $data = \json_decode($contents, true);
+
+        if (!\is_array($data)) {
+            \error_log('Settings file ' . $this->settingsFile . ' contains invalid JSON');
+            return;
+        }
+
+        $this->setSettings($data);
+        // Normalize excludes immediately after reading settings to keep a
+        // consistent internal representation
+        if (isset($this->excludes) && is_array($this->excludes)) {
+            $this->excludes = $this->normalizePatterns($this->excludes);
+        }
+    }
+
+    /**
+     * Normalize and deduplicate an array of regex patterns.
+     * This keeps representations consistent across callers that may escape
+     * slashes differently.
+     */
+    public function normalizePatterns(array $patterns): array
+    {
+        $normalized = [];
+        foreach ($patterns as $pattern) {
+            $p = str_replace(['\\\\/', '\\/', '\\/'], '/', $pattern);
+            $p = trim($p);
+            if ($p !== '' && !in_array($p, $normalized, true)) {
+                $normalized[] = $p;
+            }
+        }
+
+        return $normalized;
     }
 
     public function writeSettings(): void
     {
-        \file_put_contents($this->settingsFile, \json_encode($this->getSettings(), JSON_PRETTY_PRINT));
+       $data = $this->getSettings();
+
+       // Ensure excludes are normalized and deduplicated so repeated runs don't
+       // append duplicate patterns (some callers may pass differently escaped
+       // strings). We only normalize escaped forward slashes here to avoid
+       // touching other intentional backslashes in regex patterns.
+       if (isset($data['excludes']) && is_array($data['excludes'])) {
+           $normalized = [];
+           foreach ($data['excludes'] as $pattern) {
+               // Replace both "\/" and "\\\/" sequences with a plain '/'
+               $p = str_replace(['\\\\/', '\\/', '\\/'], '/', $pattern);
+               // Trim whitespace and keep order; use the pattern as-is otherwise
+               $p = trim($p);
+               if ($p !== '' && !in_array($p, $normalized, true)) {
+                   $normalized[] = $p;
+               }
+           }
+
+           $data['excludes'] = $normalized;
+       }
+
+       try {
+           \file_put_contents($this->settingsFile, \json_encode($data, JSON_PRETTY_PRINT));
+       } catch (Throwable $e) {
+           \error_log('Could not write settings file ' . $this->settingsFile . ': ' . $e->getMessage());
+       }
     }
 
     public function getSettings()

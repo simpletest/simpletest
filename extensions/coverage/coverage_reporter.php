@@ -23,13 +23,14 @@ class CoverageReporter
     {
         $this->writer     = new CoverageWriter;
         $this->calculator = new CoverageCalculator;
-
-        $this->summaryFile = $this->reportDir . '/index.html';
     }
 
     public function generate(): void
     {
         print 'Generating Code Coverage Report';
+
+    // ensure summaryFile uses the configured reportDir
+    $this->summaryFile = $this->reportDir . '/index.html';
 
         CoverageUtils::mkdir($this->reportDir);
 

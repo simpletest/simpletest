@@ -81,6 +81,6 @@ class CoverageDataHandlerTest extends UnitTestCase
 
     public function tempdb()
     {
-        return \tempnam(null, 'coverage.test.db');
+        return \tempnam(sys_get_temp_dir(), 'coverage.test.db');
     }
 }

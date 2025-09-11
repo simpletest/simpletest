@@ -1,6 +1,13 @@
-# SimpleTest - Change Log
+# SimpleTest - Changelog
 
-## [Unreleased]
+All changes to the project will be documented in this file.
+
+- The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+- The date format is YYYY-MM-DD.
+- The upcoming release version is named `vNext` and links to the changes between latest version tag and git HEAD.
+
+## [vNext] - unreleased
 
 **Currently working on: ...**
 
@@ -14,7 +21,7 @@
   - moved static website data into "build/website/simpletest.org-static"
   - moved xml sources for en docs into "build/docs/source"
 * dropped doc translations for IT and FR (only keeping EN as source)
-* updated php-cs-fixer config file (`.php_cs`)
+* updated php-cs-fixer config file
 * incremental code-style refactorings
   - use short array syntax, "array() => []"
   - removed superfluous phpdoc tags
@@ -23,6 +30,7 @@
   - space after exclamation mark, "! $value"
   - renamed phpdoc type name boolean to shorter bool, "boolean => bool"
 * added `.editorconfig`
+* refactored CodeCoverage Extension to utilize PDO SQLite with transaction support
 
 ## [1.2.0] - 2019-09-17
 
@@ -166,7 +174,9 @@
 - greater formatting control in the reporters
 - various mock object compatibility fixes
 
-[Unreleased]: https://github.com/simpletest/simpletest/compare/v1.2.0...HEAD
+<!-- Section for Reference Links -->
+
+[vNext]: https://github.com/simpletest/simpletest/compare/v1.2.0...HEAD
 [1.2.0]: https://github.com/simpletest/simpletest/compare/v1.1.7...v1.2.0
 [1.1.7]: https://github.com/simpletest/simpletest/compare/v1.1.6...v1.1.7
 

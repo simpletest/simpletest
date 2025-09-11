@@ -22,4 +22,5 @@ $report->reportDir = CoverageUtils::issetOrDefault($args['reportDir'], 'coverage
 $report->title     = CoverageUtils::issetOrDefault($args['title'], 'Simpletest Coverage');
 $report->coverage  = $handler->read();
 $report->untouched = $handler->readUntouchedFiles();
+$handler->close();
 $report->generate();
