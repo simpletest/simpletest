@@ -262,7 +262,6 @@ class EqualExpectation extends SimpleExpectation
 
         return 'Equal expectation fails ' .
                 $dumper->describeDifference($this->value, $compare);
-
     }
 
     /**
@@ -323,7 +322,6 @@ class NotEqualExpectation extends EqualExpectation
         return 'Not equal expectation fails [' .
                 $dumper->describeValue($this->getValue()) .
                 '] matches';
-
     }
 }
 
@@ -376,7 +374,6 @@ class WithinMarginExpectation extends SimpleExpectation
         }
 
         return $this->outsideMessage($compare);
-
     }
 
     /**
@@ -408,7 +405,6 @@ class WithinMarginExpectation extends SimpleExpectation
 
         return 'Outside expectation ' .
                 $dumper->describeDifference($compare, $this->lower);
-
     }
 }
 
@@ -456,7 +452,6 @@ class OutsideMarginExpectation extends WithinMarginExpectation
         }
 
         return $this->outsideMessage($compare);
-
     }
 }
 
@@ -508,7 +503,6 @@ class ReferenceExpectation
 
         return 'Reference expectation fails ' .
                 $this->dumper->describeDifference($this->value, $compare);
-
     }
 
     /**
@@ -589,7 +583,6 @@ class IdenticalExpectation extends EqualExpectation
                 '] fails with [' .
                 $dumper->describeValue($compare) . '] ' .
                 $dumper->describeDifference($this->getValue(), $compare, TYPE_MATTERS);
-
     }
 }
 
@@ -638,7 +631,6 @@ class NotIdenticalExpectation extends IdenticalExpectation
         }
 
         return 'Not identical expectation [' . $dumper->describeValue($this->getValue()) . '] matches';
-
     }
 }
 
@@ -690,7 +682,6 @@ class PatternExpectation extends SimpleExpectation
         $dumper = $this->getDumper();
 
         return 'Pattern [' . $this->getPattern() . '] not detected in [' . $dumper->describeValue($compare) . ']';
-
     }
 
     /**
@@ -770,7 +761,6 @@ class NoPatternExpectation extends PatternExpectation
         }
 
         return $this->describePatternMatch($this->getPattern(), $compare);
-
     }
 }
 
@@ -813,7 +803,6 @@ class IsAExpectation extends SimpleExpectation
         }
 
         return false;
-
     }
 
     /**

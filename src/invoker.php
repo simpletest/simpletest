@@ -12,7 +12,7 @@ require_once __DIR__ . '/dumper.php';
 
 // define the root constant for dependent libraries.
 if (!\defined('SIMPLE_TEST')) {
-    \define('SIMPLE_TEST', __DIR__ . DIRECTORY_SEPARATOR);
+    \define('SIMPLE_TEST', __DIR__ . \DIRECTORY_SEPARATOR);
 }
 
 /**
