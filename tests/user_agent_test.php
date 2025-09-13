@@ -69,6 +69,54 @@ class TestOfAdditionalHeaders extends UnitTestCase
         $agent->addHeader('User-Agent: SimpleTest');
         $response = $agent->fetchResponse(new SimpleUrl('http://this.host/'), new SimpleGetEncoding);
     }
+
+    public function testRefererHeaderAddedToRequest(): void
+    {
+        $response = new MockSimpleHttpResponse;
+        $response->returnsByValue('isError', false);
+        $response->returnsByValue('getContent', 'stuff');
+        $mockHeaders = new MockSimpleHttpHeaders;
+        $response->returnsByReference('getHeaders', $mockHeaders);
+
+        $request = new MockSimpleHttpRequest;
+        $request->returnsByReference('fetch', $response);
+        // Ensure getHeaders returns an array so the referer-check code runs
+        $request->returns('getHeaders', []);
+        $request->expectOnce(
+            'addHeaderLine',
+            ['Referer: http://from.example/'],
+        );
+
+        $agent = new MockRequestUserAgent;
+        $agent->returnsByReference('createHttpRequest', $request);
+        $agent->__constructor();
+        $agent->setReferer('http://from.example/');
+        $agent->fetchResponse(new SimpleUrl('http://this.host/'), new SimpleGetEncoding);
+    }
+
+    public function testRefererNotAddedIfCustomPresent(): void
+    {
+        $response = new MockSimpleHttpResponse;
+        $response->returnsByValue('isError', false);
+        $response->returnsByValue('getContent', 'stuff');
+        $mockHeaders = new MockSimpleHttpHeaders;
+        $response->returnsByReference('getHeaders', $mockHeaders);
+
+        $request = new MockSimpleHttpRequest;
+        $request->returnsByReference('fetch', $response);
+        // Simulate a request that already has a Referer header
+        $request->returns('getHeaders', ['Referer: custom']);
+        $request->expectNever(
+            'addHeaderLine',
+            ['Referer: http://from.example/'],
+        );
+
+        $agent = new MockRequestUserAgent;
+        $agent->returnsByReference('createHttpRequest', $request);
+        $agent->__constructor();
+        $agent->setReferer('http://from.example/');
+        $agent->fetchResponse(new SimpleUrl('http://this.host/'), new SimpleGetEncoding);
+    }
 }
 
 class TestOfBrowserCookies extends UnitTestCase
