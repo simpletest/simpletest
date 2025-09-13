@@ -600,6 +600,15 @@ class SimpleHttpResponse extends SimpleStickyError
             return;
         }
 
+        // If the target is a file:// URL, the socket returns the raw file content
+        // without HTTP headers. Treat the entire read as the body.
+        if ('file' === $this->url->getScheme()) {
+            $this->headers = new SimpleHttpHeaders('');
+            $this->content = $raw;
+
+            return;
+        }
+
         if (false !== ($pos = \strpos($raw, "\r\n\r\n"))) {
             $headers_part = \substr($raw, 0, $pos);
             $initial_body = \substr($raw, $pos + 4);

@@ -10,10 +10,10 @@ require_once __DIR__ . '/self.php';
             test suite.
         </p>
         <ul>
-            <li><a href="<?php print my_path(); ?>network_confirm.php">Absolute</a></li>
-            <li><a href="network_confirm.php">Relative</a></li>
-            <li><a href="network_confirm.php" id="1">Id</a></li>
-            <li><a href="network_confirm.php">m&auml;rc&ecirc;l kiek&#039;eboe</a></li>
+            <li><a href="<?php print my_path(); ?>request_mirror.php">Absolute</a></li>
+            <li><a href="request_mirror.php">Relative</a></li>
+            <li><a href="request_mirror.php" id="1">Id</a></li>
+            <li><a href="request_mirror.php">m&auml;rc&ecirc;l kiek&#039;eboe</a></li>
         </ul>
     </body>
 </html>

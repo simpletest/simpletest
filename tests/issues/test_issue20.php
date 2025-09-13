@@ -8,7 +8,7 @@ require_once \dirname(__DIR__, 2) . '/src/simpletest.php';
 
 class CurrentTestMethodTest extends SimpleTestCase
 {
-    private $seenInSetUp = null;
+    private $seenInSetUp;
 
     protected function setUp(): void
     {
@@ -24,14 +24,14 @@ class CurrentTestMethodTest extends SimpleTestCase
         }
     }
 
-    public function testSetUpSeesMethod()
+    public function testSetUpSeesMethod(): void
     {
         $this->assert(new EqualExpectation('testSetUpSeesMethod'), $this->seenInSetUp, 'setUp saw current test method');
     }
 
-    public function testWillBeSkipped()
+    public function testWillBeSkipped(): void
     {
         // This will be skipped by skip(); if it runs, assert true.
-        $this->assert(new TrueExpectation(), true, 'This should not run');
+        $this->assert(new TrueExpectation, true, 'This should not run');
     }
 }

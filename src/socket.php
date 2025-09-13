@@ -181,7 +181,19 @@ class SimpleFileSocket extends SimpleStickyError
      */
     protected function openFile($file)
     {
-        return @\fopen($file->asString(), 'r');
+        $fileUrl = $file->asString();
+
+        // If the URL uses the file:// scheme, strip it to get a local path.
+        if (\str_starts_with($fileUrl, 'file://')) {
+            // file:///path or file://host/path -> prefer the path portion
+            $path = \preg_replace('#^file://#', '', $fileUrl);
+
+            // On Windows the path may start with a drive letter without leading slash.
+            // Leave as-is; fopen will handle it.
+            return @\fopen($path, 'r');
+        }
+
+        return @\fopen($fileUrl, 'r');
     }
 }
 
