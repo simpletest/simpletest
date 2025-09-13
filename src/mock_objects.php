@@ -1384,6 +1384,8 @@ class MockGenerator
 
     /** @var bool */
     private $has_generated_unserialize = false;
+    /** @var array */
+    private $generated_methods = [];
 
     /**
      * Builds initial reflection object.
@@ -1535,6 +1537,7 @@ class MockGenerator
     {
         // Reset per-class generated markers
         $this->has_generated_unserialize = false;
+        $this->generated_methods = [];
         $implements                      = '';
         $interfaces                      = $this->reflection->getInterfaces();
 
@@ -1579,6 +1582,7 @@ class MockGenerator
     {
         // Reset per-class generated markers
         $this->has_generated_unserialize = false;
+        $this->generated_methods = [];
 
         $code = '';
 
@@ -1617,6 +1621,7 @@ class MockGenerator
     {
         // Reset per-class generated markers
         $this->has_generated_unserialize = false;
+        $this->generated_methods = [];
 
         $code = '';
 
@@ -1685,8 +1690,39 @@ class MockGenerator
             // Guard: silence deprecation notices, when return type is not declared
             // https://www.php.net/manual/en/class.returntypewillchange.php
             if (\PHP_VERSION_ID >= 80100) {
-                $code .= '    #[\\ReturnTypeWillChange]' . "\n";
+                $lm = strtolower($method);
+
+                if (empty($this->generated_methods[$lm])) {
+                    $attr = '    #[\\ReturnTypeWillChange]' . "\n";
+
+                    if (substr($code, -\strlen($attr)) !== $attr) {
+                        $code .= $attr;
+                    }
+                    $this->generated_methods[$lm] = true;
+                }
             }
+            // If generating for PHP 8.5+ we must not declare __wakeup() because
+            // that magic method is deprecated. Instead, generate an
+            // __unserialize() proxy so unserialization still routes through
+            // the mock without triggering the deprecation. For older PHP
+            // versions, continue to generate __wakeup as before.
+            if (\strtolower($method) === '__wakeup' && \PHP_VERSION_ID >= 80500) {
+                // Generate __unserialize proxy when appropriate and skip
+                // generating __wakeup itself.
+                $originalClass = !empty($this->namespace) ? $this->namespace . '\\' . $this->class : $this->class;
+
+                if (!($originalClass && \class_exists($originalClass) && \method_exists($originalClass, '__unserialize')) && !$this->has_generated_unserialize) {
+                    // Standalone mock uses $this->invoke(...) to dispatch.
+                    $code .= "    public function __unserialize(\$data) {\n";
+                    $code .= "        // Proxy unserialization to the mock so tests can stub it.\n";
+                    $code .= '        $this->invoke("__unserialize", array($data));' . "\n";
+                    $code .= "    }\n";
+                    $this->has_generated_unserialize = true;
+                }
+                // Skip the usual generation of __wakeup
+                continue;
+            }
+
             $code .= '    ' . $signature;
 
             if ($mock_reflection->isAbstract()) {
@@ -1797,18 +1833,40 @@ class MockGenerator
             if (\in_array($method, $mock_reflection->getMethods(), true)) {
                 continue;
             }
+            // Special-case __wakeup: on PHP 8.5+ the __wakeup() magic method is
+            // deprecated. In that environment we must not declare __wakeup()
+            // on generated mocks. Instead generate an __unserialize($data)
+            // proxy which routes unserialization through the mock. For older
+            // PHP versions, emit the normal __wakeup() and optionally a shim.
+            if (\strtolower($method) === '__wakeup' && \PHP_VERSION_ID >= 80500) {
+                $originalClass = !empty($this->namespace) ? $this->namespace . '\\\\' . $this->class : $this->class;
+
+                if (!($originalClass && \class_exists($originalClass) && \method_exists($originalClass, '__unserialize')) && !$this->has_generated_unserialize) {
+                    $code .= "    public function __unserialize(\$data) {\n";
+                    $code .= "        // Proxy unserialization to the mock so tests can stub it.\n";
+                    $code .= '        $this->mock->invoke("__unserialize", array($data));' . "\n";
+                    $code .= "    }\n";
+                    $this->has_generated_unserialize = true;
+                }
+
+                // Skip generating the deprecated __wakeup() method itself.
+                continue;
+            }
+
             $code .= "    public function {$method}() {\n";
-            $code .= "        return \$this->mock->invoke(\"{$method}\", func_get_args());\n";
+            $code .= "        return " . '$this->mock->invoke("' . $method . '", func_get_args());' . "\n";
             $code .= "    }\n";
 
-            // Guard: __wakeup() serialization magic method has been deprecated.
-            // Added generation of an __unserialize($data) shim
-            // https://www.php.net/manual/de/language.oop5.magic.php#object.unserialize
+            // Backwards-compat (older PHP): if generating for pre-8.5 PHP and
+            // we saw a __wakeup, optionally add an untyped __unserialize()
+            // shim when the original class doesn't already provide it.
             if (\PHP_VERSION_ID < 80500) {
                 if (\strtolower($method) === '__wakeup' && !$this->has_generated_unserialize) {
-                    $originalClass = !empty($this->namespace) ? $this->namespace . '\\' . $this->class : $this->class;
+                    $originalClass = !empty($this->namespace) ? $this->namespace . '\\\\' . $this->class : $this->class;
 
-                    if (!(\class_exists($originalClass) && \method_exists($originalClass, '__unserialize'))) {
+                    if (!(
+                        \class_exists($originalClass) && \method_exists($originalClass, '__unserialize')
+                    )) {
                         $code .= "    public function __unserialize(\$data) {\n";
                         $code .= "        // Proxy unserialization to the mock so tests can stub it.\n";
                         $code .= '        $this->mock->invoke("__unserialize", array($data));' . "\n";
@@ -2031,8 +2089,34 @@ class MockGenerator
             // Guard: silence deprecation notices, when return type is not declared
             // https://www.php.net/manual/en/class.returntypewillchange.php
             if (\PHP_VERSION_ID >= 80100) {
-                $code .= '    #[\ReturnTypeWillChange]' . "\n";
+                $lm = strtolower($method);
+
+                if (empty($this->generated_methods[$lm])) {
+                    $attr = '    #[\\ReturnTypeWillChange]' . "\n";
+
+                    if (substr($code, -\strlen($attr)) !== $attr) {
+                        $code .= $attr;
+                    }
+                    $this->generated_methods[$lm] = true;
+                }
             }
+            // If overriding __wakeup on PHP 8.5+, emit an __unserialize proxy
+            // instead and skip declaring the deprecated __wakeup method.
+            if (\strtolower($method) === '__wakeup' && \PHP_VERSION_ID >= 80500) {
+                $originalClass = !empty($this->namespace) ? $this->namespace . '\\\\' . $this->class : $this->class;
+
+                if (!($originalClass && \class_exists($originalClass) && \method_exists($originalClass, '__unserialize')) && !$this->has_generated_unserialize) {
+                    $code .= "    public function __unserialize(\$data) {\n";
+                    $code .= "        // Proxy unserialization to the mock so tests can stub it.\n";
+                    $code .= '        $this->mock->invoke("__unserialize", array($data));' . "\n";
+                    $code .= "    }\n";
+                    $this->has_generated_unserialize = true;
+                }
+
+                // Skip generating the deprecated __wakeup override
+                continue;
+            }
+
             $code .= '    ' . $signature . "\n    {\n";
 
             // Guard: a void function must not return a value
