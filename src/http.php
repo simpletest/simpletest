@@ -443,16 +443,25 @@ class SimpleHttpHeaders
     /**
      * Writes new cookies to the cookie jar.
      *
+     * Host Handling:
+     * If Set-Cookie provids an explicit Domain attribute then the cookie
+     * object will have a host set.
+     * We prefer this host when writing into the cookie jar.
+     * Otherwise we fall back to the response URL's host.
+     * This is important for ensuring cookies are sent to the correct sub/domain.
+     *
      * @param SimpleCookieJar $jar jar to write to
      * @param SimpleUrl       $url host and path to write under
      */
     public function writeCookiesToJar($jar, $url): void
     {
         foreach ($this->cookies as $cookie) {
+            $host = $cookie->getHost() ?: $url->getHost();
+
             $jar->setCookie(
                 $cookie->getName(),
                 $cookie->getValue(),
-                $url->getHost(),
+                $host,
                 $cookie->getPath(),
                 $cookie->getExpiry(),
             );
@@ -508,22 +517,39 @@ class SimpleHttpHeaders
      */
     protected function parseCookie($cookie_line)
     {
-        $parts  = \explode(';', $cookie_line);
+        $parts = \explode(';', $cookie_line);
+
+        // The first part is the name=value pair
         $cookie = [];
         \preg_match('/\s*(.*?)\s*=(.*)/', \array_shift($parts), $cookie);
 
+        // Parse remaining attributes case-insensitively.
+        // Some attributes (eg. Secure) may have no equals-sign!
         foreach ($parts as $part) {
             if (\preg_match('/\s*(.*?)\s*=(.*)/', $part, $matches)) {
-                $cookie[$matches[1]] = \trim($matches[2]);
+                $key          = \strtolower(\trim($matches[1]));
+                $cookie[$key] = \trim($matches[2]);
+            } elseif (\preg_match('/\s*(secure)\s*/i', $part, $m)) {
+                $cookie['secure'] = true;
             }
         }
 
-        return new SimpleCookie(
-            $cookie[1],
-            \trim($cookie[2]),
-            $cookie['path'] ?? '',
-            $cookie['expires'] ?? false,
-        );
+        $name     = $cookie[1] ?? null;
+        $value    = isset($cookie[2]) ? \trim($cookie[2]) : '';
+        $path     = $cookie['path'] ?? '';
+        $exp      = $cookie['expires'] ?? false;
+        $isSecure = !empty($cookie['secure']);
+
+        $sc = new SimpleCookie($name, $value, $path, $exp, $isSecure);
+
+        // If Set-Cookie contains an explicit Domain attribute, use it.
+        // But strip any leading dot which is used to indicate domain scope.
+        if (!empty($cookie['domain'])) {
+            $domain = \ltrim($cookie['domain'], '.');
+            $sc->setHost($domain);
+        }
+
+        return $sc;
     }
 }
 
