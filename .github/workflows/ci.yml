@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         # https://www.php.net/supported-versions.php
-        version: ['8.1', '8.2', '8.3', '8.4']
+        version: ['8.1', '8.2', '8.3', '8.4', '8.5']
 
     # ubuntu-latest = ubuntu-22.04 (06-2024)
     # https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md
@@ -21,25 +21,28 @@ jobs:
 
     steps:
 
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: 🤘 Checkout
+        uses: actions/checkout@v4 # https://github.com/actions/checkout
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - name: 🔽 Setup PHP
+        uses: shivammathur/setup-php@v2 # https://github.com/shivammathur/setup-php
         with:
           php-version: ${{matrix.version}}
           extensions: dom, mbstring, tidy
           ini-values: memory_limit=-1, error_reporting=-1, display_errors=On
           tools: none
 
-      - name: PHP lint
+      - name: 🔽 Setup problem matchers for PHP
+        run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+
+      - name: ✅ PHP lint
         run: find . -path ./vendor -prune -o -type f -name '*.php' ! -name "test_with_parse_error.php" -print0 | xargs -0 -n1 -P4 php -l -n | (! grep -v "No syntax errors detected" )
 
-      - name: Start built-in PHP server
+      - name: 🛠️ Start built-in PHP server
         run: nohup php -S localhost:8080 -t tests/site > php-server.log 2>&1 &
 
-      - name: Test
+      - name: 🔴🟢🟢🟢 Test
         run: php tests/all_tests.php
 
-      - name: Display Server Log
+      - name: 📑 Display Server Log
         run: cat php-server.log
