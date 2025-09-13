@@ -356,7 +356,7 @@ class TestOfParsing extends UnitTestCase
 
     public function testLabelsWithoutForDoNotAttachToInputsWithNoId(): void
     {
-    $raw = '<form action="request_mirror.php?x=X&y=Y" method="post">
+        $raw = '<form action="request_mirror.php?x=X&y=Y" method="post">
             <label>Text A <input type="text" name="a" value="one"></label>
             <label>Text B <input type="text" name="b" value="two"></label>
         </form>';
