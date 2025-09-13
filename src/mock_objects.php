@@ -1382,6 +1382,9 @@ class MockGenerator
     private $mock_base;
     private $reflection;
 
+    /** @var bool */
+    private $has_generated_unserialize = false;
+
     /**
      * Builds initial reflection object.
      *
@@ -1530,8 +1533,10 @@ class MockGenerator
      */
     protected function createCodeForClass($methods, $stripVoid = false)
     {
-        $implements = '';
-        $interfaces = $this->reflection->getInterfaces();
+        // Reset per-class generated markers
+        $this->has_generated_unserialize = false;
+        $implements                      = '';
+        $interfaces                      = $this->reflection->getInterfaces();
 
         // exclude interfaces that should not be copied
         $interfaces = \array_diff($interfaces, ['Traversable', 'Throwable']);
@@ -1572,6 +1577,9 @@ class MockGenerator
      */
     protected function createCodeForSubclass($methods)
     {
+        // Reset per-class generated markers
+        $this->has_generated_unserialize = false;
+
         $code = '';
 
         if (!empty($this->namespace)) {
@@ -1607,6 +1615,9 @@ class MockGenerator
      */
     protected function extendClassCode($methods)
     {
+        // Reset per-class generated markers
+        $this->has_generated_unserialize = false;
+
         $code = '';
 
         if (!empty($this->namespace)) {
@@ -1737,6 +1748,29 @@ class MockGenerator
                     }
                 }
                 $code .= "    }\n";
+
+                // Guard: __wakeup() serialization magic method has been deprecated.
+                // Added generation of an __unserialize($data) shim
+                // https://www.php.net/manual/de/language.oop5.magic.php#object.unserialize
+                if (\PHP_VERSION_ID < 80500) {
+                    // If both __unserialize() and __wakeup() are defined in the same object,
+                    // only __unserialize() will be called. __wakeup() will be ignored.
+                    if (\strtolower($method) === '__wakeup' && !$this->has_generated_unserialize) {
+                        // Only generate an untyped __unserialize proxy when the
+                        // original class doesn't already declare __unserialize.
+                        $originalClass = !empty($this->namespace) ? $this->namespace . '\\' . $this->class : $this->class;
+
+                        if (\class_exists($originalClass) && \method_exists($originalClass, '__unserialize')) {
+                            // skip generation, because original class already declares __unserialize;
+                        } else {
+                            $code .= "    public function __unserialize(\$data) {\n";
+                            $code .= "        // Proxy unserialization to the mock so tests can stub it.\n";
+                            $code .= '        $this->invoke("__unserialize", array($data));' . "\n";
+                            $code .= "    }\n";
+                            $this->has_generated_unserialize = true;
+                        }
+                    }
+                }
             }
         }
 
@@ -1766,6 +1800,23 @@ class MockGenerator
             $code .= "    public function {$method}() {\n";
             $code .= "        return \$this->mock->invoke(\"{$method}\", func_get_args());\n";
             $code .= "    }\n";
+
+            // Guard: __wakeup() serialization magic method has been deprecated.
+            // Added generation of an __unserialize($data) shim
+            // https://www.php.net/manual/de/language.oop5.magic.php#object.unserialize
+            if (\PHP_VERSION_ID < 80500) {
+                if (\strtolower($method) === '__wakeup' && !$this->has_generated_unserialize) {
+                    $originalClass = !empty($this->namespace) ? $this->namespace . '\\' . $this->class : $this->class;
+
+                    if (!(\class_exists($originalClass) && \method_exists($originalClass, '__unserialize'))) {
+                        $code .= "    public function __unserialize(\$data) {\n";
+                        $code .= "        // Proxy unserialization to the mock so tests can stub it.\n";
+                        $code .= '        $this->mock->invoke("__unserialize", array($data));' . "\n";
+                        $code .= "    }\n";
+                        $this->has_generated_unserialize = true;
+                    }
+                }
+            }
         }
 
         return $code;
@@ -2025,6 +2076,23 @@ class MockGenerator
                 $code .= "        return \$this->mock->invoke(\"{$method}\", func_get_args());\n";
             }
             $code .= "    }\n";
+
+            // Guard: __wakeup() serialization magic method has been deprecated.
+            // Added generation of an __unserialize($data) shim
+            // https://www.php.net/manual/de/language.oop5.magic.php#object.unserialize
+            if (\PHP_VERSION_ID < 80500) {
+                if (\strtolower($method) === '__wakeup' && !$this->has_generated_unserialize) {
+                    $originalClass = !empty($this->namespace) ? $this->namespace . '\\' . $this->class : $this->class;
+
+                    if (!(\class_exists($originalClass) && \method_exists($originalClass, '__unserialize'))) {
+                        $code .= "    public function __unserialize(\$data) {\n";
+                        $code .= "        // Proxy unserialization to the mock so tests can stub it.\n";
+                        $code .= '        $this->mock->invoke("__unserialize", array($data));' . "\n";
+                        $code .= "    }\n";
+                        $this->has_generated_unserialize = true;
+                    }
+                }
+            }
         }
 
         return $code;
