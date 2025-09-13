@@ -424,6 +424,21 @@ class TestOfHttpHeaders extends UnitTestCase
         $this->assertTrue($headers->isRedirect());
     }
 
+    public function testDomainCookieMatchesSubdomain(): void
+    {
+        $jar = new SimpleCookieJar;
+
+        $headers = new SimpleHttpHeaders(
+            "HTTP/1.1 200 OK\r\n" .
+            "Set-Cookie: a=AAA; Domain=.example.com; path=/\r\n" .
+            'Connection: close',
+        );
+
+        $headers->writeCookiesToJar($jar, new SimpleUrl('http://www.example.com/'));
+
+        $this->assertEqual($jar->getCookieValue('subdomain.example.com', '/', 'a'), 'AAA');
+    }
+
     public function testCanParseChallenge(): void
     {
         $headers = new SimpleHttpHeaders("HTTP/1.1 401 Authorization required\r\n" .
