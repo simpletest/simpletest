@@ -36,6 +36,13 @@ class SimpleTestCase
     private $should_skip = false;
 
     /**
+     * Name of the test method currently being executed (set in before()).
+     *
+     * @var null|string
+     */
+    private $current_test_method;
+
+    /**
      * Sets up the test with no display.
      *
      * @param string $label if no test name is given then the class name is used
@@ -197,6 +204,9 @@ class SimpleTestCase
      */
     public function before($method): void
     {
+        // Make the currently-running test method available to setUp()/skip().
+        $this->current_test_method = $method;
+
         $this->reporter->paintMethodStart($method);
         $this->observers = [];
     }
@@ -212,6 +222,20 @@ class SimpleTestCase
             $observer->atTestEnd($method, $this);
         }
         $this->reporter->paintMethodEnd($method);
+
+        // Clear the stored current test method after the test finishes.
+        $this->current_test_method = null;
+    }
+
+    /**
+     * Returns the name of the currently-running test method or null when none.
+     * This is intended to be used from setUp(), tearDown(), skip(), etc.
+     *
+     * @return null|string
+     */
+    public function getCurrentTest()
+    {
+        return $this->current_test_method;
     }
 
     /**
