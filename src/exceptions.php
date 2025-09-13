@@ -52,7 +52,13 @@ class SimpleExceptionTrappingInvoker extends SimpleInvokerDecorator
                 $testCase      = parent::getTestCase();
                 $testCaseClass = $testCase::class;
                 $p_tearDown    = new ReflectionMethod($testCaseClass, 'tearDown');
-                $p_tearDown->setAccessible(true);
+
+                // Guard: ReflectionMethod::setAccessible() became a no-op and deprecated in PHP 8.5.
+                // https://www.php.net/manual/en/reflectionmethod.setaccessible.php
+                if (\PHP_VERSION_ID < 80500) {
+                    $p_tearDown->setAccessible(true);
+                }
+
                 $p_tearDown->invoke(parent::getTestCase());
             } catch (Exception $e) {
             }

@@ -63,14 +63,26 @@ class SimpleInvoker
     {
         // $this->test_case->setUp();
         $r_setUp = new ReflectionMethod($this->test_case::class, 'setUp');
-        $r_setUp->setAccessible(true);
+
+        // Guard: ReflectionMethod::setAccessible() became a no-op and deprecated in PHP 8.5.
+        // https://www.php.net/manual/en/reflectionmethod.setaccessible.php
+        if (\PHP_VERSION_ID < 80500) {
+            $r_setUp->setAccessible(true);
+        }
+
         $r_setUp->invoke($this->test_case);
 
         $this->test_case->{$method}();
 
         // $this->test_case->tearDown();
         $r_tearDown = new ReflectionMethod($this->test_case::class, 'tearDown');
-        $r_tearDown->setAccessible(true);
+
+        // Guard: ReflectionMethod::setAccessible() became a no-op and deprecated in PHP 8.5.
+        // https://www.php.net/manual/en/reflectionmethod.setaccessible.php
+        if (\PHP_VERSION_ID < 80500) {
+            $r_tearDown->setAccessible(true);
+        }
+
         $r_tearDown->invoke($this->test_case);
     }
 

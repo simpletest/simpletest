@@ -159,13 +159,33 @@ class SimpleErrorQueue
      */
     public function tally(): void
     {
-        while ([$severity, $message, $file, $line] = $this->extract()) {
-            $severity = $this->getSeverityAsString($severity);
-            $this->test->error($severity, $message, $file, $line);
+        while (true) {
+            $extracted = $this->extract();
+
+            if ($extracted === false) {
+                break;
+            }
+
+            [$severity, $message, $file, $line] = $extracted;
+            $severity                           = $this->getSeverityAsString($severity);
+
+            if ($this->test) {
+                $this->test->error($severity, $message, $file, $line);
+            }
         }
 
-        while ([$expected, $message] = $this->extractExpectation()) {
-            $this->test->assert($expected, false, '%s -> Expected error not caught');
+        while (true) {
+            $expectation = $this->extractExpectation();
+
+            if ($expectation === false) {
+                break;
+            }
+
+            [$expected, $message] = $expectation;
+
+            if ($this->test) {
+                $this->test->assert($expected, false, '%s -> Expected error not caught');
+            }
         }
     }
 
