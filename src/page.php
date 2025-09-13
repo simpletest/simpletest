@@ -415,6 +415,27 @@ class SimplePage
     }
 
     /**
+     * Finds a held form by a button (<button> or input type="button") using a selector.
+     * Will only search correctly built forms.
+     *
+     * @param SelectorInterface $selector button finder
+     *
+     * @return SimpleForm form object containing the button
+     */
+    public function getFormByButton($selector)
+    {
+        $counter = \count($this->forms);
+
+        for ($i = 0; $i < $counter; $i++) {
+            if ($this->forms[$i]->hasButton($selector)) {
+                return $this->forms[$i];
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Finds a held form by the form ID.
      * A way of identifying a specific form when we have control of the HTML code.
      *

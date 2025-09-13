@@ -616,4 +616,66 @@ class TestOfBrowserNavigation extends UnitTestCase
         $browser->get('http://this.com/page.html');
         $this->assertTrue($browser->submitFormById(33));
     }
+
+    public function testClickButtonByLabel(): void
+    {
+        $agent = new MockSimpleUserAgent;
+        $agent->returns('fetchResponse', new MockSimpleHttpResponse);
+
+        $form = new MockSimpleForm;
+        $form->returnsByValue('getAction', new SimpleUrl('http://this.com/handler.html'));
+        $form->returnsByValue('getMethod', 'post');
+        $form->returnsByValue('submitWidget', new SimplePostEncoding(['a' => 'A']));
+        $form->expectOnce('submitWidget', [new SelectByLabel('GoBtn'), false]);
+
+        $page = new MockSimplePage;
+        $page->returns('getFormByButton', $form);
+        $page->expectOnce('getFormByButton', [new SelectByLabel('GoBtn')]);
+        $page->returnsByValue('getRaw', 'stuff');
+
+        $browser = $this->createBrowser($agent, $page);
+        $browser->get('http://this.com/page.html');
+        $this->assertTrue($browser->clickButton('GoBtn'));
+    }
+
+    public function testClickButtonByName(): void
+    {
+        $agent = new MockSimpleUserAgent;
+        $agent->returns('fetchResponse', new MockSimpleHttpResponse);
+
+        $form = new MockSimpleForm;
+        $form->returnsByValue('getAction', new SimpleUrl('http://this.com/handler.html'));
+        $form->returnsByValue('getMethod', 'post');
+        $form->returnsByValue('submitWidget', new SimplePostEncoding(['a' => 'A']));
+
+        $page = new MockSimplePage;
+        $page->returns('getFormByButton', $form);
+        $page->expectOnce('getFormByButton', [new SelectByName('btn_name')]);
+        $page->returnsByValue('getRaw', 'stuff');
+
+        $browser = $this->createBrowser($agent, $page);
+        $browser->get('http://this.com/page.html');
+        $this->assertTrue($browser->clickButtonByName('btn_name'));
+    }
+
+    public function testClickButtonById(): void
+    {
+        $agent = new MockSimpleUserAgent;
+        $agent->returns('fetchResponse', new MockSimpleHttpResponse);
+
+        $form = new MockSimpleForm;
+        $form->returnsByValue('getAction', new SimpleUrl('http://this.com/handler.html'));
+        $form->returnsByValue('getMethod', 'post');
+        $form->returnsByValue('submitWidget', new SimplePostEncoding(['a' => 'A']));
+        $form->expectOnce('submitWidget', [new SelectById(99), false]);
+
+        $page = new MockSimplePage;
+        $page->returns('getFormByButton', $form);
+        $page->expectOnce('getFormByButton', [new SelectById(99)]);
+        $page->returnsByValue('getRaw', 'stuff');
+
+        $browser = $this->createBrowser($agent, $page);
+        $browser->get('http://this.com/page.html');
+        $this->assertTrue($browser->clickButtonById(99));
+    }
 }

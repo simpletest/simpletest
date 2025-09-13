@@ -197,6 +197,35 @@ class SimpleForm
     }
 
     /**
+     * Test to see if a form has a button element (eg. <button>).
+     *
+     * @param SelectorInterface $selector criteria to apply
+     *
+     * @return bool true if present
+     */
+    public function hasButton(SelectorInterface $selector)
+    {
+        foreach ($this->widgets as $widget) {
+            if ($selector->isMatch($widget)) {
+                // Only treat real button elements (and input type=button if present)
+                $tag = $widget->getTagName();
+
+                if ('button' === $tag) {
+                    return true;
+                }
+
+                $type = $widget->getAttribute('type');
+
+                if ($type && 'button' === \strtolower($type)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Gets the submit values for a selected button.
      *
      * @param            $selector   criteria to apply
@@ -272,6 +301,40 @@ class SimpleForm
         }
 
         return $encoding;
+    }
+
+    /**
+     * Gets the submit values for a button-like widget (eg. <button>).
+     *
+     * @param SelectorInterface $selector   criteria to apply
+     * @param array|bool        $additional additional data for the form
+     *
+     * @return false|SimpleEncoding submitted values or false if there is no such widget in the form
+     */
+    public function submitWidget(SelectorInterface $selector, $additional = false)
+    {
+        $additional = $additional ?: [];
+
+        foreach ($this->widgets as $widget) {
+            if ($selector->isMatch($widget)) {
+                $tag = $widget->getTagName();
+
+                $type = $widget->getAttribute('type');
+
+                if ('button' === $tag || ($type && 'button' === \strtolower($type))) {
+                    $encoding = $this->encode();
+                    $widget->write($encoding);
+
+                    if ($additional) {
+                        $encoding->merge($additional);
+                    }
+
+                    return $encoding;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

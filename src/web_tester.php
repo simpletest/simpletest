@@ -931,6 +931,68 @@ class WebTestCase extends SimpleTestCase
     }
 
     /**
+     * Clicks a <button> element by its label.
+     * The owning form will be submitted by this.
+     *
+     * @param string     $label      button label
+     * @param array|bool $additional additional form values
+     *
+     * @return bool|string Page on success, else false
+     */
+    public function clickButton($label, $additional = false)
+    {
+        return $this->failOnError(
+            $this->browser->clickButton($label, $additional),
+        );
+    }
+
+    /**
+     * Clicks a button by its name attribute.
+     *
+     * @param string $name       name attribute of button
+     * @param hash   $additional additional form values
+     *
+     * @return bool|string Page on success
+     */
+    public function clickButtonByName($name, $additional = false)
+    {
+        return $this->failOnError(
+            $this->browser->clickButtonByName($name, $additional),
+        );
+    }
+
+    /**
+     * Clicks a button by its ID attribute.
+     *
+     * @param string $id         ID attribute of button
+     * @param hash   $additional additional form values
+     *
+     * @return bool|string Page on success
+     */
+    public function clickButtonById($id, $additional = false)
+    {
+        return $this->failOnError(
+            $this->browser->clickButtonById($id, $additional),
+        );
+    }
+
+    /**
+     * Checks for a valid button label.
+     *
+     * @param string $label   visible text
+     * @param string $message
+     *
+     * @return bool true if click target
+     */
+    public function assertButton($label, $message = '%s')
+    {
+        return $this->assertTrue(
+            $this->browser->isButton($label),
+            \sprintf($message, "Button [{$label}] should exist"),
+        );
+    }
+
+    /**
      * Checks for a valid button label.
      *
      * @param string $label visible text

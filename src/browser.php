@@ -1044,7 +1044,86 @@ class SimpleBrowser
      */
     public function isClickable($label)
     {
-        return $this->isSubmit($label) || (false !== $this->getLink($label)) || $this->isImage($label);
+        return $this->isSubmit($label) ||
+            $this->isButton($label) ||
+            (false !== $this->getLink($label)) ||
+            $this->isImage($label);
+    }
+
+    /**
+     * Clicks a <button> element (or input type="button") by its label.
+     * The owning form will be submitted by this.
+     *
+     * @param string     $label      button label
+     * @param array|bool $additional additional form data
+     *
+     * @return bool|string Page on success
+     */
+    public function clickButton($label, $additional = false)
+    {
+        if (!($form = $this->page->getFormByButton(new SelectByLabel($label)))) {
+            return false;
+        }
+        $success = $this->load(
+            $form->getAction(),
+            $form->submitWidget(new SelectByLabel($label), $additional),
+        );
+
+        return $success ? $this->getContent() : $success;
+    }
+
+    /**
+     * Clicks a <button> element by name attribute. The owning form will be submitted by this.
+     *
+     * @param string $name       button name
+     * @param hash   $additional additional form data
+     *
+     * @return bool|string Page on success
+     */
+    public function clickButtonByName($name, $additional = false)
+    {
+        if (!($form = $this->page->getFormByButton(new SelectByName($name)))) {
+            return false;
+        }
+        $success = $this->load(
+            $form->getAction(),
+            $form->submitWidget(new SelectByName($name), $additional),
+        );
+
+        return $success ? $this->getContent() : $success;
+    }
+
+    /**
+     * Clicks a <button> element by ID attribute. The owning form will be submitted by this.
+     *
+     * @param string $id         button ID
+     * @param hash   $additional additional form data
+     *
+     * @return bool|string Page on success
+     */
+    public function clickButtonById($id, $additional = false)
+    {
+        if (!($form = $this->page->getFormByButton(new SelectById($id)))) {
+            return false;
+        }
+        $success = $this->load(
+            $form->getAction(),
+            $form->submitWidget(new SelectById($id), $additional),
+        );
+
+        return $success ? $this->getContent() : $success;
+    }
+
+    /**
+     * Tests to see if a button exists with this label.
+     *
+     * @param string $label button label
+     *
+     * @return bool true if present
+     */
+    public function isButton($label)
+    {
+        return (bool) $this->page->getFormByButton(new SelectByLabel($label));
     }
 
     /**
