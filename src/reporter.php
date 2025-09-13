@@ -329,14 +329,14 @@ class SelectiveReporter extends SimpleReporterDecorator
      */
     public function __construct($reporter, $just_this_case = false, $just_this_test = false)
     {
-        if (isset($just_this_case) && $just_this_case) {
+        if ($just_this_case) {
             $this->just_this_case = \strtolower($just_this_case);
             $this->off();
         } else {
             $this->on();
         }
 
-        if (isset($just_this_test) && $just_this_test) {
+        if ($just_this_test) {
             $this->just_this_test = \strtolower($just_this_test);
         }
         parent::__construct($reporter);

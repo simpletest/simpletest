@@ -30,8 +30,8 @@ if (\file_exists($cc->settingsFile)) {
 $args = CoverageUtils::parseArguments($_SERVER['argv'], true);
 
 // CLI-provided includes/excludes override or merge with existing settings
-$cliIncludes = CoverageUtils::issetOrDefault($args['include[]'], null);
-$cliExcludes = CoverageUtils::issetOrDefault($args['exclude[]'], null);
+$cliIncludes = $args['include[]'] ?? null;
+$cliExcludes = $args['exclude[]'] ?? null;
 
 // Default include pattern if nothing provided
 if ($cliIncludes !== null) {
@@ -67,6 +67,6 @@ foreach ($defaultExcludes as $pattern) {
 
 $cc->excludes = $merged;
 
-$cc->maxDirectoryDepth = (int) CoverageUtils::issetOrDefault($args['maxdepth'], '1');
+$cc->maxDirectoryDepth = (int) ($args['maxdepth'] ?? '1');
 $cc->resetLog();
 $cc->writeSettings();

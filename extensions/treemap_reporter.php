@@ -63,7 +63,7 @@ class TreemapReporter extends SimpleReporterDecorator
     /**
      * Paints start tag for div representing a test node.
      */
-    public function paintRectangleStart($node, $horiz, $vert): void
+    public function paintRectangleStart($node, $horiz = 100, $vert = 100): void
     {
         $name        = $node->getName();
         $description = $node->getDescription();

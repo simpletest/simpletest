@@ -9,6 +9,20 @@ class CoverageWriter
     {
         $summaryTemplateContents = function ($file, $data)
         {
+            // Provide defaults for template variables to ensure they are defined.
+            $defaults = [
+                'coverageByFile'         => [],
+                'totalPercentCoverage'   => 0,
+                'totalLinesOfCode'       => 0,
+                'totalLinesOfCoverage'   => 0,
+                'filesTouchedPercentage' => 0,
+                'untouched'              => [],
+                'title'                  => 'Coverage Report',
+            ];
+
+            $data = \array_merge($defaults, $data);
+            // Ensure coverageByFile is explicitly defined for static analysis
+            $coverageByFile = $data['coverageByFile'] ?? [];
             \extract($data);
 
             \asort($coverageByFile);
@@ -34,6 +48,12 @@ class CoverageWriter
     {
         $fileTemplateContents = function ($file, $data)
         {
+            $defaults = [
+                'title' => 'File Coverage',
+                'lines' => [],
+            ];
+
+            $data = \array_merge($defaults, $data);
             \extract($data);
             \ob_start();
 

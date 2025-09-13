@@ -4,9 +4,9 @@ require_once __DIR__ . '/../../../src/autorun.php';
 
 class CoverageWriterTest extends UnitTestCase
 {
-    public static function getAttribute($element, $attribute)
+    public static function getAttribute(DOMElement $element, $attribute)
     {
-        return $element->attributes()[$attribute];
+        return $element->getAttribute($attribute);
     }
 
     protected function setUp(): void
@@ -44,8 +44,12 @@ class CoverageWriterTest extends UnitTestCase
         $this->assertEqual('50%', $totalPercentCoverage->item(0)->textContent);
 
         $fileLinks = $xpath->query("//a[@class='fileReportLink']");
-        $this->assertEqual('file.html', $fileLinks->item(0)->getAttribute('href'));
-        $this->assertEqual('file', $fileLinks->item(0)->textContent);
+        $node      = $fileLinks->item(0);
+
+        if ($node instanceof DOMElement) {
+            $this->assertEqual('file.html', $node->getAttribute('href'));
+            $this->assertEqual('file', $node->textContent);
+        }
 
         $untouchedFile = $xpath->query("//span[@class='untouchedFile']");
         $this->assertEqual('missed-file', $untouchedFile->item(0)->textContent);
@@ -71,10 +75,29 @@ class CoverageWriterTest extends UnitTestCase
 
         $cells = $xpath->query("//table[@id='code']/tbody/tr/td/span");
 
-        $this->assertEqual('comment code', $cells->item(1)->getAttribute('class'));
-        $this->assertEqual('comment code', $cells->item(3)->getAttribute('class'));
-        $this->assertEqual('covered code', $cells->item(5)->getAttribute('class'));
-        $this->assertEqual('dead code', $cells->item(7)->getAttribute('class'));
+        $node1 = $cells->item(1);
+
+        if ($node1 instanceof DOMElement) {
+            $this->assertEqual('comment code', $node1->getAttribute('class'));
+        }
+
+        $node2 = $cells->item(3);
+
+        if ($node2 instanceof DOMElement) {
+            $this->assertEqual('comment code', $node2->getAttribute('class'));
+        }
+
+        $node3 = $cells->item(5);
+
+        if ($node3 instanceof DOMElement) {
+            $this->assertEqual('covered code', $node3->getAttribute('class'));
+        }
+
+        $node4 = $cells->item(7);
+
+        if ($node4 instanceof DOMElement) {
+            $this->assertEqual('dead code', $node4->getAttribute('class'));
+        }
 
         \unlink($reportFile);
     }

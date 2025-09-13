@@ -1681,7 +1681,7 @@ class SimpleRadioGroup extends SimpleTagGroup
     /**
      * Tests to see if a value is allowed.
      *
-     * @param string    attempted value
+     * @param string attempted value
      *
      * @return bool true if a valid value
      */

@@ -571,7 +571,7 @@ class SimpleTestXmlParser
      *
      * @return NestedXmlTag the group, case or method tag to start
      */
-    protected function pushNestingTag($nested)
+    protected function pushNestingTag($nested): void
     {
         \array_unshift($this->tag_stack, $nested);
     }

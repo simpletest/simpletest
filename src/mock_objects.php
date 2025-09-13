@@ -369,7 +369,7 @@ class SimpleSignatureMap
     {
         $slot = $this->findFirstSlot($parameters);
 
-        if (isset($slot, $slot['content'])) {
+        if (\is_array($slot) && isset($slot['content'])) {
             return $slot['content'];
         }
 
@@ -1539,8 +1539,9 @@ class MockGenerator
         // Ensure interfaces are fully-qualified to avoid namespace duplication
         // when generating code inside a namespace. Prefix a backslash if missing.
         if ($interfaces !== []) {
-            $qInterfaces = \array_map(static function ($i) {
-                return '\\' . ltrim($i, '\\');
+            $qInterfaces = \array_map(static function ($i)
+            {
+                return '\\' . \ltrim($i, '\\');
             }, $interfaces);
 
             $implements = 'implements ' . \implode(', ', $qInterfaces);

@@ -12,8 +12,6 @@ class ColorTextReporter extends TextReporter
 
     /**
      * Handle initialization.
-     *
-     * @param {@link TextReporter}
      */
     public function __construct()
     {
@@ -24,7 +22,7 @@ class ColorTextReporter extends TextReporter
      * Capture the attempt to display the final test results
      * and insert the ANSI-color codes in place.
      *
-     * @param string
+     * @param string $test_name
      *
      * @see TextReporter
      */
@@ -45,7 +43,7 @@ class ColorTextReporter extends TextReporter
     /**
      * Sets the terminal to an ANSI-standard $color.
      *
-     * @param int
+     * @param int $color
      */
     public function _setColor($color): void
     {

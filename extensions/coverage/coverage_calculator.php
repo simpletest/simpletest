@@ -58,10 +58,10 @@ class CoverageCalculator
      * -1: this line was not executed
      * -2: this line did not have executable code on it
      *
-     * @param type $total
-     * @param type $line
+     * @param int $total
+     * @param int $line
      *
-     * @return type
+     * @return int
      */
     public function lineCoverage($total, $line)
     {
@@ -91,6 +91,11 @@ class CoverageCalculator
     public function variables($coverage, $untouched)
     {
         $coverageByFile = [];
+
+        // default values to ensure variables are always defined
+        $totalPercentCoverage   = 0;
+        $totalLinesOfCoverage   = 0;
+        $filesTouchedPercentage = 0;
 
         foreach ($coverage as $file => $lineCoverageData) {
             $coverageByFile[$file] = $this->percentCoverageForFile($file, $lineCoverageData);

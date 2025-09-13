@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php print $title; ?></title>
+  <?php $title = $title ?? 'File Coverage'; ?>
+  <title><?php print $title; ?></title>
     <style type="text/css">
         body { font-family: "Gill Sans MT", "Gill Sans", GillSans, Arial, Helvetica, sans-serif; }
         h1 { font-size: medium; }
@@ -17,10 +18,12 @@
     </style>
   </head>
   <body>
-    <h1 id="title"><?php print $title; ?></h1>
+  <h1 id="title"><?php print $title; ?></h1>
     <table id="code">
       <tbody>
-          <?php foreach ($lines as $lineNo => $line) { ?>
+          <?php $lines = $lines ?? [];
+
+  foreach ($lines as $lineNo => $line) { ?>
             <tr>
               <td><span class="lineNo"><?php print $lineNo; ?></span></td>
               <td><span class="<?php print $line['lineCoverage']; ?> code"><?php print \htmlentities($line['code']); ?></span></td>

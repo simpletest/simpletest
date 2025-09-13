@@ -135,7 +135,17 @@ class CodeCoverage
             throw new Exception('XDebug is loaded, but code coverage is not enabled. Please set the environment variable XDEBUG_MODE=coverage or adjust your php.ini to include "coverage" in the xdebug.mode setting.');
         }
 
-        xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
+        $flags = 0;
+
+        if (\defined('XDEBUG_CC_UNUSED')) {
+            $flags |= XDEBUG_CC_UNUSED;
+        }
+
+        if (\defined('XDEBUG_CC_DEAD_CODE')) {
+            $flags |= XDEBUG_CC_DEAD_CODE;
+        }
+
+        xdebug_start_code_coverage($flags);
     }
 
     public function stopCoverage(): void

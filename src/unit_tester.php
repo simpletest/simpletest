@@ -69,7 +69,7 @@ class UnitTestCase extends SimpleTestCase
 
         $message = \sprintf($message, $msg_tpl);
 
-        return $this->assertTrue(!isset($value), $message);
+        return $this->assertTrue($value === null, $message);
     }
 
     /**
@@ -89,7 +89,7 @@ class UnitTestCase extends SimpleTestCase
 
         $message = \sprintf($message, $msg_tpl);
 
-        return $this->assertTrue(isset($value), $message);
+        return $this->assertTrue($value !== null, $message);
     }
 
     /**

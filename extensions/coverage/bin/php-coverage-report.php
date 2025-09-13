@@ -18,9 +18,42 @@ $cc                = CodeCoverage::getInstance();
 $handler           = new CoverageDataHandler($cc->log);
 $report            = new CoverageReporter;
 $args              = CoverageUtils::parseArguments($_SERVER['argv']);
-$report->reportDir = CoverageUtils::issetOrDefault($args['reportDir'], 'coverage-report');
-$report->title     = CoverageUtils::issetOrDefault($args['title'], 'Simpletest Coverage');
+$report->reportDir = $args['reportDir'] ?? 'coverage-report';
+$report->title     = $args['title'] ?? 'Simpletest Coverage';
 $report->coverage  = $handler->read();
 $report->untouched = $handler->readUntouchedFiles();
 $handler->close();
 $report->generate();
+
+// optional json export
+$jsonFile = null;
+
+if (\array_key_exists('jsonFile', $args)) {
+    $jsonFile = $args['jsonFile'];
+}
+
+if ($jsonFile !== null) {
+    // write a machine readable JSON report with untouched and uncovered lines
+    if (\method_exists($report, 'writeJsonReport')) {
+        $report->writeJsonReport($jsonFile);
+        print "JSON coverage report written: {$jsonFile}\n";
+    } else {
+        print "CoverageReporter does not support JSON export.\n";
+    }
+}
+
+// optional compact report export
+$compactFile = null;
+
+if (\array_key_exists('compactReportFile', $args)) {
+    $compactFile = $args['compactReportFile'];
+}
+
+if ($compactFile !== null) {
+    if (\method_exists($report, 'writeCompactReport')) {
+        $report->writeCompactReport($compactFile);
+        print "Compact coverage report written: {$compactFile}\n";
+    } else {
+        print "CoverageReporter does not support compact export.\n";
+    }
+}

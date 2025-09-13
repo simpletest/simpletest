@@ -47,7 +47,7 @@ class CoverageUtils
      *  $args['include'] will equal b   NOTE: only keeps last value
      *
      * @param array $argv
-     * @param supportMutliValue - will store 2nd copy of value in an array with key "foo[]"
+     * @param bool  $mutliValueMode will store 2nd copy of value in an array with key "foo[]" when true
      *
      * @return array
      */
@@ -82,10 +82,11 @@ class CoverageUtils
     /**
      * Adds a value as an array of one, or appends to an existing array elements.
      *
-     * @param unknown_type $array
-     * @param unknown_type $item
+     * @param array  $array array to modify (passed by reference)
+     * @param string $key   key name
+     * @param mixed  $item  item to append
      */
-    public static function addItemAsArray(&$array, $key, $item): void
+    public static function addItemAsArray(array &$array, $key, $item): void
     {
         $array_key = $key . '[]';
 
@@ -94,20 +95,5 @@ class CoverageUtils
         } else {
             $array[$array_key] = [$item];
         }
-    }
-
-    /**
-     * isset function with default value.
-     *
-     * Example:  $z = CoverageUtils::issetOr($array[$key], 'no value given')
-     *
-     * @param unknown_type $val
-     * @param unknown_type $default
-     *
-     * @return first value unless value is not set then returns 2nd arg or null if no 2nd arg
-     */
-    public static function issetOrDefault(&$val, $default = null)
-    {
-        return $val ?? $default;
     }
 }

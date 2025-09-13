@@ -36,13 +36,14 @@ class SimpleSeleniumRemoteControl
     {
         $response = $this->cmd($method, $arguments);
 
-        foreach ($this->_commandMap as $type => $commands) {
-            if (!\in_array($method, $commands, true)) {
-                continue;
-                $type = null;
-            }
+        $type = null;
 
-            break;
+        foreach ($this->_commandMap as $candidateType => $commands) {
+            if (\in_array($method, $commands, true)) {
+                $type = $candidateType;
+
+                break;
+            }
         }
 
         switch ($type) {

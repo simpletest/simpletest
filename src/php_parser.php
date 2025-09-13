@@ -439,6 +439,8 @@ class SimpleLexer
      */
     protected function reduce($raw)
     {
+        $match = '';
+
         if ($action = $this->regexes[$this->mode->getCurrent()]->match($raw, $match)) {
             if (\getenv('SIMPLETEST_DEBUG_LEXER')) {
                 \file_put_contents('php://stderr', 'REDUCE debug: raw=[' . \substr($raw, 0, 80) . '] match=[' . $match . '] action=[' . \var_export($action, true) . "]\n");

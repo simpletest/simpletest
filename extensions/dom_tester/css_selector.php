@@ -33,8 +33,14 @@ class CssSelector
         return $texts;
     }
 
+    /**
+     * @param string $selector
+     *
+     * @return DOMNode[]
+     */
     public function getElements($selector)
     {
+        /** @var DOMNode[] $all_nodes */
         $all_nodes = [];
 
         foreach ($this->tokenize_selectors($selector) as $selector) {
@@ -190,6 +196,7 @@ class CssSelector
 
     protected function getElementsByTagName($nodes, $tagName, $combinator = ' ')
     {
+        /** @var DOMNode[] $founds */
         $founds = [];
 
         foreach ($nodes as $node) {
@@ -214,6 +221,7 @@ class CssSelector
                     $element = $node->nextSibling;
 
                     if (isset($element->nodeName) && $element->nodeName == '#text') {
+                        \assert($element instanceof DOMNode);
                         $element = $element->nextSibling;
                     }
 

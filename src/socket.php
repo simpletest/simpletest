@@ -390,8 +390,6 @@ class SimpleSecureSocket extends SimpleSocket
 
     /**
      * Set the stream config for stream_context_create().
-     *
-     * @return array
      */
     public function setStreamConfig(array $stream_config): void
     {
@@ -411,7 +409,7 @@ class SimpleSecureSocket extends SimpleSocket
     {
         $context = \stream_context_create($this->stream_config);
 
-        $r = \stream_socket_client("{$this->transport}://{$host}:{$port}", $error_number, $error, DEFAULT_CONNECTION_TIMEOUT, \STREAM_CLIENT_CONNECT, $context);
+        $r = \stream_socket_client("{$this->transport}://{$host}:{$port}", $error_number, $error, $timeout, \STREAM_CLIENT_CONNECT, $context);
 
         if (!$r) {
             throw new Exception("Cannot connect to server '{$host}': {$error_number} {$error}");

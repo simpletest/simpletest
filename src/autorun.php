@@ -32,6 +32,8 @@ function simpletest_autorun()
     if (SimpleReporter::inCli()) {
         exit($result ? 0 : 1);
     }
+
+    return null;
 }
 
 /**
@@ -59,8 +61,8 @@ function run_local_tests()
 
         $reporter = new DefaultReporter;
 
-        if ($reporter->doCodeCoverage) {
-            $coverage = new PHP_CodeCoverage;
+        /*if ($reporter->doCodeCoverage) {
+            $coverage = new CodeCoverage;
             $filter   = $coverage->filter();
 
             foreach ($reporter->excludes as $folderPath) {
@@ -68,18 +70,15 @@ function run_local_tests()
             }
 
             $coverage->start($_SERVER['SCRIPT_FILENAME']);
-        }
+        }*/
 
-        $result = $suite->run($reporter);
-
-        if ($reporter->doCodeCoverage) {
+        return $suite->run($reporter);
+        /*if ($reporter->doCodeCoverage) {
             $coverage->stop();
 
-            $writer = new PHP_CodeCoverage_Report_HTML;
+            $writer = new CodeCoverage_Report_HTML;
             $writer->process($coverage, '/tmp/coverage');
-        }
-
-        return $result;
+        }*/
     } catch (Exception $stack_frame_fix) {
         print $stack_frame_fix->getMessage();
 
@@ -113,7 +112,7 @@ function initial_file()
     static $file = false;
 
     if (!$file) {
-        if (isset($_SERVER, $_SERVER['SCRIPT_FILENAME'])) {
+        if (isset($_SERVER['SCRIPT_FILENAME'])) {
             $file = $_SERVER['SCRIPT_FILENAME'];
         } else {
             $included_files = \get_included_files();

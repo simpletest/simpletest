@@ -81,11 +81,4 @@ class CoverageUtilsTest extends UnitTestCase
         CoverageUtils::addItemAsArray($actual, 'bird', 'pigeon');
         $this->assertEqual(['bird[]' => ['duck', 'pigeon']], $actual);
     }
-
-    public function testIssetOrDefault(): void
-    {
-        $data = ['bird' => 'gull'];
-        $this->assertEqual('lab', CoverageUtils::issetOrDefault($data['dog'], 'lab'));
-        $this->assertEqual('gull', CoverageUtils::issetOrDefault($data['bird'], 'sparrow'));
-    }
 }

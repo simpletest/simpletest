@@ -28,7 +28,7 @@ class JqueryTreemapReporter extends TreemapReporter
      *
      * @return string HTML of results header
      */
-    public function paintResultsHeader(): void
+    public function paintResultsHeader(): string
     {
         $title = $this->_reporter->getTitle();
         $css   = $this->_getCss();
@@ -57,7 +57,7 @@ class JqueryTreemapReporter extends TreemapReporter
         print $html;
     }
 
-    public function paintRectangleStart($node): void
+    public function paintRectangleStart($node, $horiz = 100, $vert = 100): void
     {
         $html = '<li><span class="desc">' . \basename($node->getDescription()) . '</span>';
         $html .= '<span class="data">' . $node->getTotalSize() . '</span>';
@@ -77,12 +77,12 @@ class JqueryTreemapReporter extends TreemapReporter
         print $html;
     }
 
-    public function divideMapNodes($map): void
+    public function divideMapNodes($map, $aspect): void
     {
         foreach ($map->getChildren() as $node) {
             if (!$node->isLeaf()) {
-                $this->paintRectangleStart($node);
-                $this->divideMapNodes($node);
+                $this->paintRectangleStart($node, 100, 100);
+                $this->divideMapNodes($node, $aspect);
             }
         }
     }
