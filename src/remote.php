@@ -85,36 +85,6 @@ class RemoteTestCase
             $xml     = $browser->get($this->dry_url);
 
             if (!$xml) {
-                \trigger_error('Cannot read remote test URL [' . $this->dry_url . ']');
-
-                return false;
-            }
-            $reporter = new SimpleReporter;
-            $parser   = $this->createParser($reporter);
-
-            if (!$parser->parse($xml)) {
-                \trigger_error('Cannot parse incoming XML from [' . $this->dry_url . ']');
-
-                return false;
-            }
-            $this->size = $reporter->getTestCaseCount();
-        }
-
-        return $this->size;
-    }
-
-    /**
-     * Accessor for the number of subtests.
-     *
-     * @return false|int|mixed number of test cases, or false
-     */
-    public function getSize()
-    {
-        if (false === $this->size) {
-            $browser = $this->createBrowser();
-            $xml     = $browser->get($this->dry_url);
-
-            if (!$xml) {
                 simpletest_trigger_error('Cannot read remote test URL [' . $this->dry_url . ']');
 
                 return false;
