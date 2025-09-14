@@ -79,23 +79,30 @@ class SimpleErrorQueue
     public function getSeverityAsString($severity)
     {
         static $map = [
-            \E_ERROR           => 'E_ERROR',
-            \E_WARNING         => 'E_WARNING',
-            \E_PARSE           => 'E_PARSE',
-            \E_NOTICE          => 'E_NOTICE',
-            \E_CORE_ERROR      => 'E_CORE_ERROR',
-            \E_CORE_WARNING    => 'E_CORE_WARNING',
-            \E_COMPILE_ERROR   => 'E_COMPILE_ERROR',
-            \E_COMPILE_WARNING => 'E_COMPILE_WARNING',
-            \E_USER_ERROR      => 'E_USER_ERROR',
-            \E_USER_WARNING    => 'E_USER_WARNING',
-            \E_USER_NOTICE     => 'E_USER_NOTICE',
-            // E_STRICT            => 'E_STRICT',            // PHP 5.0, removed PHP 8.4
+            \E_ERROR             => 'E_ERROR',
+            \E_WARNING           => 'E_WARNING',
+            \E_PARSE             => 'E_PARSE',
+            \E_NOTICE            => 'E_NOTICE',
+            \E_CORE_ERROR        => 'E_CORE_ERROR',
+            \E_CORE_WARNING      => 'E_CORE_WARNING',
+            \E_COMPILE_ERROR     => 'E_COMPILE_ERROR',
+            \E_COMPILE_WARNING   => 'E_COMPILE_WARNING',
+            \E_USER_WARNING      => 'E_USER_WARNING',
+            \E_USER_NOTICE       => 'E_USER_NOTICE',
             \E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',   // PHP 5.2
             \E_DEPRECATED        => 'E_DEPRECATED',          // PHP 5.3
             \E_USER_DEPRECATED   => 'E_USER_DEPRECATED',     // PHP 5.3
             \E_ALL               => 'E_ALL',
         ];
+
+        // Guard: deprecated error constants since PHP 8.4
+        // https://www.php.net/manual/en/errorfunc.constants.php#constant.e-strict
+        // https://www.php.net/manual/en/errorfunc.constants.php#constant.e-user-error
+        // Also see simpletest_trigger_error().
+        if (\PHP_VERSION_ID < 80400) {
+            $map[\E_USER_ERROR] = 'E_USER_ERROR';
+            $map[\E_STRICT]     = 'E_STRICT';
+        }
 
         return $map[$severity];
     }
@@ -279,4 +286,21 @@ function SimpleTestErrorHandler($severity, $message, $file = null, $line = null,
     }
 
     return true;
+}
+
+/**
+ * Replacement for trigger_error() that throws an ErrorException on E_USER_ERROR
+ * when running under PHP 8.4 or later.
+ *
+ * @param string $message    The error message
+ * @param int    $errorLevel The error level, one of E_USER_NOTICE, E_USER_WARNING, or E_USER_ERROR
+ *
+ * @throws ErrorException when running under PHP 8.4 or later and $errorLevel is E_USER_ERROR
+ */
+function simpletest_trigger_error(string $message, int $errorLevel): void
+{
+    if (\PHP_VERSION_ID >= 80400 && \E_USER_ERROR === $errorLevel) {
+        throw new ErrorException($message, $errorLevel);
+    }
+    \trigger_error($message, $errorLevel);
 }

@@ -1278,22 +1278,10 @@ class SimpleMock
     {
         $was = \error_reporting();
 
-        // Avoid referencing E_STRICT directly on newer PHP versions where
-        // the constant is deprecated; use constant() only when defined.
-        if (\defined('E_STRICT')) {
-            // Use get_defined_constants() to read the numeric value without
-            // directly referencing the deprecated constant symbol which can
-            // emit deprecation notices on some PHP versions.
-            $consts = \get_defined_constants();
-
-            if (isset($consts['E_STRICT'])) {
-                $mask = $consts['E_STRICT'];
-                \error_reporting($was & ~$mask);
-            } else {
-                \error_reporting($was);
-            }
-        } else {
-            \error_reporting($was);
+        // Guard: deprecated since PHP 8.4
+        // https://www.php.net/manual/en/errorfunc.constants.php#constant.e-strict
+        if (\PHP_VERSION_ID < 80400) {
+            \error_reporting($was & ~\E_STRICT);
         }
 
         return $was;
@@ -1384,6 +1372,7 @@ class MockGenerator
 
     /** @var bool */
     private $has_generated_unserialize = false;
+
     /** @var array */
     private $generated_methods = [];
 
@@ -1537,7 +1526,7 @@ class MockGenerator
     {
         // Reset per-class generated markers
         $this->has_generated_unserialize = false;
-        $this->generated_methods = [];
+        $this->generated_methods         = [];
         $implements                      = '';
         $interfaces                      = $this->reflection->getInterfaces();
 
@@ -1582,7 +1571,7 @@ class MockGenerator
     {
         // Reset per-class generated markers
         $this->has_generated_unserialize = false;
-        $this->generated_methods = [];
+        $this->generated_methods         = [];
 
         $code = '';
 
@@ -1621,7 +1610,7 @@ class MockGenerator
     {
         // Reset per-class generated markers
         $this->has_generated_unserialize = false;
-        $this->generated_methods = [];
+        $this->generated_methods         = [];
 
         $code = '';
 
@@ -1690,17 +1679,18 @@ class MockGenerator
             // Guard: silence deprecation notices, when return type is not declared
             // https://www.php.net/manual/en/class.returntypewillchange.php
             if (\PHP_VERSION_ID >= 80100) {
-                $lm = strtolower($method);
+                $lm = \strtolower($method);
 
                 if (empty($this->generated_methods[$lm])) {
                     $attr = '    #[\\ReturnTypeWillChange]' . "\n";
 
-                    if (substr($code, -\strlen($attr)) !== $attr) {
+                    if (\substr($code, -\strlen($attr)) !== $attr) {
                         $code .= $attr;
                     }
                     $this->generated_methods[$lm] = true;
                 }
             }
+
             // If generating for PHP 8.5+ we must not declare __wakeup() because
             // that magic method is deprecated. Instead, generate an
             // __unserialize() proxy so unserialization still routes through
@@ -1719,6 +1709,7 @@ class MockGenerator
                     $code .= "    }\n";
                     $this->has_generated_unserialize = true;
                 }
+
                 // Skip the usual generation of __wakeup
                 continue;
             }
@@ -1833,6 +1824,7 @@ class MockGenerator
             if (\in_array($method, $mock_reflection->getMethods(), true)) {
                 continue;
             }
+
             // Special-case __wakeup: on PHP 8.5+ the __wakeup() magic method is
             // deprecated. In that environment we must not declare __wakeup()
             // on generated mocks. Instead generate an __unserialize($data)
@@ -1854,7 +1846,7 @@ class MockGenerator
             }
 
             $code .= "    public function {$method}() {\n";
-            $code .= "        return " . '$this->mock->invoke("' . $method . '", func_get_args());' . "\n";
+            $code .= '        return $this->mock->invoke("' . $method . '", func_get_args());' . "\n";
             $code .= "    }\n";
 
             // Backwards-compat (older PHP): if generating for pre-8.5 PHP and
@@ -2089,17 +2081,18 @@ class MockGenerator
             // Guard: silence deprecation notices, when return type is not declared
             // https://www.php.net/manual/en/class.returntypewillchange.php
             if (\PHP_VERSION_ID >= 80100) {
-                $lm = strtolower($method);
+                $lm = \strtolower($method);
 
                 if (empty($this->generated_methods[$lm])) {
                     $attr = '    #[\\ReturnTypeWillChange]' . "\n";
 
-                    if (substr($code, -\strlen($attr)) !== $attr) {
+                    if (\substr($code, -\strlen($attr)) !== $attr) {
                         $code .= $attr;
                     }
                     $this->generated_methods[$lm] = true;
                 }
             }
+
             // If overriding __wakeup on PHP 8.5+, emit an __unserialize proxy
             // instead and skip declaring the deprecated __wakeup method.
             if (\strtolower($method) === '__wakeup' && \PHP_VERSION_ID >= 80500) {

@@ -557,8 +557,6 @@ class SimpleTestXmlParser
     protected function createParser()
     {
         $expat = \xml_parser_create();
-        // xml_set_object() is deprecated in PHP 8.4; pass proper callables instead.
-        // Use [$this, 'methodName'] so handlers are valid callables and bound to this instance.
         \xml_set_element_handler($expat, [$this, 'startElement'], [$this, 'endElement']);
         \xml_set_character_data_handler($expat, [$this, 'addContent']);
         \xml_set_default_handler($expat, [$this, 'defaultContent']);

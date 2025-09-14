@@ -242,10 +242,24 @@ class TextReporter extends SimpleReporter
     {
         parent::paintFail($message);
         print $this->getFailCount() . ") {$message}\n";
-        $breadcrumb = $this->getTestList();
-        \array_shift($breadcrumb);
-        print "\tin " . \implode("\n\tin ", \array_reverse($breadcrumb));
+
+        $breadcrumb    = $this->getTestList();
+        $leafFunction  = $breadcrumb[6];
+        $leafClass     = $breadcrumb[5];
+        $leafTestFile  = $breadcrumb[4];
+        $leafTestGroup = $breadcrumb[3];
+        $leafGroupFile = $breadcrumb[2];
+        $leafTestSuite = $breadcrumb[1];
+        $leafSuiteFile = $breadcrumb[0];
+        unset($breadcrumb);
+
+        print "   {$leafClass}::{$leafFunction}\n";
+        print "   └─ {$leafTestGroup} in {$leafGroupFile}\n";
+        // echo "      └─ {$leafTestSuite} in {$leafSuiteFile}\n";
+
         print "\n";
+
+        \var_export($breadcrumb);
     }
 
     /**
@@ -256,10 +270,24 @@ class TextReporter extends SimpleReporter
     public function paintError($message): void
     {
         parent::paintError($message);
-        print 'Exception ' . $this->getExceptionCount() . "!\n{$message}\n";
-        $breadcrumb = $this->getTestList();
-        \array_shift($breadcrumb);
-        print "\tin " . \implode("\n\tin ", \array_reverse($breadcrumb));
+
+        print 'Exception ' . $this->getExceptionCount() . "!\n";
+        print "{$message}\n";
+
+        $breadcrumb    = $this->getTestList();
+        $leafFunction  = $breadcrumb[6];
+        $leafClass     = $breadcrumb[5];
+        $leafTestFile  = $breadcrumb[4];
+        $leafTestGroup = $breadcrumb[3];
+        $leafGroupFile = $breadcrumb[2];
+        $leafTestSuite = $breadcrumb[1];
+        $leafSuiteFile = $breadcrumb[0];
+        unset($breadcrumb);
+
+        print "{$leafClass}::{$leafFunction}\n";
+        print "└─ {$leafTestGroup} in {$leafGroupFile}\n";
+        // echo "      └─ {$leafTestSuite} in {$leafSuiteFile}\n";
+
         print "\n";
     }
 
@@ -276,10 +304,24 @@ class TextReporter extends SimpleReporter
                 '] with message [' . $exception->getMessage() .
                 '] in [' . $exception->getFile() .
                 ' line ' . $exception->getLine() . ']';
-        print 'Exception ' . $this->getExceptionCount() . "!\n{$message}\n";
-        $breadcrumb = $this->getTestList();
-        \array_shift($breadcrumb);
-        print "\tin " . \implode("\n\tin ", \array_reverse($breadcrumb));
+
+        print 'Exception ' . $this->getExceptionCount() . "!\n";
+        print "{$message}\n";
+
+        $breadcrumb    = $this->getTestList();
+        $leafFunction  = $breadcrumb[6];
+        $leafClass     = $breadcrumb[5];
+        $leafTestFile  = $breadcrumb[4];
+        $leafTestGroup = $breadcrumb[3];
+        $leafGroupFile = $breadcrumb[2];
+        $leafTestSuite = $breadcrumb[1];
+        $leafSuiteFile = $breadcrumb[0];
+        unset($breadcrumb);
+
+        print "{$leafClass}::{$leafFunction}\n";
+        print "└─ {$leafTestGroup} in {$leafGroupFile}\n";
+        // echo "      └─ {$leafTestSuite} in {$leafSuiteFile}\n";
+
         print "\n";
     }
 
@@ -295,7 +337,7 @@ class TextReporter extends SimpleReporter
     }
 
     /**
-     * Paints formatted text such as dumped privateiables.
+     * Paints formatted text.
      *
      * @param string $message text to show
      */

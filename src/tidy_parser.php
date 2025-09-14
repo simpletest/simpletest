@@ -52,7 +52,7 @@ class SimpleTidyPageBuilder
         ];
 
         /** @var object $tidied */
-        $tidied = tidy_parse_string($tidy_input, $tidy_config, 'latin1');
+        $tidied = \tidy_parse_string($tidy_input, $tidy_config, 'latin1');
 
         $this->walkTree($tidied->html());
         $this->attachLabels($this->widgets_by_id, $this->labels);
