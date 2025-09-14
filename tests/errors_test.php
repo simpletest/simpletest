@@ -125,43 +125,44 @@ class TestOfErrors extends UnitTestCase
     {
         \error_reporting(\E_ALL);
         $this->expectError('Ouch!');
-        simpletest_trigger_error('Ouch!', E_USER_NOTICE);
+        simpletest_trigger_error('Ouch!', \E_USER_NOTICE);
     }
 
     public function testWarningWhenReported(): void
     {
         \error_reporting(\E_ALL);
         $this->expectError('Ouch!');
-        simpletest_trigger_error('Ouch!', E_USER_WARNING);
+        simpletest_trigger_error('Ouch!', \E_USER_WARNING);
     }
 
     public function testErrorWhenReported(): void
     {
-        error_reporting(E_ALL);
-        if (PHP_VERSION_ID < 80400) {
+        \error_reporting(\E_ALL);
+
+        if (\PHP_VERSION_ID < 80400) {
             $this->expectError('Ouch!');
         } else {
             $this->expectException(ErrorException::class, 'Ouch!');
         }
-        simpletest_trigger_error('Ouch!', E_USER_ERROR);
+        simpletest_trigger_error('Ouch!', \E_USER_ERROR);
     }
 
     public function testNoNoticeWhenNotReported(): void
     {
-        error_reporting(0);
-        simpletest_trigger_error('Ouch!', E_USER_NOTICE);
+        \error_reporting(0);
+        simpletest_trigger_error('Ouch!', \E_USER_NOTICE);
     }
 
     public function testNoWarningWhenNotReported(): void
     {
-        error_reporting(0);
-        simpletest_trigger_error('Ouch!', E_USER_WARNING);
+        \error_reporting(0);
+        simpletest_trigger_error('Ouch!', \E_USER_WARNING);
     }
 
     public function testNoticeSuppressedWhenReported(): void
     {
-        error_reporting(E_ALL);
-        @simpletest_trigger_error('Ouch!', E_USER_NOTICE);
+        \error_reporting(\E_ALL);
+        @simpletest_trigger_error('Ouch!', \E_USER_NOTICE);
     }
 
     public function testWarningSuppressedWhenReported(): void

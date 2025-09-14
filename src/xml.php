@@ -541,13 +541,7 @@ class SimpleTestXmlParser
                 \xml_get_current_column_number($this->expat),
                 \xml_get_current_byte_index($this->expat),
             );
-<<<<<<< HEAD
-            \trigger_error($message);
-||||||| parent of 8cc29c6 (Wrote a wrapper for the trigger_error function.)
-            trigger_error($message);
-=======
             simpletest_trigger_error($message);
->>>>>>> 8cc29c6 (Wrote a wrapper for the trigger_error function.)
 
             return false;
         }

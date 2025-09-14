@@ -708,8 +708,6 @@ class SimpleErrorThrower
     public function act(): void
     {
         simpletest_trigger_error($this->error, $this->severity);
-
-        return;
     }
 }
 
@@ -758,56 +756,6 @@ class SimpleMock
     public function disableExpectationNameChecks(): void
     {
         $this->is_strict = false;
-    }
-
-    /**
-     * Finds currently running test.
-     *
-     * @return SimpeTestCase current test case
-     */
-    protected function getCurrentTestCase()
-    {
-        return SimpleTest::getContext()->getTest();
-    }
-
-    /**
-     * Die if bad arguments array is passed.
-     *
-     * @param mixed  $args the arguments value to be checked
-     * @param string $task description of task attempt
-     *
-     * @return bool
-     */
-    protected function checkArgumentsIsArray($args, $task)
-    {
-        if (!is_array($args)) {
-            $errormsg = sprintf('Cannot %s. Parameter %s is not an array.', $task, $args);
-            simpletest_trigger_error($errormsg, E_USER_ERROR);
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Triggers a PHP error if the method is not part of this object.
-     *
-     * @param string $method name of method
-     * @param string $task   description of task attempt
-     *
-     * @return bool
-     */
-    protected function dieOnNoMethod($method, $task)
-    {
-        if ($this->is_strict && !method_exists($this, $method)) {
-            $errormsg = sprintf('Cannot %s. Method %s() not in class %s.', $task, $method, get_class($this));
-            simpletest_trigger_error($errormsg, E_USER_ERROR);
-
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -1230,7 +1178,7 @@ class SimpleMock
     {
         if (!\is_array($args)) {
             $errormsg = \sprintf('Cannot %s. Parameter %s is not an array.', $task, $args);
-            \trigger_error($errormsg, \E_USER_ERROR);
+            simpletest_trigger_error($errormsg, \E_USER_ERROR);
 
             return false;
         }
@@ -1250,7 +1198,7 @@ class SimpleMock
     {
         if ($this->is_strict && !\method_exists($this, $method)) {
             $errormsg = \sprintf('Cannot %s. Method %s() not in class %s.', $task, $method, static::class);
-            \trigger_error($errormsg, \E_USER_ERROR);
+            simpletest_trigger_error($errormsg, \E_USER_ERROR);
 
             return false;
         }
@@ -1359,14 +1307,6 @@ class SimpleMock
 class Mock
 {
     /**
-     * Factory for mock object classes.
-     */
-    public function __construct()
-    {
-        trigger_error('Mock factory methods are static.');
-    }
-
-    /**
      * Clones the interface of a class and creates a mock version
      * that can have return values and expectations set.
      *
@@ -1415,7 +1355,7 @@ class Mock
      */
     public function __construct()
     {
-        \trigger_error('Mock factory methods are static.');
+        simpletest_trigger_error('Mock factory methods are static.');
     }
 }
 
@@ -1566,7 +1506,7 @@ class MockGenerator
         $mock_reflection = new SimpleReflection($this->mock_class);
 
         if ($mock_reflection->classExistsWithoutAutoload()) {
-            simpletest_trigger_error('Partial mock class ['.$this->mock_class.'] already exists');
+            simpletest_trigger_error('Partial mock class [' . $this->mock_class . '] already exists');
 
             return false;
         }
