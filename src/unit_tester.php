@@ -173,6 +173,22 @@ class UnitTestCase extends SimpleTestCase
     }
 
     /**
+     * Will trigger a pass if the two parameters have a different value.
+     *
+     * Convenience alias for assertNotEqual().
+     *
+     * @param mixed  $first   value to compare
+     * @param mixed  $second  value to compare
+     * @param string $message message to display
+     *
+     * @return bool true on pass, otherwise a fail
+     */
+    public function assertNotEquals($first, $second, $message = '%s')
+    {
+        return $this->assert(new NotEqualExpectation($first), $second, $message);
+    }
+
+    /**
      * Will trigger a pass if the if the first parameter is near enough to the second by the margin.
      *
      * @param mixed  $first   value to compare

@@ -216,6 +216,27 @@ class ShellTestCase extends SimpleTestCase
     }
 
     /**
+     * Will trigger a pass if the two parameters have a different value.
+     * This is for testing hand extracted text, etc.
+     *
+     * Convenience alias for assertNotEqual().
+     *
+     * @param mixed  $first   value to compare
+     * @param mixed  $second  value to compare
+     * @param string $message message to display
+     *
+     * @return bool true on pass, Otherwise a fail
+     */
+    public function assertNotEquals($first, $second, $message = '%s')
+    {
+        return $this->assert(
+            new NotEqualExpectation($first),
+            $second,
+            $message,
+        );
+    }
+
+    /**
      * Tests the last status code from the shell.
      *
      * @param int    $status  expected status of last command
