@@ -138,6 +138,27 @@ class UnitTestCase extends SimpleTestCase
     }
 
     /**
+     * Will trigger a pass if the two parameters have the same value only.
+     * This is for testing hand extracted text, etc.
+     *
+     * Convenience alias for assertEqual()!
+     *
+     * @param mixed  $first   value to compare
+     * @param mixed  $second  value to compare
+     * @param string $message message to display
+     *
+     * @return bool true on pass, Otherwise a fail
+     */
+    public function assertEquals($first, $second, $message = '%s')
+    {
+        return $this->assert(
+            new EqualExpectation($first),
+            $second,
+            $message,
+        );
+    }
+
+    /**
      * Will trigger a pass if the two parameters have a different value.
      *
      * @param mixed  $first   value to compare
