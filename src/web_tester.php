@@ -1501,9 +1501,9 @@ class WebTestCase extends SimpleTestCase
     }
 
     /**
-     * Will trigger a pass if the Perl regex pattern is found in the raw content.
+     * Will trigger a pass if the regex pattern is found in the raw content.
      *
-     * @param string $pattern perl regex to look for including the regex delimiters
+     * @param string $pattern regex to look for including the regex delimiters
      * @param string $message message to display
      *
      * @return bool true if pass
@@ -1518,9 +1518,9 @@ class WebTestCase extends SimpleTestCase
     }
 
     /**
-     * Will trigger a pass if the perl regex pattern is not present in raw content.
+     * Will trigger a pass if the regex pattern is not present in raw content.
      *
-     * @param string $pattern perl regex to look for including the regex delimiters
+     * @param string $pattern regex to look for including the regex delimiters
      * @param string $message message to display
      *
      * @return bool true if pass

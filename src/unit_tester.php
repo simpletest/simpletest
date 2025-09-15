@@ -347,9 +347,9 @@ class UnitTestCase extends SimpleTestCase
     }
 
     /**
-     * Will trigger a pass if the Perl regex pattern is found in the subject.
+     * Will trigger a pass if the regex pattern is found in the subject.
      *
-     * @param string $pattern perl regex to look for including the regex delimiters
+     * @param string $pattern regex to look for including the regex delimiters
      * @param string $subject string to search in
      * @param string $message message to display
      *
@@ -361,9 +361,9 @@ class UnitTestCase extends SimpleTestCase
     }
 
     /**
-     * Will trigger a pass if the perl regex pattern is not present in subject.
+     * Will trigger a pass if the regex pattern is not present in subject.
      *
-     * @param string $pattern perl regex to look for including the regex delimiters
+     * @param string $pattern regex to look for including the regex delimiters
      * @param string $subject string to search in
      * @param string $message message to display
      *

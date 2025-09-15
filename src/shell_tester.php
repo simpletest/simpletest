@@ -278,7 +278,7 @@ class ShellTestCase extends SimpleTestCase
     }
 
     /**
-     * Scans the output for a Perl regex. If found anywhere it passes, else it fails.
+     * Scans the output for a regex. If found anywhere it passes, else it fails.
      *
      * @param string $pattern regex to search for
      * @param string $message message to display
@@ -297,7 +297,7 @@ class ShellTestCase extends SimpleTestCase
     }
 
     /**
-     * If a Perl regex is found anywhere in the current output
+     * If a regex is found anywhere in the current output
      * then a failure is generated, else a pass.
      *
      * @param string $pattern regex to search for
@@ -351,7 +351,7 @@ class ShellTestCase extends SimpleTestCase
     }
 
     /**
-     * Scans a file for a Perl regex. If found anywhere it passes, else it fails.
+     * Scans a file for a regex. If found anywhere it passes, else it fails.
      *
      * @param string $pattern regex to search for
      * @param string $path    full filename and path
@@ -369,7 +369,7 @@ class ShellTestCase extends SimpleTestCase
     }
 
     /**
-     * If a Perl regex is found anywhere in the named file
+     * If a regex is found anywhere in the named file
      * then a failure is generated, else a pass.
      *
      * @param string $pattern regex to search for

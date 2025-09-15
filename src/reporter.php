@@ -243,23 +243,58 @@ class TextReporter extends SimpleReporter
         parent::paintFail($message);
         print $this->getFailCount() . ") {$message}\n";
 
-        $breadcrumb    = $this->getTestList();
-        $leafFunction  = $breadcrumb[6];
-        $leafClass     = $breadcrumb[5];
-        $leafTestFile  = $breadcrumb[4];
-        $leafTestGroup = $breadcrumb[3];
-        $leafGroupFile = $breadcrumb[2];
-        $leafTestSuite = $breadcrumb[1];
-        $leafSuiteFile = $breadcrumb[0];
-        unset($breadcrumb);
+        $breadcrumb = $this->getTestList();
 
-        print "   {$leafClass}::{$leafFunction}\n";
-        print "   └─ {$leafTestGroup} in {$leafGroupFile}\n";
-        // echo "      └─ {$leafTestSuite} in {$leafSuiteFile}\n";
+        if (\count($breadcrumb) === 9) {
+            $leafMethod    = $breadcrumb[8];            // test
+            $leafClass     = $breadcrumb[7];
+            $leafFile      = $breadcrumb[6];
+            $leafCompName  = $breadcrumb[5];            // component
+            $leafCompFile  = \realpath($breadcrumb[4]);
+            $leafGroupName = $breadcrumb[3];            // group
+            $leafGroupFile = $breadcrumb[2];
+            $leafSuiteName = $breadcrumb[1];            // suite
+            $leafSuiteFile = $breadcrumb[0];
 
-        print "\n";
+            print " ➔  {$leafClass}::{$leafMethod}\n    in {$leafFile}\n";
+            print " └─ {$leafCompName} in {$leafCompFile}\n";
+            print " └─ {$leafGroupName} in {$leafGroupFile}\n";
+            // print " └─ {$leafSuiteName} in {$leafSuiteFile}\n";
+            print "\n";
+        } elseif (\count($breadcrumb) === 7) {
+            // we have class/method info
+            $leafFunction  = $breadcrumb[6];
+            $leafClass     = $breadcrumb[5];
+            $leafTestFile  = $breadcrumb[4];            // method
+            $leafTestGroup = $breadcrumb[3];            // class
+            $leafGroupFile = $breadcrumb[2];            // file
+            $leafTestSuite = $breadcrumb[1];            // suite
+            $leafSuiteFile = $breadcrumb[0];    	    // file
 
-        \var_export($breadcrumb);
+            print "    {$leafClass}::{$leafFunction}\n";
+            print " └─ {$leafTestGroup}::{$leafTestFile}\n    in {$leafGroupFile}\n";
+            print " └─ '{$leafTestSuite}' in {$leafSuiteFile}\n";
+            print "\n";
+        } elseif (\count($breadcrumb) === 5) {
+            // no class/method info
+            $leafTestFile  = $breadcrumb[4];
+            $leafTestGroup = $breadcrumb[3];
+            $leafGroupFile = $breadcrumb[2];
+            $leafTestSuite = $breadcrumb[1];
+            $leafSuiteFile = $breadcrumb[0];
+
+            print " └─ {$leafTestGroup}::{$leafTestFile}\n    in {$leafGroupFile}\n";
+            print " └─ '{$leafTestSuite}' in {$leafSuiteFile}\n";
+            print "\n";
+        } else {
+            // something is wrong, just dump it all
+            \var_export($breadcrumb);
+            print "\n";
+
+            return;
+        }
+
+        // \var_export($breadcrumb);
     }
 
     /**
@@ -275,8 +310,8 @@ class TextReporter extends SimpleReporter
         print "{$message}\n";
 
         $breadcrumb    = $this->getTestList();
-        $leafFunction  = $breadcrumb[6];
-        $leafClass     = $breadcrumb[5];
+        $leafFunction  = $breadcrumb[6] ?? null;
+        $leafClass     = $breadcrumb[5] ?? null;
         $leafTestFile  = $breadcrumb[4];
         $leafTestGroup = $breadcrumb[3];
         $leafGroupFile = $breadcrumb[2];
@@ -289,6 +324,8 @@ class TextReporter extends SimpleReporter
         // echo "      └─ {$leafTestSuite} in {$leafSuiteFile}\n";
 
         print "\n";
+
+        // \var_export($breadcrumb);
     }
 
     /**

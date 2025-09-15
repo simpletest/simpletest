@@ -635,7 +635,7 @@ class NotIdenticalExpectation extends IdenticalExpectation
 }
 
 /**
- * Test for a pattern using Perl regex rules.
+ * Test for a pattern using regular expression rules.
  */
 class PatternExpectation extends SimpleExpectation
 {
@@ -656,7 +656,7 @@ class PatternExpectation extends SimpleExpectation
 
     /**
      * Tests the expectation.
-     * True, if the Perl regex matches the comparison value.
+     * True, if the regex matches the comparison value.
      *
      * @param string $compare comparison value
      *
@@ -687,7 +687,7 @@ class PatternExpectation extends SimpleExpectation
     /**
      * Accessor for the pattern.
      *
-     * @return string perl regex as string
+     * @return string regex as string
      */
     protected function getPattern()
     {
@@ -732,7 +732,7 @@ class NoPatternExpectation extends PatternExpectation
     }
 
     /**
-     * Tests the expectation. False if the Perl regex matches the comparison value.
+     * Tests the expectation. False if the regex matches the comparison value.
      *
      * @param string $compare comparison value
      *

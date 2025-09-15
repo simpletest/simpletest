@@ -99,7 +99,7 @@ class SimplePatternCollector extends SimpleCollector
     private $pattern;
 
     /**
-     * @param string $pattern Perl compatible regex to test name against
+     * @param string $pattern Regex to test name against
      */
     public function __construct($pattern = '/php$/i')
     {
