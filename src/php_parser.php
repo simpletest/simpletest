@@ -33,7 +33,7 @@ class ParallelRegex
     /**
      * Adds a pattern with an optional label.
      *
-     * @param string $pattern perl style regex, but ( and ) lose the usual meaning
+     * @param string $pattern regex, but ( and ) lose the usual meaning
      * @param string $label   label of regex to be returned on a match
      */
     public function addPattern($pattern, $label = true): void
@@ -91,18 +91,25 @@ class ParallelRegex
                     $this->patterns[$i],
                 ) . ')';
             }
-            $this->regex = '/' . \implode('|', $this->patterns) . '/' . $this->getPerlMatchingFlags();
+            $this->regex = '/' . \implode('|', $this->patterns) . '/' . $this->getPatternModifiers();
         }
 
         return $this->regex;
     }
 
     /**
-     * Accessor for perl regex mode flags to use.
+     * Accessor for the regex PCRE modifiers to use.
      *
-     * @return string perl regex flags
+     * - m = multi-line mode
+     * - s = dot matches newlines
+     * - S = extra analysis of the pattern
+     * - i = case insensitive (used if $this->case is false)
+     *
+     * @see https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
+     *
+     * @return string regex flags
      */
-    protected function getPerlMatchingFlags()
+    protected function getPatternModifiers()
     {
         return $this->case ? 'msS' : 'msSi';
     }
@@ -193,7 +200,7 @@ class SimpleLexer
      * Adds a token search pattern for a particular parsing mode.
      * The pattern does not change the current mode.
      *
-     * @param string $pattern perl style regex, but ( and ) lose the usual meaning
+     * @param string $pattern regex, but ( and ) lose the usual meaning
      * @param string $mode    should only apply this pattern when dealing with this type of
      *                        input
      */
@@ -213,7 +220,7 @@ class SimpleLexer
      * Adds a pattern that will enter a new parsing mode.
      * Useful for entering parenthesis, strings, tags, etc.
      *
-     * @param string $pattern  perl style regex, but ( and ) lose the usual meaning
+     * @param string $pattern  regex, but ( and ) lose the usual meaning
      * @param string $mode     should only apply this pattern when dealing with this type of
      *                         input
      * @param string $new_mode change parsing to this new nested mode
@@ -233,7 +240,7 @@ class SimpleLexer
     /**
      * Adds a pattern that will exit the current mode and re-enter the previous one.
      *
-     * @param string $pattern perl style regex, but ( and ) lose the usual meaning
+     * @param string $pattern regex, but ( and ) lose the usual meaning
      * @param string $mode    mode to leave
      */
     public function addExitPattern($pattern, $mode): void
@@ -253,7 +260,7 @@ class SimpleLexer
      * Acts as an entry and exit pattern in one go,
      * effectively calling a special parser handler for this token only.
      *
-     * @param string $pattern perl style regex, but ( and ) lose the usual meaning
+     * @param string $pattern regex, but ( and ) lose the usual meaning
      * @param string $mode    should only apply this pattern when dealing with this type of
      *                        input
      * @param string $special use this mode for this one token
