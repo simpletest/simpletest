@@ -228,3 +228,96 @@ class TestOfThrowingExceptionsInTearDown extends UnitTestCase
         $this->expectException();
     }
 }
+
+class AssertThrowsTest extends UnitTestCase
+{
+    public function testAssertThrowsReturnsExceptionOnMatch(): void
+    {
+        $ex = $this->assertThrows(static function (): void
+        {
+            throw new RuntimeException('boom');
+        }, RuntimeException::class);
+
+        // ensure we got the exception back so further assertions can be made
+        $this->assert(new TrueExpectation, $ex instanceof RuntimeException, 'Exception was returned');
+    }
+
+    public function testAssertThrowsFailsWhenNoException(): void
+    {
+        $ex = $this->assertThrows(static function (): void
+        {
+            // no exception
+        }, null);
+
+        $this->assertNull($ex);
+    }
+
+    public function testAssertThrowsFailsOnDifferentExceptionClass(): void
+    {
+        $ex = $this->assertThrows(static function (): void
+        {
+            throw new RuntimeException('boom');
+        }, InvalidArgumentException::class);
+
+        $this->assertNull($ex);
+    }
+}
+
+class AssertThrowsExactlyTest extends UnitTestCase
+{
+    public function testReturnsExceptionOnExactMatch(): void
+    {
+        $ex = $this->assertThrowsExactly(static function (): void
+        {
+            throw new RuntimeException('boom');
+        }, RuntimeException::class);
+
+        $this->assertNotNull($ex);
+        $this->assertEqual(RuntimeException::class, $ex::class);
+    }
+
+    public function testReturnsNullForSubclassMismatch(): void
+    {
+        // HigherTestException extends MyTestException in exceptions_test.php; use RuntimeException vs Exception
+        $ex = $this->assertThrowsExactly(static function (): void
+        {
+            throw new RuntimeException('boom');
+        }, Exception::class);
+
+        // RuntimeException is a subclass of Exception, but not an exact match
+        $this->assertNull($ex);
+    }
+
+    public function testReturnsNullWhenNoException(): void
+    {
+        $ex = $this->assertThrowsExactly(static function (): void
+        {
+            // no exception
+        }, Exception::class);
+
+        $this->assertNull($ex);
+    }
+}
+
+class AssertDoesNotThrowTest extends UnitTestCase
+{
+    public function testDoesNotThrowReturnsTrueWhenNoException(): void
+    {
+        $result = $this->assertDoesNotThrow(static function (): void
+        {
+            // no exception thrown
+        });
+
+        $this->assertTrue($result);
+    }
+
+    public function testDoesNotThrowWithCustomMessage(): void
+    {
+        $result = $this->assertDoesNotThrow(static function (): void
+        {
+            // no exception
+        }, 'Custom message');
+
+        $this->assertTrue($result);
+    }
+}

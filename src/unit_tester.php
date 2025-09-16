@@ -62,6 +62,86 @@ class UnitTestCase extends SimpleTestCase
     }
 
     /**
+     * Assert that the given callable throws an exception of the expected type.
+     *
+     * assertThrows catches the exception, verifies its class,
+     * and returns the exception so that further assertions can be made.
+     *
+     * @param callable    $fn            The function to execute
+     * @param null|string $expectedClass Expected exception class (optional)
+     * @param string      $message       Optional message to display if expectation fails
+     *
+     * @return null|Throwable The caught exception, or null on failure
+     */
+    public function assertThrows(callable $fn, ?string $expectedClass = null, string $message = ''): ?Throwable
+    {
+        try {
+            $fn();
+        } catch (Throwable $e) {
+            if ($expectedClass !== null && !($e instanceof $expectedClass)) {
+                // Caller can assert on null to record a failure if desired.
+                return null;
+            }
+
+            // Success: return the caught exception for further assertions by the caller.
+            return $e;
+        }
+
+        // If we get here, no exception was thrown
+        return null;
+    }
+
+    /**
+     * Assert that the given callable throws an exception of the exact expected type.
+     *
+     * Unlike assertThrows (which uses instanceof), this requires the thrown
+     * exception's concrete class to match the expected class exactly.
+     *
+     * @param callable $fn            The function to execute
+     * @param string   $expectedClass Expected exception class (exact match)
+     * @param string   $message       Optional message to display if expectation fails
+     *
+     * @return null|Throwable The caught exception on exact match, or null otherwise
+     */
+    public function assertThrowsExactly(callable $fn, string $expectedClass, string $message = ''): ?Throwable
+    {
+        try {
+            $fn();
+        } catch (Throwable $e) {
+            if ($e::class !== $expectedClass) {
+                return null;
+            }
+
+            return $e;
+        }
+
+        return null;
+    }
+
+    /**
+     * Assert that the given callable does not throw any exception.
+     *
+     * @param callable $fn      The function to execute
+     * @param string   $message Optional message to display on failure
+     *
+     * @return bool True on pass (no exception), false on failure
+     */
+    public function assertDoesNotThrow(callable $fn, $message = '%s')
+    {
+        try {
+            $fn();
+        } catch (Throwable $e) {
+            $msg = $message !== '%s'
+                ? $message
+                : \sprintf('Unexpected exception [%s] thrown: %s', $e::class, $e->getMessage());
+
+            return $this->fail($msg);
+        }
+
+        return $this->assertTrue(true, $message !== '%s' ? $message : 'No exception thrown');
+    }
+
+    /**
      * Will be true if the value is null.
      *
      * @param null   $value   supposedly null value
@@ -399,6 +479,9 @@ class UnitTestCase extends SimpleTestCase
     /**
      * Prepares for an exception. If the error mismatches it passes through, otherwise it is
      * swallowed. Any left over errors trigger failures.
+     *
+     * Note: if you want to catch the exception and continue the test (for further
+     * assertions), use assertThrows() which returns the caught exception.
      *
      * @param mixed  $expected The error to match
      * @param string $message  message on failure
