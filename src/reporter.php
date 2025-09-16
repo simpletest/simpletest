@@ -192,6 +192,15 @@ class HtmlReporter extends SimpleReporter
  */
 class TextReporter extends SimpleReporter
 {
+    /** @var null|bool */
+    private $useColors;
+
+    /** @var int */
+    private $passColor = 42;
+
+    /** @var int */
+    private $failColor = 41;
+
     /**
      * Does nothing yet. The first output will be sent on the first test start.
      */
@@ -221,11 +230,23 @@ class TextReporter extends SimpleReporter
      */
     public function paintFooter($test_name): void
     {
-        if (0 === $this->getFailCount() + $this->getExceptionCount()) {
+        $failures = $this->getFailCount() + $this->getExceptionCount();
+
+        if ($this->supportsColor()) {
+            $color = $failures === 0 ? $this->passColor : $this->failColor;
+            $this->setColor($color);
+        }
+
+        if (0 === $failures) {
             print "OK\n";
         } else {
             print "FAILURES!!!\n";
         }
+
+        if ($this->supportsColor()) {
+            $this->resetColor();
+        }
+
         print 'Test cases run: ' . $this->getTestCaseProgress() .
                 '/' . $this->getTestCaseCount() .
                 ', Passes: ' . $this->getPassCount() .
@@ -382,6 +403,67 @@ class TextReporter extends SimpleReporter
     {
         print "{$message}\n";
         \flush();
+    }
+
+    /**
+     * Detects whether we can emit ANSI color codes to the current output.
+     * Caches the result in `$useColors`.
+     *
+     * @return bool
+     */
+    protected function supportsColor()
+    {
+        if ($this->useColors !== null) {
+            return $this->useColors;
+        }
+
+        // Only attempt color on CLI
+        if (!SimpleReporter::inCli()) {
+            $this->useColors = false;
+
+            return false;
+        }
+
+        // Prefer posix_isatty when available
+        if (\function_exists('posix_isatty') && \defined('STDOUT')) {
+            $this->useColors = (bool) @\posix_isatty(\STDOUT);
+
+            return $this->useColors;
+        }
+
+        // Fallback: check TERM environment variable
+        $term = \getenv('TERM');
+
+        $this->useColors = $term && \strtolower($term) !== 'dumb';
+
+        return $this->useColors;
+    }
+
+    /**
+     * Set an ANSI color on the terminal output (no trailing newline).
+     *
+     * @param int $color
+     */
+    protected function setColor($color): void
+    {
+        if (!$this->supportsColor()) {
+            return;
+        }
+
+        // ESC[<color>m
+        \printf('%s[%sm', \chr(27), $color);
+    }
+
+    /**
+     * Reset terminal color back to normal.
+     */
+    protected function resetColor(): void
+    {
+        if (!$this->supportsColor()) {
+            return;
+        }
+
+        $this->setColor(0);
     }
 }
 
