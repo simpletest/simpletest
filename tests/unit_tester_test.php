@@ -121,4 +121,21 @@ class TestOfUnitTester extends UnitTestCase
         $b = $this->escapeIncidentalPrintfSyntax('%s (%SimpleTest error%)');
         $this->assertEqual($a, $b);
     }
+
+    public function testStringAssertionsContainStartEnd(): void
+    {
+        $haystack = 'The quick brown fox jumps over the lazy dog';
+
+        // contains
+        $this->assertTrue($this->assertStringContainsString('brown fox', $haystack));
+        $this->assertTrue($this->assertStringContainsString('The quick', $haystack));
+
+        // starts with
+        $this->assertTrue($this->assertStringStartsWith('The quick', $haystack));
+
+        // ends with
+        $this->assertTrue($this->assertStringEndsWith('lazy dog', $haystack));
+        // empty suffix should always be considered as matching
+        $this->assertTrue($this->assertStringEndsWith('', $haystack));
+    }
 }

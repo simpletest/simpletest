@@ -464,6 +464,89 @@ class UnitTestCase extends SimpleTestCase
     }
 
     /**
+     * Assert that the given substring is present inside the target string.
+     *
+     * @param string $substring    substring to look for
+     * @param string $targetString string to search in
+     * @param string $message      optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertStringContainsString(string $substring, string $targetString, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] does not contain [%s]';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($targetString), $dumper->describeValue($substring));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue(\str_contains($targetString, $substring), $message);
+    }
+
+    /**
+     * Assert that the given target string starts with the provided prefix.
+     *
+     * @param string $prefix       prefix expected at the start of the target string
+     * @param string $targetString string to check
+     * @param string $message      optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertStringStartsWith(string $prefix, string $targetString, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] does not start with [%s]';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($targetString), $dumper->describeValue($prefix));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue(\str_starts_with($targetString, $prefix), $message);
+    }
+
+    /**
+     * Assert that the given target string ends with the provided suffix.
+     *
+     * @param string $suffix       suffix expected at the end of the target string
+     * @param string $targetString string to check
+     * @param string $message      optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertStringEndsWith(string $suffix, string $targetString, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] does not end with [%s]';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($targetString), $dumper->describeValue($suffix));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        if ($suffix === '') {
+            // Every string ends with an empty suffix
+            return $this->assertTrue(true, $message);
+        }
+
+        $len      = \strlen($suffix);
+        $endsWith = \substr($targetString, -$len) === $suffix;
+
+        return $this->assertTrue($endsWith, $message);
+    }
+
+    /**
      * Prepares for an error. If the error mismatches it passes through, otherwise it is swallowed.
      * Any left over errors trigger failures.
      *
