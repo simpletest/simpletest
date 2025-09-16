@@ -213,6 +213,60 @@ class UnitTestCase extends SimpleTestCase
     }
 
     /**
+     * Assert that the given object is an instance of the specified class.
+     *
+     * @param string $class   fully-qualified class name expected
+     * @param mixed  $object  object to check
+     * @param string $message optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertInstanceOf(string $class, $object, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] is not an instance of [%s]';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($object), $dumper->describeValue($class));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue($object instanceof $class, $message);
+    }
+
+    /**
+     * Assert that the given object has the specified property (declared on the class).
+     *
+     * Uses property_exists() to check for declared properties. This will return true
+     * for declared properties even if their value is null, and it does not consult
+     * magic __get implementations.
+     *
+     * @param string $property property name to look for
+     * @param object $object   object to check
+     * @param string $message  optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertObjectHasProperty(string $property, object $object, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] does not have property [%s]';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($object), $dumper->describeValue($property));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue(\property_exists($object, $property), $message);
+    }
+
+    /**
      * Will trigger a pass if the two parameters have the same value only. Otherwise a fail.
      *
      * @param mixed  $first   value to compare
@@ -544,6 +598,621 @@ class UnitTestCase extends SimpleTestCase
         $endsWith = \substr($targetString, -$len) === $suffix;
 
         return $this->assertTrue($endsWith, $message);
+    }
+
+    /**
+     * Assert that the given array has the provided key.
+     *
+     * @param int|string $key     key expected to exist in the array
+     * @param array      $array   array to check
+     * @param string     $message optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertArrayHasKey(int|string $key, array $array, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] does not have key [%s]';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($array), $dumper->describeValue($key));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue(\array_key_exists($key, $array), $message);
+    }
+
+    /**
+     * Assert that the given array does NOT have the provided key.
+     *
+     * @param int|string $key     key expected to NOT exist in the array
+     * @param array      $array   array to check
+     * @param string     $message optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertArrayNotHasKey(int|string $key, array $array, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] has key [%s]';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($array), $dumper->describeValue($key));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue(!\array_key_exists($key, $array), $message);
+    }
+
+    /**
+     * Assert that the given collection (array or Traversable) contains the element.
+     *
+     * @param mixed             $element    element to look for
+     * @param array|Traversable $collection array or Traversable to search
+     * @param string            $message    optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertContains(mixed $element, array|Traversable $collection, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] does not contain [%s]';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($collection), $dumper->describeValue($element));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        $found = false;
+
+        if (\is_array($collection)) {
+            $found = \in_array($element, $collection, true);
+        } else {
+            foreach ($collection as $item) {
+                if ($item === $element) {
+                    $found = true;
+
+                    break;
+                }
+            }
+        }
+
+        return $this->assertTrue($found, $message);
+    }
+
+    /**
+     * Assert that the given collection (array or Traversable) does NOT contain the element.
+     *
+     * @param mixed             $element    element to look for
+     * @param array|Traversable $collection array or Traversable to search
+     * @param string            $message    optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertNotContains(mixed $element, array|Traversable $collection, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] contains [%s]';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($collection), $dumper->describeValue($element));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        $found = false;
+
+        if (\is_array($collection)) {
+            $found = \in_array($element, $collection, true);
+        } else {
+            foreach ($collection as $item) {
+                if ($item === $element) {
+                    $found = true;
+
+                    break;
+                }
+            }
+        }
+
+        return $this->assertTrue(!$found, $message);
+    }
+
+    /**
+     * Assert that the given array or Countable has the expected count.
+     *
+     * @param int             $expectedCount expected number of elements
+     * @param array|Countable $value         array or Countable to count
+     * @param string          $message       optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertCount(int $expectedCount, array|Countable $value, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $actual = \count($value);
+
+        $msg_tpl = '[%s] expected count [%d], actual [%d]';
+
+        return $this->assertTrue($actual === $expectedCount, $message);
+    }
+
+    /**
+     * Assert that $actual is greater than $expected.
+     *
+     * @param mixed  $expected expected threshold
+     * @param mixed  $actual   actual value to test
+     * @param string $message  optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertGreaterThan($expected, $actual, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] is not greater than [%s]';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($actual), $dumper->describeValue($expected));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue($actual > $expected, $message);
+    }
+
+    /**
+     * Assert that $actual is greater than or equal to $expected.
+     */
+    public function assertGreaterThanOrEqual($expected, $actual, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] is not greater than or equal to [%s]';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($actual), $dumper->describeValue($expected));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue($actual >= $expected, $message);
+    }
+
+    /**
+     * Assert that $actual is less than $expected.
+     */
+    public function assertLessThan($expected, $actual, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] is not less than [%s]';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($actual), $dumper->describeValue($expected));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue($actual < $expected, $message);
+    }
+
+    /**
+     * Assert that $actual is less than or equal to $expected.
+     */
+    public function assertLessThanOrEqual($expected, $actual, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] is not less than or equal to [%s]';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($actual), $dumper->describeValue($expected));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue($actual <= $expected, $message);
+    }
+
+    /**
+     * Assert that two floating point numbers are equal to within the given delta.
+     *
+     * @param float  $expected expected value
+     * @param float  $actual   actual value to test
+     * @param float  $delta    allowed difference
+     * @param string $message  optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertEqualsWithDelta(float $expected, float $actual, float $delta, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] is not equal to [%s] within delta [%s]';
+        $msg_tpl = \sprintf(
+            $msg_tpl,
+            $dumper->describeValue($actual),
+            $dumper->describeValue($expected),
+            $dumper->describeValue($delta),
+        );
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        $diff = \abs($actual - $expected);
+
+        return $this->assertTrue($diff <= $delta, $message);
+    }
+
+    /**
+     * Assert that executing the given callable takes longer than the specified number of seconds.
+     *
+     * @param callable $fn      callable to execute
+     * @param float    $seconds threshold in seconds
+     * @param string   $message optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertTimeout(callable $fn, float $seconds, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = 'Execution time [%s]s did not exceed expected timeout [%s]s';
+
+        $start = \microtime(true);
+        $fn();
+        $end = \microtime(true);
+
+        $elapsed = $end - $start;
+
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($elapsed), $dumper->describeValue($seconds));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue($elapsed > $seconds, $message);
+    }
+
+    /**
+     * Assert that executing the given callable does NOT take longer than the specified seconds.
+     *
+     * @param callable $fn      callable to execute
+     * @param float    $seconds maximum allowed duration in seconds
+     * @param string   $message optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertDoesNotTimeout(callable $fn, float $seconds, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = 'Execution time [%s]s exceeded maximum allowed [%s]s';
+
+        $start = \microtime(true);
+        $fn();
+        $end = \microtime(true);
+
+        $elapsed = $end - $start;
+
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($elapsed), $dumper->describeValue($seconds));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue($elapsed <= $seconds, $message);
+    }
+
+    /**
+     * Assert that the given path points to an existing file.
+     *
+     * @param string $path    path to the file
+     * @param string $message optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertFileExists(string $path, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] does not exist or is not a file';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($path));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue(\is_file($path), $message);
+    }
+
+    /**
+     * Assert that the given path points to an existing directory.
+     *
+     * @param string $path    path to the directory
+     * @param string $message optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertDirExists(string $path, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] does not exist or is not a directory';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($path));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue(\is_dir($path), $message);
+    }
+
+    /**
+     * Assert that the given path is readable.
+     *
+     * @param string $path    file or directory path
+     * @param string $message optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertIsReadable(string $path, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] is not readable';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($path));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue(\is_readable($path), $message);
+    }
+
+    /**
+     * Assert that the given path is writable.
+     *
+     * @param string $path    file or directory path
+     * @param string $message optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertIsWritable(string $path, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] is not writable';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($path));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue(\is_writable($path), $message);
+    }
+
+    /**
+     * Assert that the given path points to an existing file that is readable.
+     *
+     * @param string $path    path to the file
+     * @param string $message optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertFileIsReadable(string $path, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] is not a readable file';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($path));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue(\is_file($path) && \is_readable($path), $message);
+    }
+
+    /**
+     * Assert that the given path points to a directory that is readable.
+     *
+     * @param string $path    path to the directory
+     * @param string $message optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertDirIsReadable(string $path, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] is not a readable directory';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($path));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue(\is_dir($path) && \is_readable($path), $message);
+    }
+
+    /**
+     * Assert that the given path points to a file that is writable.
+     *
+     * @param string $path    path to the file
+     * @param string $message optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertFileIsWritable(string $path, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] is not a writable file';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($path));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue(\is_file($path) && \is_writable($path), $message);
+    }
+
+    /**
+     * Assert that the given path points to a directory that is writable.
+     *
+     * @param string $path    path to the directory
+     * @param string $message optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertDirIsWritable(string $path, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] is not a writable directory';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($path));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue(\is_dir($path) && \is_writable($path), $message);
+    }
+
+    /**
+     * Assert that the given float value is NaN (not a number).
+     *
+     * @param float  $value   value to test
+     * @param string $message optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertIsNaN(float $value, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] is not NaN';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($value));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue(\is_nan($value), $message);
+    }
+
+    /**
+     * Assert that the given float value is infinite (positive or negative).
+     *
+     * @param float  $value   value to test
+     * @param string $message optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertIsInfinite(float $value, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] is not infinite';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($value));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue(\is_infinite($value), $message);
+    }
+
+    /**
+     * Assert that the given float value is positive infinity.
+     *
+     * @param float  $value   value to test
+     * @param string $message optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertIsPositiveInfinity(float $value, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] is not positive infinity';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($value));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue(\is_infinite($value) && $value === \INF, $message);
+    }
+
+    /**
+     * Assert that the given float value is negative infinity.
+     *
+     * @param float  $value   value to test
+     * @param string $message optional message (can contain a single %s placeholder)
+     *
+     * @return bool true on pass, false otherwise
+     */
+    public function assertIsNegativeInfinity(float $value, string $message = '')
+    {
+        $dumper = new SimpleDumper;
+
+        $msg_tpl = '[%s] is not negative infinity';
+        $msg_tpl = \sprintf($msg_tpl, $dumper->describeValue($value));
+
+        if ($message !== '') {
+            $message = \sprintf($message, $msg_tpl);
+        } else {
+            $message = $msg_tpl;
+        }
+
+        return $this->assertTrue(\is_infinite($value) && $value === -\INF, $message);
     }
 
     /**
