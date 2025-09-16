@@ -38,14 +38,23 @@ class UnitTestCase extends SimpleTestCase
     }
 
     /**
-     * Will be true on false and vice versa.
-     * False is the PHP definition of false, so that null,
-     * empty strings, zero and an empty array all count as false.
+     * Tests whether a value evaluates to false.
      *
-     * @param bool   $result  pass on false
-     * @param string $message message to display
+     * In PHP, the following values are considered false:
+     * - false itself
+     * - null
+     * - 0 (integer)
+     * - 0.0 (float)
+     * - "" (empty string)
+     * - "0" (string containing zero)
+     * - [] (empty array)
      *
-     * @return bool True on pass
+     * @see https://www.php.net/manual/en/language.types.boolean.php#language.types.boolean.casting
+     *
+     * @param mixed  $result  the value to check (passes if it evaluates to false)
+     * @param string $message message to display on failure
+     *
+     * @return bool true if the assertion passes, false otherwise
      */
     public function assertFalse($result, $message = '%s')
     {
