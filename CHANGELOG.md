@@ -1,8 +1,18 @@
-# SimpleTest - Change Log
+# Changelog
 
-## [Unreleased]
+All changes to the project will be documented in this file.
+
+- The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+  The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+- The date format is `YYYY-MM-DD`.
+- The versions are linked to their Git tags via the reference section at the end of the document.
+- The upcoming release `vNext` links to the changes between the latest version tag and git HEAD.
+
+## [vNext]
 
 **Currently working on: ...**
+
+## [1.3.0] - 2025-09-17
 
 * renamed branch "master" to "main"
 * added old changelog entries to this file
@@ -24,6 +34,8 @@
   - renamed phpdoc type name boolean to shorter bool, "boolean => bool"
   - switch from post to pre increments on loops, "$i++ => ++$i"
 * added `.editorconfig`
+* add Github Community Documents
+* renamed Changelog.md to CHANGELOG.md and updated its format
 
 ## [1.2.0] - 2019-09-17
 
@@ -167,7 +179,10 @@
 - greater formatting control in the reporters
 - various mock object compatibility fixes
 
-[Unreleased]: https://github.com/simpletest/simpletest/compare/v1.2.0...HEAD
+<!-- Section for Reference Links -->
+
+[vNext]: https://github.com/simpletest/simpletest/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/simpletest/simpletest/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/simpletest/simpletest/compare/v1.1.7...v1.2.0
 [1.1.7]: https://github.com/simpletest/simpletest/compare/v1.1.6...v1.1.7
 

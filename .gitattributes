@@ -4,6 +4,8 @@
 /.gitignore         export-ignore
 /.php_cs            export-ignore
 /.phan              export-ignore
+/CHANGELOG.md       export-ignore
+/README.md          export-ignore
 /build              export-ignore
 /docs               export-ignore
 /tests              export-ignore
