@@ -1632,7 +1632,12 @@ class MockGenerator
                 $code .= ";\n";
             } else {
                 $code .= "\n    {\n";
-                $code .= "        return \$this->invoke(\"$method\", func_get_args());\n";
+                if (PHP_VERSION_ID >= 80200 && strpos($signature, ': void') !== false) {
+                    $code .= "        \$this->invoke(\"$method\", func_get_args());\n";
+                }
+                else {
+                    $code .= "        return \$this->invoke(\"$method\", func_get_args());\n";
+                }
                 $code .= "    }\n";
             }
         }

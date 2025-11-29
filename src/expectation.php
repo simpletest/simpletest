@@ -1011,7 +1011,11 @@ class MemberExpectation extends IdenticalExpectation
     {
         $reflection = new ReflectionObject($object);
         $property = $reflection->getProperty($name);
-        if (method_exists($property, 'setAccessible')) {
+        // Since PHP 8.1, all properties have been accessible by default.
+        // Since PHP 8.5, the setAccessible() method has been deprecated.
+        if (PHP_VERSION_ID < 80100 &&
+            method_exists($property, 'setAccessible'))
+        {
             $property->setAccessible(true);
         }
         try {
